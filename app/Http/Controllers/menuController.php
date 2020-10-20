@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Productos;
+use App\Ingredientes;
+use App\Inventario;
+
+class menuController extends Controller
+{
+    protected function index(){
+
+        $productos = Productos::all();
+
+        return view('menu', compact('productos'));
+    }
+
+    protected function create(){
+
+        $inventarios = Inventario::where('local_id', 1)->get();
+
+        return view('nuevoProducto', compact('inventarios'));
+    }
+
+    protected function store(Request $request){
+
+        $inventarios = Inventario::where('local_id', 1)->get();
+
+        $producto = Productos::create([
+                    'nombre' => request('nombre'),
+                    'estado' => 'desactivado',
+                    'local_id' => '1',
+                    ]);
+        
+        $ingredientes = [];
+
+        foreach($request as $elemento){
+            foreach($elemento as $key => $val ){
+                for($i=1; $i < count($elemento); $i++ ){
+                    if($key == 'ingrediente'.$i){
+
+                        $ingrediente = Ingredientes::create([
+                                'nombre' => request('ingrediente'.$i),
+                                'cantidad' => request('cantidad'.$i),
+                                'unidad_medida' => request('unidad_medida'.$i),
+                                'producto_id' => $producto->id,
+                                ]);
+
+
+                        foreach($inventarios as $inventario){
+                            if($inventario->nombre == $ingrediente->nombre){
+
+                                $ingrediente->valor = $inventario->pmp * $ingrediente->cantidad;
+                                $ingrediente->save(); 
+
+                                array_push($ingredientes, $ingrediente);
+                                
+                            }   
+                        }
+                    }
+                }
+            }
+        }
+
+        $sumaPreciosIngredientes = 0;
+        foreach($ingredientes as $ingrediente){
+            $sumaPreciosIngredientes += $ingrediente->valor;
+        }
+
+        $precioSugerido = round(($sumaPreciosIngredientes/(1 - 0.3)), -2);
+
+        return view('nuevoProducto2', compact('producto', 'ingredientes', 'precioSugerido'));
+    }
+
+    protected function store2(Request $request){
+        $producto = Productos::where('local_id', 1)->get()->last();
+        $producto->tiempo_preparacion = request('tiempo_preparacion');
+        $producto->descripcion = request('descripcion');
+        $producto->estado = 'activado';
+
+        if($request->radio == 'sugerido'){
+            $producto->precio = request('precioSugerido');
+        }else{
+            $producto->precio = request('precio');
+        }
+
+        $producto->save();
+
+        return redirect()->route('menu.index');
+    }
+
+    protected function activar(Productos $producto){
+        $producto->estado = 'activado';
+        $producto->save();
+
+        return redirect()->route('menu.index');
+    }
+
+    protected function desactivar(Productos $producto){
+        $producto->estado = 'desactivado';
+        $producto->save();
+
+        return redirect()->route('menu.index');
+    }
+
+    protected function delete(Productos $producto){
+        $ingredientes = Ingredientes::where('producto_id', $producto->id);
+        $ingredientes->delete();
+
+        Productos::destroy($producto->id);
+
+        return redirect()->route('menu.index');
+    }
+}
