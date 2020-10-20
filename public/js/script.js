@@ -56,7 +56,6 @@ var userAgent = navigator.userAgent.toLowerCase(),
     selectFilter: $("select"),
     slick: $('.slick-slider'),
     statefulButton: $('.btn-stateful'),
-    stepper: $("input[type='number']"),
     swiper: $(".swiper-slider"),
     twitterfeed: $(".twitter"),
     viewAnimate: $('.view-animate'),
@@ -1974,18 +1973,6 @@ $document.ready(function () {
     }
   }
 
-  /**
-   * Stepper
-   * @description Enables Stepper Plugin
-   */
-  if (plugins.stepper.length) {
-    plugins.stepper.stepper({
-      labels: {
-        up: "",
-        down: ""
-      }
-    });
-  }
 
   /**
    * Slick carousel
