@@ -13,7 +13,7 @@
 
                         <div class="form-group row">
                             <label for="nombre_ingrediente" class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
-                            <input id="nombre_ingrediente" maxlength="225" type="text" class="col-md-4 form-control text-md-left" name="nombre" value=""  required>
+                            <input id="nombre_ingrediente" maxlength="225" type="text" class="col-md-4 form-control text-md-left" name="nombre_ingrediente" value=""  required>
   
                         </div>
                         

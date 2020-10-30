@@ -28,7 +28,7 @@ class menuController extends Controller
         $inventarios = Inventario::where('local_id', 1)->get();
 
         $producto = Productos::create([
-                    'nombre' => request('nombre'),
+                    'nombre' => request('nombre_ingrediente'),
                     'estado' => 'desactivado',
                     'local_id' => '1',
                     ]);

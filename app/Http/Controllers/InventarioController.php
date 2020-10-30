@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inventario;
 use App\Compras_historicas;
+use App\Mermas;
 
 class InventarioController extends Controller
 {
@@ -16,7 +17,10 @@ class InventarioController extends Controller
     }
 
     protected function create(){
-        return view('nuevoIngrediente');
+
+        $mermas = Mermas::all();
+
+        return view('nuevoIngrediente', compact('mermas'));
     }
 
     protected function store(){
@@ -24,7 +28,7 @@ class InventarioController extends Controller
         $valor = request('precio')*request('cantidad');
 
         $inventario =   Inventario::create([
-                        'nombre' => request('nombre'),
+                        'nombre' => request('nombre_ingrediente'),
                         'cantidad' => request('cantidad'),
                         'unidad_medida' => request('unidad_medida'),
                         'valor' => $valor,

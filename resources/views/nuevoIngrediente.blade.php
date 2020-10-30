@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="container">
+<div class="container" style="margin-top:50px">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -14,7 +14,11 @@
                             <label class="col-md-4 col-form-label text-md-right">Nombre ingrediente</label>
 
                             <div class="col-md-6">
-                                <input id="nombre_ingrediente" type="text" class="form-control" name="nombre" required>
+                                <select id="nombre_ingrediente" class="form-control" name="nombre_ingrediente" >
+                                    @foreach($mermas as $merma)
+                                        <option value="{{ $merma->nombre }}">{{ $merma->nombre }}</option> 
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -41,10 +45,10 @@
                         </div>
 
                         <div class="form-group row">
-                         
-                            <label class="col-md-3 col-form-label text-md-right">Precio por cada</label>
-                            <label id="precio_por_cada" class="col-form-label text-md-left">Gramo</label>
-                        
+                            <div class="col-md-4 text-md-right">
+                                <label>Precio por cada</label>
+                                <label id="precio_por_cada">Gramo</label>
+                            </div>
                             <div class="col-md-6">
                                 <input id="precio" type="number" class="form-control" name="precio" required>
                             </div>
