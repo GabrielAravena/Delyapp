@@ -1,9 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 @section('content')
 
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
+            <!-- Header -->
+        <div class="header mt-5">
+          <div class="header-body">
+            <div class="row align-items-center">
+              <div class="col">
+
+                <!-- Title -->
+                <h3 class="header-title">
+                  Nuevo producto
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
             <div class="card">
                 <div class="card-header">Nuevo producto</div>
 

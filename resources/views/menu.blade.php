@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 @section('content')
 <div class="main-content">
   <div class="container">
@@ -6,7 +6,7 @@
       <div class="col-12">
 
         <!-- Header -->
-        <div class="header mt-md-5">
+        <div class="header mt-5">
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col">

@@ -2156,18 +2156,33 @@ pre code {
   box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25);
 }
 
+::-webkit-input-placeholder { /* WebKit, Blink, Edge */
+  color: #ffffff;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+ color: #ffffff;
+ opacity: 1 /* esto es porque Firefox le reduce la opacidad por defecto */;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+ color: #ffffff;
+ opacity:  1;
+}
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: #ffffff;
+}
+
 .form-control::-moz-placeholder {
-  color: #6c757d;
+  color: #ffffff;
   opacity: 1;
 }
 
 .form-control:-ms-input-placeholder {
-  color: #6c757d;
+  color: #ffffff;
   opacity: 1;
 }
 
 .form-control::placeholder {
-  color: #6c757d;
+  color: #ffffff;
   opacity: 1;
 }
 
@@ -2620,7 +2635,6 @@ textarea.form-control.is-invalid {
 .btn {
   display: inline-block;
   font-weight: 400;
-  color: #212529;
   text-align: center;
   vertical-align: middle;
   -webkit-user-select: none;
@@ -2635,6 +2649,8 @@ textarea.form-control.is-invalid {
   border-radius: 0.25rem;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
   .btn {
