@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Productos;
 use App\Ingredientes;
 use App\Inventario;
+use App\Productos_user;
 
 class menuController extends Controller
 {
@@ -34,7 +35,7 @@ class menuController extends Controller
                     ]);
         
         $ingredientes = [];
-
+            
         foreach($request as $elemento){
             foreach($elemento as $key => $val ){
                 for($i=1; $i < count($elemento); $i++ ){
@@ -107,6 +108,9 @@ class menuController extends Controller
     protected function delete(Productos $producto){
         $ingredientes = Ingredientes::where('producto_id', $producto->id);
         $ingredientes->delete();
+
+        $productos_user = Productos_user::where('productos_id', $producto->id);
+        $productos_user->delete();
 
         Productos::destroy($producto->id);
 

@@ -6,16 +6,12 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">Nuevo producto</div>
-
                 <div class="card-body">
                     <div>
-                      
-
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
                             <label class="col-md-2 col-form-label text-md-left"><strong>{{ $producto->nombre }}</strong></label>
                         </div>
-                        
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-12">
@@ -44,7 +40,7 @@
                             </div>     
                         </div>
 
-                    <form method="POST" action="{{ route('menu.store2'), $precioSugerido }}">
+                    <form method="POST" action="{{ route('menu.store2') }}">
                         @csrf   
                         <div class="form-group row">
                             <label class="col-md-2 col-form-label text-md-left">Tiempo de preparación</label>

@@ -1,34 +1,46 @@
 @extends('layouts.dashboard')
-
 @section('content')
-<div class="container" style="margin-top:50px">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+
+            <!-- Header -->
+            <div class="header mt-5">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Title -->
+                            <h3 class="header-title">
+                                Nuevo ingrediente
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">Nuevo ingrediente</div>
-
                 <div class="card-body">
                     <form method="POST" action="{{ route('inventario.store')}}">
                         @csrf
-
-                        <div class="form-group row">
+                        <div class="form-inline row mt-3">
                             <label class="col-md-4 col-form-label text-md-right">Nombre ingrediente</label>
 
                             <div class="col-md-6">
-                                <select id="nombre_ingrediente" class="form-control" name="nombre_ingrediente" >
+                                <select id="nombre_ingrediente" class="form-control" name="nombre_ingrediente">
                                     @foreach($mermas as $merma)
-                                        <option value="{{ $merma->nombre }}">{{ $merma->nombre }}</option> 
+                                    <option value="{{ $merma->nombre }}">{{ $merma->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-inline row mt-3">
                             <label for="unidad_medida" class="col-md-4 col-form-label text-md-right">Unidad de medida</label>
 
                             <div class="col-md-6">
                                 <select id="unidad_medida" class="form-control" name="unidad_medida" onchange="showSelected();">
-                                    <option value="Kilogramo">Kilogramo</option> 
+                                    <option value="Kilogramo">Kilogramo</option>
                                     <option value="Gramo" selected>Gramo</option>
                                     <option value="Litro">Litro</option>
                                     <option value="Ml">Ml</option>
@@ -36,8 +48,8 @@
                                 </select>
                             </div>
                         </div>
-                     
-                        <div class="form-group row">
+
+                        <div class="form-inline row mt-3">
                             <label for="cantidad_en_inventario" class="col-md-4 col-form-label text-md-right">Cantidad en inventario</label>
 
                             <div class="col-md-6">
@@ -45,7 +57,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-inline row mt-3">
                             <div class="col-md-4 text-md-right">
                                 <label>Precio por cada</label>
                                 <label id="precio_por_cada">Gramo</label>
@@ -55,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
+                        <div class="form-inline row mb-0 mt-5">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     Ingresar
@@ -71,9 +83,9 @@
 
 
 <script type="text/javascript">
-    function showSelected(){
+    function showSelected() {
         var cod = document.getElementById("unidad_medida").value;
-        document.getElementById('precio_por_cada').innerHTML= cod;
+        document.getElementById('precio_por_cada').innerHTML = cod;
     }
 </script>
 @endsection

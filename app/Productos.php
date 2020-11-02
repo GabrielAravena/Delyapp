@@ -20,7 +20,6 @@ class Productos extends Model
         'estado',
         'imagen',
         'local_id',
-
     ];
 
     public function ingredientes()
@@ -30,7 +29,7 @@ class Productos extends Model
 
     public function user()
     {
-        return $this->belongsToMany('App\User')->using('App\Clientes_productos');
+        return $this->belongsToMany('App\User')->using('App\Productos_user');
     }
 
 }
