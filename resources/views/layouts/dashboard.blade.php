@@ -47,7 +47,7 @@
                 <div class="navbar-expand-md d-md-block collapse col-md-3 col-lg-2" id="sidebarMenu">
                     <ul class="nav flex-column text-center">
                         <li class="nav-item pt-5">
-                            <img src="{{asset('/images/logo0.jpeg')}}" width="170" height="70" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
+                            <img src="{{asset('/images/logo0.png')}}" width="170" height="70" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
                         </li>
                         <li class="nav-item pt-3">
                             <h6 class="text-white">Panel administrativo</h6>

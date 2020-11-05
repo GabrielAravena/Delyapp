@@ -27,9 +27,9 @@
                             <label class="col-md-4 col-form-label text-md-right">Nombre ingrediente</label>
 
                             <div class="col-md-6">
-                                <select id="nombre_ingrediente" class="form-control" name="nombre_ingrediente">
+                                <select id="nombre_ingrediente" class="form-control" name="mermaId">
                                     @foreach($mermas as $merma)
-                                    <option value="{{ $merma->nombre }}">{{ $merma->nombre }}</option>
+                                    <option value="{{ $merma->id }}">{{ $merma->nombre }}</option>
                                     @endforeach
                                 </select>
                             </div>

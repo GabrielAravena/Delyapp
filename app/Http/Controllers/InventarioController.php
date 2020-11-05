@@ -27,12 +27,16 @@ class InventarioController extends Controller
 
         $valor = request('precio')*request('cantidad');
 
+        $merma = Mermas::find(request('mermaId'));
+        
         $inventario =   Inventario::create([
-                        'nombre' => request('nombre_ingrediente'),
+                        'nombre' => $merma->nombre,
                         'cantidad' => request('cantidad'),
                         'unidad_medida' => request('unidad_medida'),
                         'valor' => $valor,
-                        'pmp' => ($valor/request('cantidad')),
+                        'pmp' => (request('precio')),
+                        'ultimo_precio' => (request('precio')),
+                        'merma' => $merma->porcentaje,
                         'local_id' => '1',
 
         ]);
@@ -76,6 +80,7 @@ class InventarioController extends Controller
         $inventario->cantidad = $cantidadinventario;
         $inventario->valor = $precioMedioPonderado * $cantidadinventario;
         $inventario->pmp = $precioMedioPonderado;
+        $inventario->ultimo_precio = (request('valor')/request('cantidad'));
 
         $inventario->save();
 

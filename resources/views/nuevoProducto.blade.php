@@ -44,9 +44,9 @@
                                                             <label class="col-md-12 col-form-label text-md-left">Ingrediente</label>
                                                         </td>
                                                         <td>
-                                                            <select id="ingrediente1" type="text" class="form-control" name="ingrediente1" value="">
+                                                            <select id="ingrediente1" type="text" class="form-control" name="ingrediente1">
                                                                 @foreach($inventarios as $inventario)
-                                                                <option value="{{$inventario->nombre}}">{{$inventario->nombre}}</option>
+                                                                <option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </td>
@@ -109,7 +109,7 @@
                 '<td>' +
                 '<select id="ingrediente1" type="text" class="form-control" name="ingrediente' + c + '" value="" >' +
                 '@foreach($inventarios as $inventario)' +
-                '<option value="{{$inventario->nombre}}">{{$inventario->nombre}}</option>' +
+                '<option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>' +
                 '@endforeach' +
                 '</select>' +
                 '</td>' +

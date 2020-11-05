@@ -36,6 +36,7 @@
                       <th style="text-align:center" scope="col">Unidad de medida</th>
                       <th style="text-align:center" scope="col">Valorización</th>
                       <th style="text-align:center" scope="col">PMP</th>
+                      <th style="text-align:center" scope="col">Último precio</th>
                       <th style="text-align:center" scope="col">Compra de ingrediente</th>
                       <th style="text-align:center" scope="col">Eliminar producto</th>
                     </tr>
@@ -45,10 +46,11 @@
                     @foreach($inventarios as $inventario)
                     <tr>
                       <td>{{$inventario->nombre}}</td>
-                      <td style="text-align:center">{{$inventario->cantidad}}</td>
-                      <td style="text-align:center">{{$inventario->unidad_medida}}</td>
-                      <td style="text-align:center">{{$inventario->valor}}</td>
-                      <td style="text-align:center">{{$inventario->pmp}}</td>
+                      <td style="text-align:center">{{ number_format($inventario->cantidad, 0, ",", ".") }}</td>
+                      <td style="text-align:center">{{ $inventario->unidad_medida }}</td>
+                      <td style="text-align:center">{{ number_format($inventario->valor, 0, ",", ".") }}</td>
+                      <td style="text-align:center">{{ number_format($inventario->pmp, 0, ",", ".")}}</td>
+                      <td style="text-align:center">{{ number_format($inventario->ultimo_precio, 0 , ",", ".") }}</td>
                       <td style="text-align:center">
                         <a href="{{ route('inventario.comprar', $inventario) }}">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="#137830" xmlns="http://www.w3.org/2000/svg">

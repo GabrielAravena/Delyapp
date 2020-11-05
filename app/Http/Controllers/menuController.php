@@ -9,10 +9,11 @@ use App\Inventario;
 use App\Productos_user;
 
 class menuController extends Controller
-{
+
+{   
     protected function index(){
 
-        $productos = Productos::all();
+        $productos = Productos::where('local_id', 1)->get();
 
         return view('menu', compact('productos'));
     }
@@ -26,39 +27,29 @@ class menuController extends Controller
 
     protected function store(Request $request){
 
-        $inventarios = Inventario::where('local_id', 1)->get();
-
         $producto = Productos::create([
                     'nombre' => request('nombre_ingrediente'),
                     'estado' => 'desactivado',
                     'local_id' => '1',
                     ]);
         
-        $ingredientes = [];
-            
+        $ingredientes = [];  
         foreach($request as $elemento){
             foreach($elemento as $key => $val ){
                 for($i=1; $i < count($elemento); $i++ ){
                     if($key == 'ingrediente'.$i){
 
+                        $inventario = Inventario::find(request('ingrediente'.$i));
+
                         $ingrediente = Ingredientes::create([
-                                'nombre' => request('ingrediente'.$i),
+                                'nombre' => $inventario->nombre,
                                 'cantidad' => request('cantidad'.$i),
                                 'unidad_medida' => request('unidad_medida'.$i),
                                 'producto_id' => $producto->id,
+                                'valor' => ($inventario->pmp * request('cantidad'.$i)),
                                 ]);
 
-
-                        foreach($inventarios as $inventario){
-                            if($inventario->nombre == $ingrediente->nombre){
-
-                                $ingrediente->valor = $inventario->pmp * $ingrediente->cantidad;
-                                $ingrediente->save(); 
-
                                 array_push($ingredientes, $ingrediente);
-                                
-                            }   
-                        }
                     }
                 }
             }

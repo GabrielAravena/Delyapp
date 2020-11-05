@@ -20,8 +20,9 @@ class CreateInventariosTable extends Migration
             $table->string('unidad_medida');
             $table->decimal('valor');
             $table->decimal('pmp');
+            $table->decimal('ultimo_precio');
+            $table->decimal('merma');
             $table->timestamps();
-
             $table->foreignId('local_id')->constrained('local');
             
         });

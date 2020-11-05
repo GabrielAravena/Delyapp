@@ -17,6 +17,8 @@ class Inventario extends Model
         'unidad_medida',
         'valor',
         'pmp',
+        'ultimo_precio',
+        'merma',
         'local_id',
     ];
 

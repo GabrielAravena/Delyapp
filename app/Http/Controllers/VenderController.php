@@ -11,7 +11,7 @@ class VenderController extends Controller
 {
     protected function index(){
 
-        $productos = Productos::all();
+        $productos = Productos::where('estado', 'activado')->get();
         return view('vender', compact('productos'));
     }
 

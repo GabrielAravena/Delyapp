@@ -29,7 +29,7 @@
         <nav class="navbar navbar-expand-md navbar-light shadow" style="background-color: #791313;">
             <div class="container">
                 <a class="float-left" href="#">
-                    <img src="{{asset('/images/logo0.jpeg')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
+                    <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
                 </a>
                 <button class="navbar-toggler mr-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-list-ul" fill="white" xmlns="http://www.w3.org/2000/svg">
