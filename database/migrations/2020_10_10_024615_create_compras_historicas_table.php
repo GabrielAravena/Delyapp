@@ -21,7 +21,7 @@ class CreateComprasHistoricasTable extends Migration
             $table->decimal('valor');
             $table->timestamps();
 
-            $table->foreignId('inventarios_id')->constrained('inventarios');
+            $table->foreignId('inventario_id')->constrained('inventarios');
         });
     }
 

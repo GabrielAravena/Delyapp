@@ -38,9 +38,9 @@
                                         @foreach($productos as $item)
                                         <tr>
                                             <td>{{ $item['producto']->nombre }}</td>
-                                            <td>{{ $item['producto']->precio }}</td>
-                                            <td>{{ $item['productos_user']->cantidad }}</td>
-                                            <td>{{ $item['producto']->precio * $item['productos_user']->cantidad }}</td>
+                                            <td>{{ number_format($item['producto']->precio, 0, ",", ".") }}</td>
+                                            <td>{{ number_format($item['productos_user']->cantidad, 0, ",", ".") }}</td>
+                                            <td>{{ number_format($item['producto']->precio * $item['productos_user']->cantidad, 0, ",", ".") }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -52,7 +52,7 @@
                         <label class="h6 mr-3" style="text-align:right;">Precio total</label>
                         <label class="h5 mr-5" style="text-align:right;"><strong>$ {{ $precioTotal }}</strong></label>
                     </div>
-                    <form method="POST" action="{{ route('vender.store2') }}">
+                    <form method="POST" action="{{ route('vender.store2', $venta) }}">
                         @csrf
 
                         <input id="precio_total" type="number" class="col-md-2 form-control text-md-left" name="precio_total" value="{{ $precioTotal }}" style="display:none" />

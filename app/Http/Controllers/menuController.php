@@ -33,40 +33,59 @@ class menuController extends Controller
                     'local_id' => '1',
                     ]);
         
-        $ingredientes = [];  
+        $ingredientes = [];
+        $sumaPreciosIngredientes = 0;  
         foreach($request as $elemento){
             foreach($elemento as $key => $val ){
                 for($i=1; $i < count($elemento); $i++ ){
                     if($key == 'ingrediente'.$i){
 
                         $inventario = Inventario::find(request('ingrediente'.$i));
-
+                        
                         $ingrediente = Ingredientes::create([
                                 'nombre' => $inventario->nombre,
                                 'cantidad' => request('cantidad'.$i),
                                 'unidad_medida' => request('unidad_medida'.$i),
                                 'producto_id' => $producto->id,
                                 'valor' => ($inventario->pmp * request('cantidad'.$i)),
+                                'merma' => $inventario->merma,
+                                'inventario_id' => request('ingrediente'.$i),
                                 ]);
 
-                                array_push($ingredientes, $ingrediente);
+                        $unidadMedidaInv = $inventario->unidad_medida;
+                        $unidadMedidaIng = $ingrediente->unidad_medida;
+
+                        if($unidadMedidaInv == $unidadMedidaIng){
+                            $ingrediente-> valor = ($inventario->pmp * $ingrediente->cantidad);
+                            $ingrediente->save();
+                        }elseif(($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')){
+                            $ingrediente-> valor = (($inventario->pmp/1000) * $ingrediente->cantidad);
+                            $ingrediente->save();
+                        }elseif(($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')){
+                            $ingrediente-> valor = (($inventario->pmp * 1000) * $ingrediente->cantidad);
+                            $ingrediente->save();
+                        }else{
+                            $ingrediente->delete();
+                            return "Error: No es posible ingresar estos ingredientes, ya que la unidad de medida de ".$inventario->nombre." en el inventario es ".$unidadMedidaInv.", pero en los ingredientes es ". $unidadMedidaIng;
+                        }
+
+                        $sumaPreciosIngredientes += $ingrediente->valor * (100/(100 - $ingrediente->merma));
+
+                        array_push($ingredientes, $ingrediente);
                     }
                 }
             }
         }
+        
 
-        $sumaPreciosIngredientes = 0;
-        foreach($ingredientes as $ingrediente){
-            $sumaPreciosIngredientes += $ingrediente->valor;
-        }
-
-        $precioSugerido = round(($sumaPreciosIngredientes/(1 - 0.3)), -2);
+        $precioSugerido = number_format(($sumaPreciosIngredientes/(1 - 0.3)), -2, ",", ".");
 
         return view('nuevoProducto2', compact('producto', 'ingredientes', 'precioSugerido'));
     }
 
     protected function store2(Request $request){
         $producto = Productos::where('local_id', 1)->get()->last();
+
         $producto->tiempo_preparacion = request('tiempo_preparacion');
         $producto->descripcion = request('descripcion');
         $producto->estado = 'activado';

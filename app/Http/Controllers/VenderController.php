@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Inventario;
 use App\Productos;
 use App\Ventas;
 use App\Productos_user;
+use App\Ingredientes;
 use Illuminate\Http\Request;
 
 class VenderController extends Controller
@@ -29,7 +31,7 @@ class VenderController extends Controller
                     if ($key == 'producto'.$i) {
     
                         $productos_user = Productos_user::create([
-                            'productos_id' => $val,
+                            'producto_id' => $val,
                             'cantidad' => request('cantidad'.$i),
                             'users_id' => '3',
                             'ventas_id' => $venta->id,
@@ -38,19 +40,36 @@ class VenderController extends Controller
                         $producto = Productos::find($val); 
                         $precioTotal += ($producto->precio * $productos_user->cantidad);    
                         $productos[] = ['productos_user'=>$productos_user, 'producto'=>$producto];
+
                     }
                 }
             }
         }
+       
         return view('vender2', compact('venta', 'productos', 'precioTotal'));
     }
 
-    protected function store2(Request $request){
+    protected function store2(Ventas $venta){
 
-        $venta = Ventas::find($request->venta_id);
-        
-        $venta-> tipo = $request->tipo_venta;
-        $venta-> precio = $request->precio_total;
+        $productos = Productos_user::where('ventas_id', $venta->id)->get();
+
+        foreach($productos as $producto){
+
+            $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
+
+            foreach($ingredientes as $ingrediente){
+                
+                $inventario = Inventario::find($ingrediente->inventario_id);
+                $inventario-> cantidad -= ($ingrediente->cantidad * $producto->cantidad);
+                $inventario->save();
+
+            }
+           
+
+        }
+
+        $venta-> tipo = request('tipo_venta');
+        $venta-> precio = request('precio_total');
         $venta-> estado = 'finalizado';
         $venta->save();
 

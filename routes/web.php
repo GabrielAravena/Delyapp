@@ -46,4 +46,4 @@ Route::get('/menu/borrarProducto/{producto}', 'MenuController@delete')->name('me
 
 Route::get('/vender', 'VenderController@index')->name('vender.index');
 Route::post('/vender/store', 'VenderController@store')->name('vender.store');
-Route::post('/vender/store2', 'VenderController@store2')->name('vender.store2');
+Route::post('/vender/store2/{venta}', 'VenderController@store2')->name('vender.store2');

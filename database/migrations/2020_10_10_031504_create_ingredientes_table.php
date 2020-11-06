@@ -18,10 +18,12 @@ class CreateIngredientesTable extends Migration
             $table->string('nombre');
             $table->decimal('cantidad');
             $table->string('unidad_medida');
-            $table->decimal('valor');
+            $table->decimal('valor')->nullable();
+            $table->decimal('merma');
             $table->timestamps();
 
-            $table->foreignId('productos_id')->constrained('productos');
+            $table->foreignId('producto_id')->constrained('productos');
+            $table->foreignId('inventario_id')->constrained('inventarios');
         });
     }
 

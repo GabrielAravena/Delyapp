@@ -16,7 +16,9 @@ class Ingredientes extends Model
         'cantidad', 
         'unidad_medida',
         'valor',
+        'merma',
         'producto_id',
+        'inventario_id',
     ];
 
 }
