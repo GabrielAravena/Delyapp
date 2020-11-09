@@ -55,7 +55,7 @@
                             </svg>
                         </a>
                         <div class="row justify-content-center text-center mt-5">
-                            <button type="submit" id="confirmarIngredientes" type="submit" class="col-md-4 btn btn-primary text-white">Confirmar productos</button>
+                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-primary text-white">Confirmar productos</button>
                         </div>
                     </form>
                 </div>

@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <button type="submit" id="confirmarIngredientes" type="submit" class="col-md-4 btn btn-primary justify-center text-white" >Confirmar ingredientes</button>
+                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-primary justify-center text-white" >Confirmar ingredientes</button>
                         </div>
                     </form>
                 </div>

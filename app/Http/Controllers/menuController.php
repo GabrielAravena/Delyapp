@@ -119,7 +119,7 @@ class menuController extends Controller
         $ingredientes = Ingredientes::where('producto_id', $producto->id);
         $ingredientes->delete();
 
-        $productos_user = Productos_user::where('productos_id', $producto->id);
+        $productos_user = Productos_user::where('producto_id', $producto->id);
         $productos_user->delete();
 
         Productos::destroy($producto->id);
