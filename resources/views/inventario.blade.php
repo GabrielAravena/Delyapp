@@ -48,9 +48,9 @@
                       <td>{{$inventario->nombre}}</td>
                       <td style="text-align:center">{{ number_format($inventario->cantidad, 0, ",", ".") }}</td>
                       <td style="text-align:center">{{ $inventario->unidad_medida }}</td>
-                      <td style="text-align:center">{{ number_format($inventario->valor, 0, ",", ".") }}</td>
-                      <td style="text-align:center">{{ number_format($inventario->pmp, 0, ",", ".")}}</td>
-                      <td style="text-align:center">{{ number_format($inventario->ultimo_precio, 0 , ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($inventario->valor, 0, ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($inventario->pmp, 0, ",", ".")}}</td>
+                      <td style="text-align:right">{{ number_format($inventario->ultimo_precio, 0 , ",", ".") }}</td>
                       <td style="text-align:center">
                         <a href="{{ route('inventario.comprar', $inventario) }}">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="#137830" xmlns="http://www.w3.org/2000/svg">

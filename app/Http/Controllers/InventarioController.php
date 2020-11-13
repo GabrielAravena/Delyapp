@@ -11,7 +11,7 @@ class InventarioController extends Controller
 {
     protected function index(){
 
-        $inventarios = Inventario::all();
+        $inventarios = Inventario::where('local_id', 1)->get();
 
         return view('inventario', compact('inventarios'));
     }

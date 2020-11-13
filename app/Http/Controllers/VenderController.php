@@ -73,6 +73,6 @@ class VenderController extends Controller
         $venta-> estado = 'finalizado';
         $venta->save();
 
-        return redirect()->route('vender.index');
+        return redirect()->route('inicioAdmin.index');
     }
 }

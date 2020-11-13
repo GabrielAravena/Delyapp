@@ -25,9 +25,8 @@ Route::get('/inicio', function(){
     return view('index1');
 });
 
-Route::get('/inicioAdmin', function(){
-    return view('inicio-admin');
-})->name('inicio-admin');
+Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
+Route::post('/inicioAdmin', 'InicioAdminController@datosGrafico')->name('inicioAdmin.datos_grafico');
 
 Route::get('/inventario', 'inventarioController@index')->name('inventario.index');
 Route::get('/inventario/nuevoIngrediente', 'inventarioController@create')->name('inventario.create');

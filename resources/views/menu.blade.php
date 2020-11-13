@@ -45,7 +45,7 @@
                       <td>{{ $producto->nombre }}</td>
                       <td>{{ $producto->descripcion }}</td>
                       <td style="text-align:center">{{ $producto->imagen }}</td>
-                      <td style="text-align:center">{{ number_format($producto->precio, 0, ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($producto->precio, 0, ",", ".") }}</td>
                       <td style="text-align:center">
                         @if($producto->estado == 'activado')
                         <a href="{{ route('menu.desactivar', $producto)}}">

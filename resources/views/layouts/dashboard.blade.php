@@ -45,7 +45,7 @@
                     </svg>
                 </button>
                 <div class="navbar-expand-md d-md-block collapse col-md-3 col-lg-2" id="sidebarMenu">
-                    <ul class="nav flex-column text-center">
+                    <ul class="nav flex-column text-left">
                         <li class="nav-item pt-5">
                             <img src="{{asset('/images/logo0.png')}}" width="170" height="70" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
                         </li>
@@ -53,7 +53,7 @@
                             <h6 class="text-white">Panel administrativo</h6>
                         </li>
                         <li class="nav-item pt-5">
-                            <a class="nav-link h5 text-white" href="{{ route('inicio-admin') }}">
+                            <a class="nav-link h5 text-white" href="{{ route('inicioAdmin.index') }}">
                                 Inicio
                             </a>
                         </li>
@@ -82,7 +82,7 @@
 
                         @guest
                         <li class="nav-item">
-                            <a class="text-white" role="button" href="{{ route('login') }}">
+                            <a class="text-white text-center" role="button" href="{{ route('login') }}">
                                 <svg id="iconoIniciarSesion" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-square mr-1" fill="white" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                                     <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />

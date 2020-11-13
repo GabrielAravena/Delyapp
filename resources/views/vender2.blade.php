@@ -50,7 +50,7 @@
                     </div>
                     <div class="form-inline row justify-content-center mt-5" style="text-align:right;">
                         <label class="h6 mr-3" style="text-align:right;">Precio total</label>
-                        <label class="h5 mr-5" style="text-align:right;"><strong>$ {{ $precioTotal }}</strong></label>
+                        <label class="h5 mr-5" style="text-align:right;"><strong>$ {{ number_format($precioTotal, 0, ",", ".") }}</strong></label>
                     </div>
                     <form method="POST" action="{{ route('vender.store2', $venta) }}">
                         @csrf
