@@ -15,15 +15,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('inicio');
-});
+})->name('inicio');
+
+Route::get('/producto', function () {
+    return view('producto');
+})->name('producto');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/inicio', function(){
-    return view('index1');
-});
+Route::get('/local/{id}', 'LocalController@index')->name('local.index');
+
+Route::get('/carrito', 'CarritoController@index')->name('carrito.index');
+Route::post('/carrito/{producto}', 'CarritoController@agregar')->name('carrito.agregar');
+Route::get('/carrito/delete/{id}', 'CarritoController@delete')->name('carrito.delete');
+Route::get('/producto/{producto}', 'CarritoController@producto')->name('carrito.producto');
 
 Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
 Route::post('/inicioAdmin', 'InicioAdminController@datosGrafico')->name('inicioAdmin.datos_grafico');

@@ -22,11 +22,25 @@
     <link rel="stylesheet" href="{{asset('css/fonts.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
+    <style>
+        .btn-green{
+            color: #fff;
+            background-color: #137830;
+            border-color: #137830;
+        }
+
+        .btn-green:hover{
+            color: #fff;
+            background-color: #095603;
+            border-color: #095603;
+        }
+    </style>
+
 </head>
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light shadow" style="background-color: #791313;">
+        <nav class="navbar navbar-expand-md shadow" style="background-color: #791313; margin-bottom: 0px;">
             <div class="container">
                 <a class="float-left" href="#">
                     <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">

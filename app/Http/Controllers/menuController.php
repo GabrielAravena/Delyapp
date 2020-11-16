@@ -88,7 +88,9 @@ class menuController extends Controller
 
         $producto->tiempo_preparacion = request('tiempo_preparacion');
         $producto->descripcion = request('descripcion');
+        $producto->categoria = request('categoria');
         $producto->estado = 'activado';
+        $producto->precio_sugerido = request('precioSugerido');
 
         if($request->radio == 'sugerido'){
             $producto->precio = request('precioSugerido');

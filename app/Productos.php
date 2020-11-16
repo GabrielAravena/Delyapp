@@ -15,10 +15,12 @@ class Productos extends Model
     protected $fillable = [
         'nombre', 
         'precio', 
+        'precio_sugerido',
         'tiempo_preparacion',
         'descripcion',
         'estado',
         'imagen',
+        'categoria',
         'local_id',
     ];
 

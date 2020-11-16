@@ -18,6 +18,8 @@ class Local extends Model
         'delivery',
     ];
 
+    protected $table = 'local';
+
     public function productos()
     {
         return $this->hasMany('App\Productos');

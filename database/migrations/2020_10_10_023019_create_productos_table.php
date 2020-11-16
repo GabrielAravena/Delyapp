@@ -17,10 +17,12 @@ class CreateProductosTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->decimal('precio')->nullable();
+            $table->decimal('precio_sugerido')->nullable();
             $table->decimal('tiempo_preparacion')->nullable();
             $table->string('descripcion')->nullable();
             $table->string('estado');
             $table->string('imagen')->nullable();
+            $table->string('categoria')->nullable();
             $table->timestamps();
             
             $table->foreignId('local_id')->constrained('local');

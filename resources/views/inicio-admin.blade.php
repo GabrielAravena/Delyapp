@@ -90,7 +90,7 @@
           ticks: {
             beginAtZero: true
           }
-        }],
+        }]
       }
     }
   });

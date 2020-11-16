@@ -4430,7 +4430,9 @@ input[type=button].btn-block {
   padding: 0.5rem 1rem;
 }
 
-.nav-link:hover,
+.nav-link:hover {
+  background-color: rgb(75, 6, 6);
+},
 .nav-link:focus {
   text-decoration: none;
 }
@@ -4457,7 +4459,7 @@ input[type=button].btn-block {
 
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-link:focus {
-  border-color: #e9ecef #e9ecef #dee2e6;
+  border-color: #7c0606 #750000 #e6dede;
 }
 
 .nav-tabs .nav-link.disabled {
@@ -4513,6 +4515,7 @@ input[type=button].btn-block {
 .navbar {
   position: relative;
   display: flex;
+  margin-bottom: 0px;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;

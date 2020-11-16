@@ -30,6 +30,20 @@
                 font-size: 3.5rem;
             }
         }
+
+        .navbar-expand-md .nav .nav-item .nav-link:hover {
+            background-color: #530705;
+        }
+
+        .btn-green{
+            color: #fff;
+            background-color: #137830;
+        }
+
+        .btn-green:hover{
+            color: #fff;
+            background-color: #095603;
+        }
     </style>
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
@@ -46,13 +60,10 @@
                 </button>
                 <div class="navbar-expand-md d-md-block collapse col-md-3 col-lg-2" id="sidebarMenu">
                     <ul class="nav flex-column text-left">
-                        <li class="nav-item pt-5">
+                        <li class="nav-item" width="170" height="70" style="padding-top: 40px;">
                             <img src="{{asset('/images/logo0.png')}}" width="170" height="70" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
                         </li>
-                        <li class="nav-item pt-3">
-                            <h6 class="text-white">Panel administrativo</h6>
-                        </li>
-                        <li class="nav-item pt-5">
+                        <li class="nav-item" style="padding-top: 70px;">
                             <a class="nav-link h5 text-white" href="{{ route('inicioAdmin.index') }}">
                                 Inicio
                             </a>
@@ -92,7 +103,7 @@
                         </li>
                         @else
                         <li class="dropdown" style="padding-bottom: 20px;">
-                            <div id="navbarDropdown" class="dropdown-toggle text-white" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <div id="navbarDropdown" class="dropdown-toggle text-white text-center" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <svg id="iconoIniciarSesion" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-square mr-1" fill="white" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
                                     <path fill-rule="evenodd" d="M2 15v-1c0-1 1-4 6-4s6 3 6 4v1H2zm6-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />

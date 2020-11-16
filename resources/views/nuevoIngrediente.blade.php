@@ -53,7 +53,7 @@
                             <label for="cantidad_en_inventario" class="col-md-4 col-form-label text-md-right">Cantidad en inventario</label>
 
                             <div class="col-md-6">
-                                <input id="cantidad_en_inventario" type="number" class="form-control " name="cantidad" required>
+                                <input id="cantidad_en_inventario" type="number" class="form-control" name="cantidad" required>
                             </div>
                         </div>
 
