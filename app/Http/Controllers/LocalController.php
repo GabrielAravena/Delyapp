@@ -22,6 +22,6 @@ class LocalController extends Controller
 
         $local = Local::find(1);
 
-        return view('index1', compact('categoria', 'productos', 'local'));
+        return view('local', compact('categoria', 'productos', 'local'));
     }
 }
