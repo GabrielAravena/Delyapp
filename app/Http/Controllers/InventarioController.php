@@ -9,7 +9,14 @@ use App\Mermas;
 
 class InventarioController extends Controller
 {
-    protected function index(){
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    protected function index(Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
 
         $inventarios = Inventario::where('local_id', 1)->get();
 

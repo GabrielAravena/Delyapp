@@ -3,7 +3,7 @@
 
 <section class="bg-image-5">
   <section class="parallax-container parallax-light" data-parallax-img="{{asset('images/parallax-03.png')}}">
-    <div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt="" style="display: block;"></div>
+<div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt=""></div>
     <div class="parallax-content">
       <div class="container section-80 section-sm-top-140 section-sm-bottom-150 text-center">
         <div class="row justify-content-xs-center">
@@ -18,7 +18,31 @@
     </div>
   </section>
 </section>
-<section class="section-50 section-sm-top-80 section-sm-bottom-100 bg-gray-lighter">
+
+<section class="section-50" style="background: #791313 !important">
+  <h3 class="text-white text-center" style="text-align:center text-white">Nuestras promociones y combos</h3>
+  <div class="container-wide mt-5">
+    <div class="row justify-content-xs-center">
+
+      @foreach($productos as $producto)
+      @if($producto->categoria == 'promoción' || $producto->categoria == 'combo')
+      <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5">
+        <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}">
+          <img class="img-responsive" style="opacity: 0.6;" src="https://static.iris.net.co/dinero/upload/images/2016/12/15/240194_1.jpg" alt="" width="566" height="401">
+          <div class="caption text-center">
+            <h3 class="text-italic">{{ $producto->nombre }}</h3>
+            <p class="big">{{ $producto->descripcion }}</p>
+            <label class="h4 shadow" style="color: #f9b129">${{ number_format($producto->precio, 0, ",", ".") }}</label>
+          </div>
+        </a>
+      </div>
+      @endif
+      @endforeach
+    </div>
+  </div>
+</section>
+
+<section class="section-50 section-sm-top-80 section-sm-bottom-100">
   <h3 style="text-align:center">Nuestro Menú</h3>
   <div class="responsive-tabs responsive-tabs-button responsive-tabs-horizontal responsive-tabs-carousel offset-top-40" style="text-align:center">
     <ul class="resp-tabs-list">
@@ -61,28 +85,6 @@
   </div>
 </section>
 
-<section class="section-50" style="background: #791313 !important">
-  <h3 class="text-white text-center" style="text-align:center text-white">Nuestras promociones y combos</h3>
-  <div class="container-wide mt-5">
-    <div class="row justify-content-xs-center">
-
-      @foreach($productos as $producto)
-      @if($producto->categoria == 'promoción' || $producto->categoria == 'combo')
-      <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5">
-        <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}">
-          <img class="img-responsive" style="opacity: 0.6;" src="https://static.iris.net.co/dinero/upload/images/2016/12/15/240194_1.jpg" alt="" width="566" height="401">
-          <div class="caption text-center">
-            <h3 class="text-italic">{{ $producto->nombre }}</h3>
-            <p class="big">{{ $producto->descripcion }}</p>
-            <label class="h4 shadow" style="color: #f9b129">${{ number_format($producto->precio, 0, ",", ".") }}</label>
-          </div>
-        </a>
-      </div>
-      @endif
-      @endforeach
-    </div>
-  </div>
-</section>
 <footer class="page-foot text-sm-left">
   <section class="bg-gray-darker section-top-55 section-bottom-60">
     <div class="container">

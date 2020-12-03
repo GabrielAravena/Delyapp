@@ -10,8 +10,15 @@ use Illuminate\Http\Request;
 
 class InicioAdminController extends Controller
 {
-    protected function index()
+    public function __construct()
     {
+        $this->middleware('auth');
+    }
+
+    protected function index(Request $request)
+    {
+        $request->user()->authorizeRoles(['admin']);
+
         /* info grafico MES */
         $ventasMes = $this->ventasMes();
 

@@ -11,7 +11,14 @@ use Illuminate\Http\Request;
 
 class VenderController extends Controller
 {
-    protected function index(){
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    protected function index(Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
 
         $productos = Productos::where('estado', 'activado')->get();
         return view('vender', compact('productos'));

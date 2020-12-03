@@ -9,10 +9,28 @@ use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
-    protected function index()
+    protected function index(Request $request)
     {
+        $user_id = null;
+        
+        if($request->user() == null){
 
-        $productos = Productos_user::where('users_id', 3)
+            $user_id = $request->session()->get('user_id');
+
+            if(!$user_id){
+
+                $id = hexdec(uniqid());
+                $request->session()->put(['user_id' => $id]);
+                $user_id = $request->session()->get('user_id');
+                
+            }
+            
+        }else{
+            $user_id = $request->user()->id;
+        }
+        
+
+        $productos = Productos_user::where('users_id', $user_id)
             ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
             ->join('productos', 'productos_users.producto_id', 'productos.id')
             ->select('productos_users.*', 'ventas.estado', 'productos.nombre', 'productos.precio', 'productos.imagen', 'productos.local_id', 'ventas.precio as total')
@@ -27,8 +45,20 @@ class CarritoController extends Controller
 
     protected function agregar(Productos $producto, Request $request)
     {
+        $user_id = null;
+        
+        if($request->user() == null){
+            $user_id = $request->session()->get('user_id');
+            if(!$user_id){
+                $id = hexdec(uniqid());
+                $request->session()->put(['user_id' => $id]);
+                $user_id = $request->session()->get('user_id');
+            }
+        }else{
+            $user_id = $request->user()->id;
+        }
 
-        $productos_user = Productos_user::where('users_id', 3)
+        $productos_user = Productos_user::where('users_id', $user_id)
             ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
             ->join('productos', 'productos_users.producto_id', 'productos.id')
             ->select('productos_users.*', 'productos.local_id', 'ventas.estado', 'ventas.precio as total')
@@ -42,7 +72,7 @@ class CarritoController extends Controller
             Productos_user::create([
                 'producto_id' => $producto->id,
                 'cantidad' => $request->cantidad,
-                'users_id' => 3,
+                'users_id' => $user_id,
                 'ventas_id' => $productos_user->ventas_id,
             ]);
 
@@ -60,7 +90,7 @@ class CarritoController extends Controller
             Productos_user::create([
                 'producto_id' => $producto->id,
                 'cantidad' => $request->cantidad,
-                'users_id' => 3,
+                'users_id' => $user_id,
                 'ventas_id' => $venta->id,
             ]);
 

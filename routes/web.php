@@ -17,10 +17,6 @@ Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
 
-Route::get('/producto', function () {
-    return view('producto');
-})->name('producto');
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
