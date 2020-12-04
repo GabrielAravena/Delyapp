@@ -76,4 +76,13 @@ class RegisterController extends Controller
 
         return $user;
     }
+
+    public function redirectPath()
+    {
+        if (User::find(auth()->user()->id)->hasRole('admin')) {
+            return route('inicioAdmin.index');
+        }
+
+        return route('inicio');
+    }
 }

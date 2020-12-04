@@ -31,11 +31,11 @@
     <nav class="color-nav navBarraLocales">
         <p class="barraLocales">LOCALES</p>
     </nav>
-    <div class="container">
+    <div class="container" style="margin-bottom: 50px;">
         <div class="row">
             <div class="col-12">&nbsp;</div>
             <div class="col-4 col-md-4 col-sm-12">
-                <img class="d-block w-100 imgLocales" src="{{URL::asset('/images/pub4.jpg')}}" >
+                <img class="d-block w-100 imgLocales" type="button" src="{{URL::asset('/images/pub4.jpg')}}" >
                 <h4>NOMBRE DEL LOCAL</h4>
                 <p>AQUI HAY DETALLE</p>
             </div>

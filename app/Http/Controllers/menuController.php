@@ -7,6 +7,7 @@ use App\Productos;
 use App\Ingredientes;
 use App\Inventario;
 use App\Productos_user;
+use App\Local;
 
 class menuController extends Controller
 {   
@@ -19,24 +20,30 @@ class menuController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $productos = Productos::where('local_id', 1)->get();
+        $local_id = Local::find($request->user()->local_id);
+
+        $productos = Productos::where('local_id', $local_id)->get();
 
         return view('menu', compact('productos'));
     }
 
-    protected function create(){
+    protected function create(Request $request){
 
-        $inventarios = Inventario::where('local_id', 1)->get();
+        $local_id = Local::find($request->user()->local_id);
+
+        $inventarios = Inventario::where('local_id', $local_id)->get();
 
         return view('nuevoProducto', compact('inventarios'));
     }
 
     protected function store(Request $request){
 
+        $local_id = Local::find($request->user()->local_id);
+
         $producto = Productos::create([
                     'nombre' => request('nombre_ingrediente'),
                     'estado' => 'desactivado',
-                    'local_id' => '1',
+                    'local_id' => $local_id,
                     ]);
         
         $ingredientes = [];
@@ -90,7 +97,10 @@ class menuController extends Controller
     }
 
     protected function store2(Request $request){
-        $producto = Productos::where('local_id', 1)->get()->last();
+
+        $local_id = Local::find($request->user()->local_id);
+
+        $producto = Productos::where('local_id', $local_id)->get()->last();
 
         $producto->tiempo_preparacion = request('tiempo_preparacion');
         $producto->descripcion = request('descripcion');

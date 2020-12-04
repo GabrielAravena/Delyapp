@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Inventario;
 use App\Compras_historicas;
 use App\Mermas;
+use App\Local;
 
 class InventarioController extends Controller
 {
@@ -18,7 +19,9 @@ class InventarioController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $inventarios = Inventario::where('local_id', 1)->get();
+        $local_id = Local::find($request->user()->local_id);
+
+        $inventarios = Inventario::where('local_id', $local_id)->get();
 
         return view('inventario', compact('inventarios'));
     }
@@ -30,7 +33,9 @@ class InventarioController extends Controller
         return view('nuevoIngrediente', compact('mermas'));
     }
 
-    protected function store(){
+    protected function store(Request $request){
+
+        $local_id = Local::find($request->user()->local_id);
 
         $valor = request('precio')*request('cantidad');
 
@@ -44,7 +49,7 @@ class InventarioController extends Controller
                         'pmp' => (request('precio')),
                         'ultimo_precio' => (request('precio')),
                         'merma' => $merma->porcentaje,
-                        'local_id' => '1',
+                        'local_id' => $local_id,
 
         ]);
 

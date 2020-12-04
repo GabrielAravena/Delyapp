@@ -18,6 +18,7 @@ class CreateLocalTable extends Migration
             $table->string('nombre');
             $table->string('direccion');
             $table->string('telefono');
+            $table->string('imagen');
             $table->boolean('delivery');
         });
     }

@@ -15,6 +15,7 @@ class Local extends Model
         'nombre', 
         'direccion', 
         'telefono',
+        'imagen',
         'delivery',
     ];
 
