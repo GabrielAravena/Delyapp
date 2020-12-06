@@ -20,7 +20,7 @@ class menuController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $productos = Productos::where('local_id', $local_id)->get();
 
@@ -29,7 +29,7 @@ class menuController extends Controller
 
     protected function create(Request $request){
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
 
@@ -38,7 +38,7 @@ class menuController extends Controller
 
     protected function store(Request $request){
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $producto = Productos::create([
                     'nombre' => request('nombre_ingrediente'),
@@ -91,14 +91,18 @@ class menuController extends Controller
         }
         
 
-        $precioSugerido = number_format(($sumaPreciosIngredientes/(1 - 0.3)), -2, ",", ".");
+        $precioSugerido = round(($sumaPreciosIngredientes/(1 - 0.3)), -2);
+
+        $producto->precio_sugerido = $precioSugerido;
+        $producto->save();
 
         return view('nuevoProducto2', compact('producto', 'ingredientes', 'precioSugerido'));
     }
 
     protected function store2(Request $request){
+  
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $producto = Productos::where('local_id', $local_id)->get()->last();
 
@@ -106,10 +110,9 @@ class menuController extends Controller
         $producto->descripcion = request('descripcion');
         $producto->categoria = request('categoria');
         $producto->estado = 'activado';
-        $producto->precio_sugerido = request('precioSugerido');
 
         if($request->radio == 'sugerido'){
-            $producto->precio = request('precioSugerido');
+            $producto->precio = $producto->precio_sugerido;
         }else{
             $producto->precio = request('precio');
         }

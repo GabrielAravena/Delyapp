@@ -19,7 +19,7 @@ class InventarioController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
 
@@ -35,7 +35,7 @@ class InventarioController extends Controller
 
     protected function store(Request $request){
 
-        $local_id = Local::find($request->user()->local_id);
+        $local_id = Local::find($request->user()->local_id)->id;
 
         $valor = request('precio')*request('cantidad');
 

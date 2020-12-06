@@ -65,6 +65,7 @@
                                         <option value="postres">Postres</option>
                                         <option value="ensaladas">Ensaladas</option>
                                         <option value="bebidas">Bebidas</option>
+                                        <option value="otro">Otro</option>
                                     </select>
                                 </div>
                             </div>
@@ -82,7 +83,7 @@
 
                             <div class="form-group row offset-md-2">
                                 <label class="col-md-2">Precio sugerido</label>
-                                <label class="col-md-4 "><strong>$ {{ $precioSugerido }}</strong></label>
+                                <label class="col-md-4 "><strong>$ {{ number_format($precioSugerido, 0, ",", ".") }}</strong></label>
                             </div>
 
                             <div class="form-group row offset-md-2">
@@ -96,7 +97,7 @@
                                     <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
                                     <span>Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="99999999" type="number" class="col-md-2 form-control text-md-left" name="precio" style="display:none" />
+                                <input id="precio" max="99999" min="1" type="number" class="col-md-2 form-control text-md-left" name="precio" style="display:none" />
                                 <input id="precioSugerido" type="number" class="col-md-2 form-control text-md-left" name="precioSugerido" value="{{ $precioSugerido }}" style="display:none" />
                             </div>
 

@@ -30,8 +30,8 @@
                     <tr class="text-center">
                       <th class="text-center" scope="col">Producto</th>
                       <th class="text-center" scope="col">Cantidad</th>
-                      <th class="text-center" scope="col">Precio unitario</th>
-                      <th class="text-center" scope="col">Total</th>
+                      <th class="text-right" scope="col">Precio unitario</th>
+                      <th class="text-right" scope="col">Total</th>
                       <th class="text-center" scope="col">Eliminar</th>
                     </tr>
                   </thead>
@@ -41,8 +41,8 @@
                     <tr>
                       <td>{{ $producto->nombre }}</td>
                       <td>{{ $producto->cantidad }}</td>
-                      <td>{{ number_format($producto->precio, 0, ",", ".") }}</td>
-                      <td>{{ number_format($producto->precio * $producto->cantidad, 0, ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($producto->precio, 0, ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($producto->precio * $producto->cantidad, 0, ",", ".") }}</td>
                       <td style="text-align:center">
                         <a href="{{ route('carrito.delete', $producto->id) }}">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="red" xmlns="http://www.w3.org/2000/svg">

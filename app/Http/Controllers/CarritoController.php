@@ -12,23 +12,21 @@ class CarritoController extends Controller
     protected function index(Request $request)
     {
         $user_id = null;
-        
-        if($request->user() == null){
+
+        if ($request->user() == null) {
 
             $user_id = $request->session()->get('user_id');
 
-            if(!$user_id){
+            if (!$user_id) {
 
                 $id = hexdec(uniqid());
                 $request->session()->put(['user_id' => $id]);
                 $user_id = $request->session()->get('user_id');
-                
             }
-            
-        }else{
+        } else {
             $user_id = $request->user()->id;
         }
-        
+
 
         $productos = Productos_user::where('users_id', $user_id)
             ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
@@ -46,15 +44,15 @@ class CarritoController extends Controller
     protected function agregar(Productos $producto, Request $request)
     {
         $user_id = null;
-        
-        if($request->user() == null){
+
+        if ($request->user() == null) {
             $user_id = $request->session()->get('user_id');
-            if(!$user_id){
+            if (!$user_id) {
                 $id = hexdec(uniqid());
                 $request->session()->put(['user_id' => $id]);
                 $user_id = $request->session()->get('user_id');
             }
-        }else{
+        } else {
             $user_id = $request->user()->id;
         }
 
