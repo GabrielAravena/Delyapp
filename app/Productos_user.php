@@ -20,6 +20,7 @@ class Productos_user extends Model
         'cantidad',
         'users_id',
         'ventas_id',
+        'invitado',
 
     ];
 
