@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,11 +12,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('inicio');
 })->name('inicio');
-
-Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -27,6 +26,10 @@ Route::get('/carrito', 'CarritoController@index')->name('carrito.index');
 Route::post('/carrito/{producto}', 'CarritoController@agregar')->name('carrito.agregar');
 Route::get('/carrito/delete/{id}', 'CarritoController@delete')->name('carrito.delete');
 Route::get('/producto/{producto}', 'CarritoController@producto')->name('carrito.producto');
+Route::post('/carritoLogin', 'CarritoController@login')->name('carrito.login');
+Route::post('/carritoPagar', 'CarritoController@pagar')->name('carrito.pagar');
+Route::post('/carritoReturn', 'CarritoController@return')->name('carrito.return');
+Route::post('/carritoFinal', 'CarritoController@final')->name('carrito.final');
 
 Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
 Route::post('/inicioAdmin', 'InicioAdminController@datosGrafico')->name('inicioAdmin.datos_grafico');

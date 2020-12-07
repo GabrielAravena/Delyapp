@@ -17,7 +17,6 @@
                             <label class="col-md-4 col-form-label text-md-left">{{ $inventario-> nombre }}</label>
                             </div>
                         </div>
-
                      
                         <div class="form-group row">
                             <label for="cantidad_en_inventario" class="col-md-4 col-form-label text-md-right">Cantidad comprada</label>
@@ -26,7 +25,6 @@
                                 <input id="cantidad_en_inventario" type="number" class="form-control" name="cantidad" value="">
                             </div>
                             <label for="cantidad_en_inventario" class="col-md-4 col-form-label text-md-left">{{ $inventario-> unidad_medida }}</label>
-
                         </div>
 
                         <div class="form-group row">
