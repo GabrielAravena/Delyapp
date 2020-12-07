@@ -10,11 +10,11 @@
                         <h2>¡Compra exitosa!</h2>
                     </div>
                     <h5 class="mt-5">Detalle de compra</h5>
-                    <div class="row offset-md-5">
+                    <div class="row offset-md-4">
                         <h6 class="mt-5">Monto: </h6>
                         <h6 class="mt-5" id="monto"></h6>
                     </div>
-                    <div class="row mb-5 offset-md-5">
+                    <div class="row mb-5 offset-md-4">
                         <h6 class="mt-5">Código de autorización: </h6>
                         <h6 class="mt-5" id="codigo"></h6>
                     </div>

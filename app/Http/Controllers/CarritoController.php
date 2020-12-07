@@ -253,13 +253,14 @@ class CarritoController extends Controller
             $venta->save();
 
             return view('carrito_redirect', compact('token_ws', 'urlRedirection', 'codigoAutorizacion', 'monto'));
+            
         } else {
 
-            return $request->session()->all();
+            return view('carrito_error');
         }
     }
 
-    protected function final(Request $request)
+    protected function final()
     {
         return view('carrito_final');
     }
