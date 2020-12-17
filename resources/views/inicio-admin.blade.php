@@ -1,7 +1,20 @@
 @extends('layouts.dashboard')
 @section('content')
 
-<div class="container" style="margin-top: 50px;">
+<div class="container">
+  <div class="header mt-md-5 mb-3">
+    <div class="header-body">
+      <div class="row align-items-center">
+        <div class="col">
+
+          <!-- Title -->
+          <h3 class="header-title">
+            Inicio
+          </h3>
+        </div>
+      </div> <!-- / .row -->
+    </div>
+  </div>
   <div class="row justify-content-center">
     <div class="col-sm-4">
       <div class="card shadow">
@@ -12,7 +25,7 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <div class="card shadow" onclick="mostrarSemana()">
+      <div class="card shadow" role="button" onclick="mostrarSemana()">
         <div class="card-body">
           <h5 class="card-title">Ingresos de la semana</h5>
           <p class="card-text h4">${{ number_format($infoSemana->ventasSemana, 0, ",", ".") }}</p>
@@ -20,7 +33,7 @@
       </div>
     </div>
     <div class="col-sm-4">
-      <div class="card shadow" onclick="mostrarMes()">
+      <div class="card shadow" role="button" onclick="mostrarMes()">
         <div class="card-body">
           <h5 class="card-title">Ingresos del mes</h5>
           <p class="card-text h4">${{ number_format($infoMes->ventasMes, 0, ",", ".") }}</p>
@@ -38,13 +51,12 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
 
 <script>
-
   function mostrarSemana() {
     document.getElementById('grafico_semana').style.display = 'block';
     document.getElementById('grafico_mes').style.display = 'none';
   }
 
-  function mostrarMes(){
+  function mostrarMes() {
     document.getElementById('grafico_semana').style.display = 'none';
     document.getElementById('grafico_mes').style.display = 'block';
   }
@@ -65,7 +77,7 @@
           'rgba(255, 99, 132, 0)',
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
+          '#ec5353',
         ],
         borderWidth: 3,
         lineTension: 0,
@@ -107,7 +119,7 @@
           'rgba(255, 99, 132, 0)',
         ],
         borderColor: [
-          'rgba(255, 99, 132, 1)',
+          '#ec5353',
         ],
         borderWidth: 3,
         lineTension: 0,

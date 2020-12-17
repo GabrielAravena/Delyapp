@@ -71,8 +71,6 @@ class VenderController extends Controller
                 $inventario->save();
 
             }
-           
-
         }
 
         $venta-> tipo = request('tipo_venta');

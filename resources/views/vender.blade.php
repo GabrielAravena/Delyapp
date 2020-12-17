@@ -6,7 +6,7 @@
         <div class="col-md-8">
 
             <!-- Header -->
-            <div class="header mt-5">
+            <div class="header mt-5 mb-3">
                 <div class="header-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -55,7 +55,7 @@
                             </svg>
                         </a>
                         <div class="row justify-content-center text-center mt-5">
-                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-primary text-white">Confirmar productos</button>
+                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-green text-white">Confirmar productos</button>
                         </div>
                     </form>
                 </div>

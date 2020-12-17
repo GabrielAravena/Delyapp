@@ -6,7 +6,7 @@
       <div class="col-12">
 
         <!-- Header -->
-        <div class="header mt-5">
+        <div class="header mt-5 mb-3">
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col">
@@ -44,7 +44,7 @@
                     <tr>
                       <td>{{ $producto->nombre }}</td>
                       <td>{{ $producto->descripcion }}</td>
-                      <td style="text-align:center">{{ $producto->imagen }}</td>
+                      <td style="text-align:center"><img src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" alt="Imagen producto" width="150px" height="80px"/></td>
                       <td style="text-align:right">{{ number_format($producto->precio, 0, ",", ".") }}</td>
                       <td style="text-align:center">
                         @if($producto->estado == 'activado')
@@ -82,8 +82,8 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3" style="float:right">
-          <a href="{{ route('menu.create')}}" class="btn btn-primary btn-sm">Nuevo producto</a>
+        <div class="col-md-3 mb-5" style="float:right">
+          <a href="{{ route('menu.create')}}" class="btn btn-green btn-sm">Nuevo producto</a>
         </div>
       </div>
     </div>

@@ -26,9 +26,9 @@
 
       @foreach($productos as $producto)
       @if($producto->categoria == 'promoción' || $producto->categoria == 'combo')
-      <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5">
+      <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
         <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}">
-          <img class="img-responsive" style="opacity: 0.6;" src="https://static.iris.net.co/dinero/upload/images/2016/12/15/240194_1.jpg" alt="" width="566" height="401">
+          <img style="opacity: 0.6; max-width: 100%;" src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" width="380" height="250">
           <div class="caption text-center">
             <h3 class="text-italic">{{ $producto->nombre }}</h3>
             <p class="big">{{ $producto->descripcion }}</p>
@@ -55,6 +55,7 @@
 
     <div class="resp-tabs-container text-center">
       @foreach($categoria as $cat)
+      @if ($cat->categoria != 'combo' && $cat->categoria != 'promoción')
       <div>
         <!-- Slick Carousel-->
         <div class="slick-slider slick-tab-centered" data-arrows="true" data-loop="true" data-dots="false" data-swipe="true" data-items="1" data-xs-items="1" data-sm-items="2" data-md-items="3" data-lg-items="3" data-xl-items="5" data-center-mode="true" data-center-padding="10">
@@ -64,7 +65,7 @@
           <div class="item">
             <div class="thumbnail-menu-modern">
               <figure>
-                <img class="img" src="https://sevilla.abc.es/gurme/wp-content/uploads/sites/24/2013/04/pizza-margarita-960x540.jpg" alt="" width="310" height="260" />
+                <img class="img" src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" alt="No se ha cargado la imagen" width="310" height="260" />
               </figure>
               <div class="caption">
                 <h5 class="primary">{{ $producto->nombre }}</h5>
@@ -80,6 +81,7 @@
           @endforeach
         </div>
       </div>
+      @endif
       @endforeach
     </div>
   </div>
@@ -90,7 +92,7 @@
     <div class="container">
       <div class="row border-left-cell">
         <div class="col-sm-6 col-md-3 col-lg-4">
-          <a class="float-left  mr-5" href="#">
+          <a class="float-left  mr-5" href="{{ route('inicio') }}">
             <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
           </a>
           <ul class="list-unstyled contact-info offset-top-5">

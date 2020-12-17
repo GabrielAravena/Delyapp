@@ -5,7 +5,7 @@
         <div class="col-md-8">
 
             <!-- Header -->
-            <div class="header mt-5">
+            <div class="header mt-5 mb-3">
                 <div class="header-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -69,7 +69,7 @@
 
                         <div class="form-inline row mb-0 mt-5">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-green">
                                     Ingresar
                                 </button>
                             </div>

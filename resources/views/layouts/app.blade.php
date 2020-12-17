@@ -23,13 +23,13 @@
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
     <style>
-        .btn-green{
+        .btn-green {
             color: #fff;
             background-color: #137830;
             border-color: #137830;
         }
 
-        .btn-green:hover{
+        .btn-green:hover {
             color: #fff;
             background-color: #095603;
             border-color: #095603;
@@ -42,7 +42,7 @@
     <div id="app">
         <nav class="navbar navbar-expand-md shadow" style="background-color: #791313; margin-bottom: 0px;">
             <div class="container">
-                <a class="float-left" href="#">
+                <a class="float-left" href="{{ route('inicio') }}">
                     <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
                 </a>
                 <button class="navbar-toggler mr-5" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -68,7 +68,13 @@
 
                     <ul class="navbar-nav float-right form-inline">
                         <!-- Authentication Links -->
+
                         @guest
+                        <a class="nav-link text-white mr-5" href="{{ route('carrito.index') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                            </svg>
+                        </a>
                         <li class="nav-item mr-5">
                             <a class="nav-link text-white" href="{{ route('login') }}">
                                 <svg id="iconoIniciarSesion" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-square mr-1" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -79,6 +85,11 @@
                             </a>
                         </li>
                         @else
+                        <a class="nav-link text-white mr-5" href="{{ route('carrito.index') }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart2" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z" />
+                            </svg>
+                        </a>
                         <li class="nav-item dropdown mr-5">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle text-white " href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                 <svg id="iconoIniciarSesion" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-person-square mr-1" fill="white" xmlns="http://www.w3.org/2000/svg">
@@ -114,6 +125,7 @@
     <script src="{{asset('js/core.min.js')}}"></script>
     <script src="{{asset('js/script.js')}}"></script>
     <script src="https://checkout.culqi.com/js/v3"></script>
+
     @stack('scripts')
 </body>
 

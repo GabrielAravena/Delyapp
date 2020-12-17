@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <!-- Header -->
-            <div class="header mt-md-5">
+            <div class="header mt-md-5 mb-3">
                 <div class="header-body">
                     <div class="row align-items-center">
                         <div class="col">

@@ -6,7 +6,7 @@
       <div class="col-12">
 
         <!-- Header -->
-        <div class="header mt-md-5">
+        <div class="header mt-md-5 mb-3">
           <div class="header-body">
             <div class="row align-items-center">
               <div class="col">
@@ -78,7 +78,7 @@
           </div>
         </div>
         <div class="col-md-3" style="float:right">
-          <a href="{{ route('inventario.create')}}" class="btn btn-primary btn-sm">Nuevo ingrediente</a>
+          <a href="{{ route('inventario.create')}}" class="btn btn-green btn-sm">Nuevo ingrediente</a>
         </div>
       </div>
     </div>

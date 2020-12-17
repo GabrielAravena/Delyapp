@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use App\Productos;
 use App\Ingredientes;
 use App\Inventario;
 use App\Productos_user;
 use App\Local;
+use Illuminate\Support\Facades\Storage;
 
 class menuController extends Controller
 {   
@@ -100,8 +103,9 @@ class menuController extends Controller
     }
 
     protected function store2(Request $request){
-  
 
+        $rutaImagen = $this->guardarImagen($request->file('imagen'));
+     
         $local_id = Local::find($request->user()->local_id)->id;
 
         $producto = Productos::where('local_id', $local_id)->get()->last();
@@ -110,6 +114,7 @@ class menuController extends Controller
         $producto->descripcion = request('descripcion');
         $producto->categoria = request('categoria');
         $producto->estado = 'activado';
+        $producto->imagen = $rutaImagen;
 
         if($request->radio == 'sugerido'){
             $producto->precio = $producto->precio_sugerido;
@@ -119,7 +124,7 @@ class menuController extends Controller
 
         $producto->save();
 
-        return redirect()->route('menu.index');
+        return redirect()->route('menu.index')->with('mensaje', 'El producto se creó correctamente');
     }
 
     protected function activar(Productos $producto){
@@ -146,5 +151,23 @@ class menuController extends Controller
         Productos::destroy($producto->id);
 
         return redirect()->route('menu.index');
+    }
+
+    protected function guardarImagen($imagen){
+        
+        if($imagen){
+            $nombre = Str::random(20).'.jpg';
+            $img = Image::make($imagen)->encode('jpg', 75);
+            $img->resize(530, 470, function($constraint){
+                $constraint->upsize();
+            });
+
+            Storage::disk('public')->put("imagenes/productos/$nombre", $img->stream());
+
+            return Storage::url("imagenes/productos/$nombre");
+        }else{
+
+            return null;
+        }
     }
 }

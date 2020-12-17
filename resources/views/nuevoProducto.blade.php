@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <!-- Header -->
-            <div class="header mt-5">
+            <div class="header mt-5 mb-3">
                 <div class="header-body">
                     <div class="row align-items-center">
                         <div class="col">
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-primary justify-center text-white" >Confirmar ingredientes</button>
+                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-green justify-center text-white" >Confirmar ingredientes</button>
                         </div>
                     </form>
                 </div>
@@ -91,8 +91,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
 <script>
     /* Agrega una fila a la tabla para agregar ingredientes */

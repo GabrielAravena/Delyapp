@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')
+
 <div class="container">
     <div class="col-md-12">
         <div class="card shadow" style="margin-top: 70px;">
@@ -12,11 +13,11 @@
                     <h5 class="mt-5">Detalle de compra</h5>
                     <div class="row offset-md-4">
                         <h6 class="mt-5">Monto: </h6>
-                        <h6 class="mt-5" id="monto"></h6>
+                        <h6 class="mt-5 ml-3" id="monto"></h6>
                     </div>
                     <div class="row mb-5 offset-md-4">
                         <h6 class="mt-5">Código de autorización: </h6>
-                        <h6 class="mt-5" id="codigo"></h6>
+                        <h6 class="mt-5 ml-3" id="codigo"></h6>
                     </div>
                     <a class="btn btn-green text-white mb-5" type="button" href="{{ route('inicio') }}">
                         Inicio

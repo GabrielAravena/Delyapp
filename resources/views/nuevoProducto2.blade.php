@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="card mt-5">
+            <div class="card mt-5 mb-5">
                 <div class="card-header">Nuevo producto</div>
                 <div class="card-body">
                     <div>
@@ -40,11 +40,11 @@
                             </div>
                         </div>
 
-                        <form method="POST" action="{{ route('menu.store2') }}">
+                        <form method="POST" action="{{ route('menu.store2') }}" enctype="multipart/form-data">
                             @csrf
 
                             <div class="form-inline row mt-3">
-                                <label class="col-md-2 col-form-label text-right">Categoria</label>
+                                <label class="col-md-2 col-form-label" style="justify-content: right;">Categoria</label>
                                 <div class="col-md-3 pl-0">
                                     <select class="col-md-2 form-control" name="categoria" id="categoria">
                                         <option value="promoción">Promoción</option>
@@ -71,17 +71,22 @@
                             </div>
 
                             <div class="form-inline row mt-3">
-                                <label class="col-md-2 col-form-label text-md-left">Tiempo de preparación</label>
+                                <label class="col-md-2 col-form-label" style="justify-content: right;">Tiempo de preparación</label>
                                 <input id="cantidad_en_inventario" max="99999999" type="number" class="col-md-2 form-control text-md-left" name="tiempo_preparacion" required>
-                                <label class="col-md-2 col-form-label text-md-left">minutos</label>
+                                <label class="col-md-2 col-form-label" style="justify-content: left;">minutos</label>
                             </div>
 
-                            <div class="form-group row mt-3">
-                                <label class="col-md-2 col-form-label text-md-left">Descripción del producto</label>
+                            <div class="form-inline row mt-3">
+                                <label class="col-md-2 col-form-label" style="justify-content: right;">Descripción del producto</label>
                                 <textarea type="textarea" maxlength="225" class="col-md-8 form-control text-md-left" name="descripcion" required></textarea>
                             </div>
 
-                            <div class="form-group row offset-md-2">
+                            <div class="form-inline row mt-3">
+                                <label class="col-md-2 col-form-label" style="justify-content: right;">Imagen del producto</label>
+                                <input class="file" type="file" name="imagen" id="imagen" data-show-preview="false" accept="image/*" />
+                            </div>
+
+                            <div class="form-group row offset-md-2 mt-5">
                                 <label class="col-md-2">Precio sugerido</label>
                                 <label class="col-md-4 "><strong>$ {{ number_format($precioSugerido, 0, ",", ".") }}</strong></label>
                             </div>
@@ -103,7 +108,7 @@
 
                             <div class="form-group row mb-0">
                                 <div class="col-md-6 offset-md-5">
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="submit" class="btn btn-green">
                                         Ingresar
                                     </button>
                                 </div>
@@ -115,7 +120,23 @@
         </div>
     </div>
 
-    <script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
+    <script>    
+        $(document).ready(function() {
+            $('#imagen').fileinput({
+                language: 'es',
+                allowedFileExtensions: ['jpg', 'jpeg', 'png'],
+                maxFileSize: 1000,
+                showUpload: false,
+                showRemove: false,
+                showClose: false,
+                initialPreviewAsData: false,
+                dropZoneEnabled: false,
+                theme: 'fas',
+            });
+        });
+
         function mostrar() {
             document.getElementById('precio').style.display = 'block';
             $('#precio').prop("required", true);

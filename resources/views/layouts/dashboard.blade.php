@@ -10,10 +10,10 @@
 
     <!-- Bootstrap core CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
     <link rel="stylesheet" href="{{asset('css/fonts.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('js/bootstrap-fileinput/css/fileinput.min.css')}}" type="text/css">
 
     <style>
         .bd-placeholder-img {
@@ -35,15 +35,17 @@
             background-color: #530705;
         }
 
-        .btn-green{
+        .btn-green {
             color: #fff;
             background-color: #137830;
         }
 
-        .btn-green:hover{
+        .btn-green:hover {
             color: #fff;
             background-color: #095603;
         }
+
+
     </style>
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
@@ -138,10 +140,12 @@
             </main>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="{{asset('js/core.min.js')}}"></script>
     <script src="{{asset('js/script.js')}}"></script>
-    <script src="{{asset('js/dashboard.js')}}"></script>
     <script src="https://checkout.culqi.com/js/v3"></script>
+    <script src="{{asset('js/bootstrap-fileinput/js/fileinput.min.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/bootstrap-fileinput/js/locales/es.js')}}" type="text/javascript"></script>
+    <script src="{{asset('js/bootstrap-fileinput/themes/fas/theme.min.js')}}" type="text/javascript"></script>
 
 </html>

@@ -6,6 +6,8 @@ use App\Productos;
 use App\Productos_user;
 use App\Ventas;
 use App\Invitado;
+use App\Ingredientes;
+use App\Inventario;
 use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use \Illuminate\Http\JsonResponse;
@@ -34,9 +36,8 @@ class CarritoController extends Controller
 
             if (!$codigoInvitado) {
 
-                $codigo = hexdec(uniqid());
-                $request->session()->put(['codigoInvitado' => $codigo]);
-                $codigoInvitado = $request->session()->get('codigoInvitado');
+                $codigoInvitado = hexdec(uniqid());
+                $request->session()->put(['codigoInvitado' => $codigoInvitado]);
             }
 
             $productos = Productos_user::where('invitado', $codigoInvitado)
@@ -75,8 +76,8 @@ class CarritoController extends Controller
                 $sessionId = $codigoInvitado;
             }
             $monto = $productos[0]->total;
+        
         }
-
 
         $returnUrl = route('carrito.return');
         $finalUrl = route('carrito.final');
@@ -88,7 +89,7 @@ class CarritoController extends Controller
             $returnUrl,
             $finalUrl
         );
-
+    
         $token_ws = $initResult->token;
         $url = $initResult->url;
 
@@ -107,9 +108,8 @@ class CarritoController extends Controller
 
             if (!$codigoInvitado) {
 
-                $codigo = hexdec(uniqid());
-                $request->session()->put(['codigoInvitado' => $codigo]);
-                $codigoInvitado = $request->session()->get('codigoInvitado');
+                $codigoInvitado = hexdec(uniqid());
+                $request->session()->put(['codigoInvitado' => $codigoInvitado]);
             }
 
             $productos_user = Productos_user::where('invitado', $codigoInvitado)
@@ -220,7 +220,7 @@ class CarritoController extends Controller
         $token_ws = $request->token_ws;
         $url = $request->url;
 
-        if($request->user() == null){
+        if ($request->user() == null) {
             Invitado::create([
                 'id' => $request->session()->get('codigoInvitado'),
                 'nombre' => $request->name,
@@ -249,11 +249,25 @@ class CarritoController extends Controller
         if ($output->responseCode == 0) {
 
             $venta = Ventas::find($buyOrder);
+
+            $productos = Productos_user::where('ventas_id', $venta->id)->get();
+
+            foreach ($productos as $producto) {
+
+                $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
+
+                foreach ($ingredientes as $ingrediente) {
+
+                    $inventario = Inventario::find($ingrediente->inventario_id);
+                    $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
+                    $inventario->save();
+                }
+            }
+            
             $venta->estado = 'finalizado';
             $venta->save();
 
             return view('carrito_redirect', compact('token_ws', 'urlRedirection', 'codigoAutorizacion', 'monto'));
-            
         } else {
 
             return view('carrito_error');

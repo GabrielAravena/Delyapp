@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Productos;
 use App\Local;
-use Illuminate\Http\Request;
 
 class LocalController extends Controller
 {
     protected function index($id){
         
-        $categorias = Productos::select('categoria')->where('local_id', $id)->get();
+        $categorias = Productos::select('categoria')->where('local_id', $id)->where('estado', 'activado')->get();
 
         $categoria = [];
         foreach($categorias as $cat){
@@ -18,9 +17,9 @@ class LocalController extends Controller
         }
         $categoria = array_unique($categoria);
 
-        $productos = Productos::where('local_id', 1)->where('estado', 'activado')->get();
+        $productos = Productos::where('local_id', $id)->where('estado', 'activado')->get();
 
-        $local = Local::find(1);
+        $local = Local::find($id);
 
         return view('local', compact('categoria', 'productos', 'local'));
     }

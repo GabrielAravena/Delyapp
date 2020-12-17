@@ -19,7 +19,7 @@
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>Este correo no está registrado</strong>
+                                        <strong>Datos incorrectos</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -53,7 +53,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-green">
                                     Ingresar
                                 </button>
 
