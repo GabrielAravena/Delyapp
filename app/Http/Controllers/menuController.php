@@ -32,6 +32,8 @@ class menuController extends Controller
 
     protected function create(Request $request){
 
+        $request->user()->authorizeRoles(['admin']);
+
         $local_id = Local::find($request->user()->local_id)->id;
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
@@ -127,29 +129,32 @@ class menuController extends Controller
         return redirect()->route('menu.index')->with('mensaje', 'El producto se creó correctamente');
     }
 
-    protected function activar(Productos $producto){
-        $producto->estado = 'activado';
-        $producto->save();
+    protected function activar(Productos $producto, Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        if($producto->local_id == $request->user()->local_id){
+
+            if($producto->estado == 'activado'){
+                $producto->estado = 'desactivado';
+                $producto->save();
+            }else{
+                $producto->estado = 'activado';
+                $producto->save();
+            }
+        }
 
         return redirect()->route('menu.index');
     }
 
-    protected function desactivar(Productos $producto){
-        $producto->estado = 'desactivado';
-        $producto->save();
+    protected function delete(Productos $producto, Request $request){
 
-        return redirect()->route('menu.index');
-    }
+        $request->user()->authorizeRoles(['admin']);
 
-    protected function delete(Productos $producto){
-        $ingredientes = Ingredientes::where('producto_id', $producto->id);
-        $ingredientes->delete();
-
-        $productos_user = Productos_user::where('producto_id', $producto->id);
-        $productos_user->delete();
-
-        Productos::destroy($producto->id);
-
+        if($producto->local_id == $request->user()->local_id){
+            Productos::eliminar($producto);
+        }
+        
         return redirect()->route('menu.index');
     }
 

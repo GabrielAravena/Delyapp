@@ -91,7 +91,7 @@
         </div>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script>
     /* Agrega una fila a la tabla para agregar ingredientes */
     $(document).ready(function() {

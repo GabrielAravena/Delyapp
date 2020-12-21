@@ -4,22 +4,18 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-12">
-
         <!-- Header -->
-        <div class="header mt-md-5 mb-3">
-          <div class="header-body">
-            <div class="row align-items-center">
-              <div class="col">
-
-                <!-- Title -->
-                <h3 class="header-title">
-                  Ingredientes en bodega
-                </h3>
-              </div>
-            </div> <!-- / .row -->
+        <div class="header mt-5 mb-3">
+          <div class="header-body form-inline col-12">
+            <!-- Title -->
+            <h3 class="header-title">
+              Ingredientes en bodega
+            </h3>
+            <div class="col-sm-4 col-md-3 col-lg-5 justify-content-end" style="display: flex; margin-left: 60px;">
+              <a href="{{ route('gastosFijos.index') }}" class="btn btn-primary">Gastos fijos</a>
+            </div>
           </div>
         </div>
-
         <!-- Team name -->
         <div class="form-group">
           <div class="row">
@@ -52,7 +48,7 @@
                       <td style="text-align:right">{{ number_format($inventario->pmp, 0, ",", ".")}}</td>
                       <td style="text-align:right">{{ number_format($inventario->ultimo_precio, 0 , ",", ".") }}</td>
                       <td style="text-align:center">
-                        <a href="{{ route('inventario.comprar', $inventario) }}">
+                        <a href="{{ route('inventario.comprar', $inventario->id) }}">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-plus-circle" fill="#137830" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
                             <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
@@ -60,8 +56,8 @@
                         </a>
                       </td>
                       <td style="text-align:center">
-                        <a href="{{ route('inventario.delete', $inventario) }}" onclick="return confirm('¿Estás seguro que deseas eliminar este ingrediente? \n\n'+
-                                              'Al eliminar un ingrediente, se eliminarán todos los registros de este, incluidas las compras que has realizado.\n\n'+ 
+                        <a href="{{ route('inventario.delete', $inventario->id) }}" onclick="return confirm('¿Estás seguro que deseas eliminar este ingrediente? \n\n'+
+                                              'Al eliminar un ingrediente, se eliminarán todos los registros de este, incluidas las compras que has realizado y LOS PRODUCTOS QUE TENGAN ESTE INGREDIENTE.\n\n'+ 
                                               'ESTA INFORMACIÓN NO SE PUEDE RECUPERAR.');">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="red" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
@@ -78,7 +74,7 @@
           </div>
         </div>
         <div class="col-md-3" style="float:right">
-          <a href="{{ route('inventario.create')}}" class="btn btn-green btn-sm">Nuevo ingrediente</a>
+          <a href="{{ route('inventario.create', $local_id)}}" class="btn btn-green btn-sm">Nuevo ingrediente</a>
         </div>
       </div>
     </div>

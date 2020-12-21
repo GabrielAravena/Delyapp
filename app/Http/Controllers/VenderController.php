@@ -7,6 +7,7 @@ use App\Productos;
 use App\Ventas;
 use App\Productos_user;
 use App\Ingredientes;
+use App\Registro_ventas;
 use Illuminate\Http\Request;
 
 class VenderController extends Controller
@@ -61,21 +62,32 @@ class VenderController extends Controller
         $productos = Productos_user::where('ventas_id', $venta->id)->get();
 
         foreach($productos as $producto){
-
+            
             $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
 
             foreach($ingredientes as $ingrediente){
                 
                 $inventario = Inventario::find($ingrediente->inventario_id);
-                $inventario-> cantidad -= ($ingrediente->cantidad * $producto->cantidad);
+                $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
                 $inventario->save();
+
+                $local_id = $inventario->local_id;
 
             }
         }
 
-        $venta-> tipo = request('tipo_venta');
-        $venta-> precio = request('precio_total');
-        $venta-> estado = 'finalizado';
+        Registro_ventas::create([
+            'local_id' => $local_id,
+            'users_id' => null,
+            'invitado' => null,
+            'venta_id' => $venta->id,
+            'tipo' => request('tipo_venta'),
+            'valor' => request('precio_total'),
+        ]);
+
+        $venta->tipo = request('tipo_venta');
+        $venta->precio = request('precio_total');
+        $venta->estado = 'finalizado';
         $venta->save();
 
         return redirect()->route('inicioAdmin.index');

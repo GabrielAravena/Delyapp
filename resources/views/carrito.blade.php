@@ -166,7 +166,7 @@
                   <label for="direccion" class="col-md-4 col-form-label text-md-right">Dirección</label>
 
                   <div class="col-md-6">
-                    <input id="direccion" type="text" class="form-control" name="direccion" value="" required autofocus>
+                    <input id="direccion" type="text" class="form-control" name="direccion" required>
                   </div>
                 </div>
 

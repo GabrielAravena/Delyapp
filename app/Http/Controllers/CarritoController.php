@@ -8,6 +8,7 @@ use App\Ventas;
 use App\Invitado;
 use App\Ingredientes;
 use App\Inventario;
+use App\Registro_ventas;
 use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use \Illuminate\Http\JsonResponse;
@@ -76,7 +77,6 @@ class CarritoController extends Controller
                 $sessionId = $codigoInvitado;
             }
             $monto = $productos[0]->total;
-        
         }
 
         $returnUrl = route('carrito.return');
@@ -89,7 +89,7 @@ class CarritoController extends Controller
             $returnUrl,
             $finalUrl
         );
-    
+
         $token_ws = $initResult->token;
         $url = $initResult->url;
 
@@ -191,20 +191,36 @@ class CarritoController extends Controller
         return redirect()->route('carrito.index');
     }
 
-    protected function delete($id)
+    protected function delete(Request $request, $id)
     {
+        if($request->user()){
+            $user_id = $request->user()->id;
 
-        $productos_user = Productos_user::where('productos_users.id', $id)
+            $productos_user = Productos_user::where('productos_users.id', $id)
+            ->where('user_id', $user_id)
             ->join('productos', 'productos_users.producto_id', 'productos.id')
             ->select('productos_users.*', 'productos.precio')
             ->get()
             ->last();
 
-        $venta = Ventas::find($productos_user->ventas_id);
-        $venta->precio -= $productos_user->precio * $productos_user->cantidad;
-        $venta->save();
+        }else{
+            $invitado = $request->session()->get('codigoInvitado');
 
-        $productos_user->delete();
+            $productos_user = Productos_user::where('productos_users.id', $id)
+            ->where('invitado', $invitado)
+            ->join('productos', 'productos_users.producto_id', 'productos.id')
+            ->select('productos_users.*', 'productos.precio')
+            ->get()
+            ->last();
+        }
+
+        if($productos_user){
+            $venta = Ventas::find($productos_user->ventas_id);
+            $venta->precio -= $productos_user->precio * $productos_user->cantidad;
+            $venta->save();
+    
+            $productos_user->delete();
+        }
 
         return redirect()->route('carrito.index');
     }
@@ -248,11 +264,17 @@ class CarritoController extends Controller
 
         if ($output->responseCode == 0) {
 
-            $venta = Ventas::find($buyOrder);
-
-            $productos = Productos_user::where('ventas_id', $venta->id)->get();
+            $productos = Productos_user::where('ventas_id', $buyOrder)->get();
 
             foreach ($productos as $producto) {
+
+                if ($producto->user_id != 1) {
+                    $user_id = $producto->users_id;
+                    $invitado = null;
+                } else {
+                    $invitado = $producto->invitado;
+                    $user_id = null;
+                }
 
                 $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
 
@@ -261,9 +283,21 @@ class CarritoController extends Controller
                     $inventario = Inventario::find($ingrediente->inventario_id);
                     $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
                     $inventario->save();
+
+                    $local_id = $inventario->local_id;
                 }
             }
-            
+
+            Registro_ventas::create([
+                'local_id' => $local_id,
+                'users_id' => $user_id,
+                'invitado' => $invitado,
+                'venta_id' => $buyOrder,
+                'tipo' => 'online',
+                'valor' => $monto,
+            ]);
+
+            $venta = Ventas::find($buyOrder);
             $venta->estado = 'finalizado';
             $venta->save();
 

@@ -104,7 +104,11 @@
                                                      document.getElementById('logout-form').submit();">
                                     Cerrar sesión
                                 </a>
-
+                                @if(Auth::user()->local_id)
+                                <a class="dropdown-item" href="{{ route('inicioAdmin.index') }}">
+                                    Panel de administración
+                                </a>
+                                @endif
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>

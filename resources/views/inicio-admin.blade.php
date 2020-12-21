@@ -2,17 +2,21 @@
 @section('content')
 
 <div class="container">
-  <div class="header mt-md-5 mb-3">
-    <div class="header-body">
-      <div class="row align-items-center">
-        <div class="col">
-
-          <!-- Title -->
-          <h3 class="header-title">
-            Inicio
-          </h3>
-        </div>
-      </div> <!-- / .row -->
+  <div class="header mt-5 mb-3">
+    <div class="header-body form-inline col-12">
+      <!-- Title -->
+      <h3 class="header-title">
+        Inicio
+      </h3>
+      @if($local->estado == 'activado')
+      <div class="col-8 col-lg-10 justify-content-end" style="display: flex; margin-left: 50px;">
+        <a href="{{ route('inicioAdmin.activar', $local)}}" class="btn btn-green">Desactivar local</a>
+      </div> 
+      @else
+      <div class="col-8 col-lg-10 justify-content-end" style="display: flex; margin-left: 50px;">
+        <a href="{{ route('inicioAdmin.activar', $local)}}" class="btn btn-primary">Activar local</a>
+      </div> 
+      @endif
     </div>
   </div>
   <div class="row justify-content-center">

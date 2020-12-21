@@ -3,9 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Storage;
 
 class Productos extends Model
 {
@@ -35,6 +32,17 @@ class Productos extends Model
     public function user()
     {
         return $this->belongsToMany('App\User')->using('App\Productos_user');
+    }
+
+    public static function eliminar(Productos $producto){
+
+        $ingredientes = Ingredientes::where('producto_id', $producto->id);
+        $ingredientes->delete();
+
+        $productos_user = Productos_user::where('producto_id', $producto->id);
+        $productos_user->delete();
+
+        Productos::destroy($producto->id);
     }
 
 }

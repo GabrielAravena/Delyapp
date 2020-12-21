@@ -19,11 +19,10 @@
             </div>
 
             <div class="card">
-                <div class="card-header">Nuevo ingrediente</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('inventario.store')}}">
                         @csrf
-                        <div class="form-inline row mt-3">
+                        <div class="form-inline row mt-5">
                             <label class="col-md-4 col-form-label text-md-right">Nombre ingrediente</label>
 
                             <div class="col-md-6">
@@ -67,11 +66,14 @@
                             </div>
                         </div>
 
-                        <div class="form-inline row mb-0 mt-5">
-                            <div class="col-md-6 offset-md-4">
+                        <div class="form-inline row mb-3 mt-5">
+                            <div class="col-md-12 offset-md-3">
                                 <button type="submit" class="btn btn-green">
                                     Ingresar
                                 </button>
+                                <a type="button" href="{{ route('inventario.index') }}" class="btn btn-primary text-white">
+                                    Volver
+                                </a>
                             </div>
                         </div>
                     </form>

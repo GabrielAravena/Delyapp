@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\InicioController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('inicio');
-})->name('inicio');
+Route::get('/', 'InicioController@index')->name('inicio');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -32,21 +31,25 @@ Route::post('/carritoReturn', 'CarritoController@return')->name('carrito.return'
 Route::post('/carritoFinal', 'CarritoController@final')->name('carrito.final');
 
 Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
-Route::post('/inicioAdmin', 'InicioAdminController@datosGrafico')->name('inicioAdmin.datos_grafico');
+Route::get('/inicioAdmin/activar/{local}', 'InicioAdminController@activar')->name('inicioAdmin.activar');
 
 Route::get('/inventario', 'inventarioController@index')->name('inventario.index');
-Route::get('/inventario/nuevoIngrediente', 'inventarioController@create')->name('inventario.create');
+Route::get('/inventario/nuevoIngrediente/{local_id}', 'inventarioController@create')->name('inventario.create');
 Route::post('/inventario/nuevoIngrediente', 'InventarioController@store')->name('inventario.store');
 Route::get('/inventario/compraIngrediente/{inventario}', 'inventarioController@comprar')->name('inventario.comprar');
 Route::get('/inventario/borrarIngrediente/{inventario}', 'inventarioController@delete')->name('inventario.delete');
 Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@compra')->name('inventario.compra');
+
+Route::get('/gastosFijos', 'gastosFijosController@index')->name('gastosFijos.index');
+Route::get('/gastosFijos/nuevoGasto', 'gastosFijosController@create')->name('gastosFijos.create');
+Route::post('/gastosFijos/nuevoGasto', 'gastosFijosController@store')->name('gastosFijos.store');
+
 
 Route::get('/menu', 'MenuController@index')->name('menu.index');
 Route::get('/menu/nuevoProducto', 'MenuController@create')->name('menu.create');
 Route::post('/menu/nuevoProducto', 'MenuController@store')->name('menu.store');
 Route::post('/menu/nuevoProducto2', 'MenuController@store2')->name('menu.store2');
 Route::get('/menu/activar/{producto}', 'MenuController@activar')->name('menu.activar');
-Route::get('/menu/desactivar/{producto}', 'MenuController@desactivar')->name('menu.desactivar');
 Route::get('/menu/borrarProducto/{producto}', 'MenuController@delete')->name('menu.delete');
 
 Route::get('/vender', 'VenderController@index')->name('vender.index');

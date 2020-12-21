@@ -16,6 +16,7 @@ class Local extends Model
         'direccion', 
         'telefono',
         'imagen',
+        'estado',
         'delivery',
     ];
 
@@ -29,6 +30,11 @@ class Local extends Model
     public function inventario()
     {
         return $this->hasMany('App\Inventario');
+    }
+
+    public function gastos_fijos()
+    {
+        return $this->hasMany('App\Gastos_fijos');
     }
 
 }

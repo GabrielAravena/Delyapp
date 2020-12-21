@@ -21,7 +21,6 @@ class Productos_user extends Model
         'users_id',
         'ventas_id',
         'invitado',
-
     ];
 
 }

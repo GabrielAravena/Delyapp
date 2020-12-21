@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inventario;
 use App\Compras_historicas;
+use App\Productos;
+use App\Ingredientes;
 use App\Mermas;
 use App\Local;
 
@@ -15,7 +17,8 @@ class InventarioController extends Controller
         $this->middleware('auth');
     }
 
-    protected function index(Request $request){
+    protected function index(Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -23,33 +26,39 @@ class InventarioController extends Controller
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
 
-        return view('inventario', compact('inventarios'));
+        return view('inventario', compact('inventarios', 'local_id'));
     }
 
-    protected function create(){
+    protected function create($local_id, Request $request)
+    {   
+        $request->user()->authorizeRoles(['admin']);
 
-        $mermas = Mermas::all();
+        if($local_id = $request->user()->local_id){
 
-        return view('nuevoIngrediente', compact('mermas'));
+            $mermas = Mermas::all();
+            return view('nuevoIngrediente', compact('mermas'));
+        }
+        return redirect()->route('inicioAdmin.index');
     }
 
-    protected function store(Request $request){
+    protected function store(Request $request)
+    {
 
         $local_id = Local::find($request->user()->local_id)->id;
 
-        $valor = request('precio')*request('cantidad');
+        $valor = request('precio') * request('cantidad');
 
         $merma = Mermas::find(request('mermaId'));
-        
+
         $inventario =   Inventario::create([
-                        'nombre' => $merma->nombre,
-                        'cantidad' => request('cantidad'),
-                        'unidad_medida' => request('unidad_medida'),
-                        'valor' => $valor,
-                        'pmp' => (request('precio')),
-                        'ultimo_precio' => (request('precio')),
-                        'merma' => $merma->porcentaje,
-                        'local_id' => $local_id,
+            'nombre' => $merma->nombre,
+            'cantidad' => request('cantidad'),
+            'unidad_medida' => request('unidad_medida'),
+            'valor' => $valor,
+            'pmp' => (request('precio')),
+            'ultimo_precio' => (request('precio')),
+            'merma' => $merma->porcentaje,
+            'local_id' => $local_id,
 
         ]);
 
@@ -64,14 +73,22 @@ class InventarioController extends Controller
         return redirect()->route('inventario.index');
     }
 
-    protected function comprar(Inventario $inventario){
+    protected function comprar($inventario_id, Request $request)
+    {
 
-        return view('compraIngrediente', [
-            'inventario' => $inventario
-        ]);
+        $request->user()->authorizeRoles(['admin']);
+
+        $inventario = Inventario::find($inventario_id)->where('local_id', $request->user()->local_id)->get()->first();
+
+        if ($inventario) {
+            return view('compraIngrediente', compact('inventario'));
+        } else {
+            return redirect()->route('inventario.index');
+        }
     }
 
-    protected function compra(Inventario $inventario){
+    protected function compra(Inventario $inventario)
+    {
 
         Compras_historicas::create([
             'nombre' => "{$inventario->nombre}",
@@ -84,7 +101,7 @@ class InventarioController extends Controller
         $sumaValores = Compras_historicas::where('inventario_id', $inventario->id)->sum('valor');
         $cantidadinventario = $inventario->cantidad + request('cantidad');
 
-        $precioMedioPonderado = $sumaValores/$cantidadinventario;
+        $precioMedioPonderado = $sumaValores / $cantidadinventario;
 
 
         $inventario = Inventario::find($inventario->id);
@@ -92,20 +109,39 @@ class InventarioController extends Controller
         $inventario->cantidad = $cantidadinventario;
         $inventario->valor = $precioMedioPonderado * $cantidadinventario;
         $inventario->pmp = $precioMedioPonderado;
-        $inventario->ultimo_precio = (request('valor')/request('cantidad'));
+        $inventario->ultimo_precio = (request('valor') / request('cantidad'));
 
         $inventario->save();
 
         return redirect()->route('inventario.index');
     }
 
-    protected function delete(Inventario $inventario){
+    protected function delete($inventario_id, Request $request)
+    {
 
-        $compras_historicas = Compras_historicas::where('inventario_id', $inventario->id);
-        $compras_historicas->delete();
+        $request->user()->authorizeRoles(['admin']);
 
-        Inventario::destroy($inventario->id);
-        
+        $local_id = $request->user()->local_id;
+
+        $inventario = Inventario::find($inventario_id)->where('local_id', $local_id)->get()->first();
+
+        if ($inventario) {
+            $compras_historicas = Compras_historicas::where('inventario_id', $inventario->id);
+            $compras_historicas->delete();
+
+            $ingredientes = Ingredientes::where('inventario_id', $inventario->id)->get();
+
+            foreach ($ingredientes as $ingrediente) {
+                $producto = Productos::find($ingrediente->producto_id);
+                Productos::eliminar($producto);
+            }
+
+            $ingredientes = Ingredientes::where('inventario_id', $inventario->id);
+            $ingredientes->delete();
+
+            Inventario::destroy($inventario->id);
+
+        }
         return redirect()->route('inventario.index');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLocalTable extends Migration
+class CreateGastosFijosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,13 @@ class CreateLocalTable extends Migration
      */
     public function up()
     {
-        Schema::create('local', function (Blueprint $table) {
+        Schema::create('gastos_fijos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('direccion');
-            $table->string('telefono');
-            $table->string('imagen');
-            $table->string('estado');
-            $table->boolean('delivery');
+            $table->decimal('monto');
             $table->timestamps();
+
+            $table->foreignId('local_id')->constrained('local');
         });
     }
 
@@ -32,6 +30,6 @@ class CreateLocalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('local');
+        Schema::dropIfExists('gastos_fijos');
     }
 }

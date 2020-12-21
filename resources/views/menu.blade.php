@@ -48,7 +48,7 @@
                       <td style="text-align:right">{{ number_format($producto->precio, 0, ",", ".") }}</td>
                       <td style="text-align:center">
                         @if($producto->estado == 'activado')
-                        <a href="{{ route('menu.desactivar', $producto)}}">
+                        <a href="{{ route('menu.activar', $producto)}}">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-check2-square" fill="green" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
                             <path fill-rule="evenodd" d="M1.5 13A1.5 1.5 0 0 0 3 14.5h10a1.5 1.5 0 0 0 1.5-1.5V8a.5.5 0 0 0-1 0v5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5h8a.5.5 0 0 0 0-1H3A1.5 1.5 0 0 0 1.5 3v10z" />
@@ -65,7 +65,7 @@
                       </td>
                       <td style="text-align:center">
                         <a href="{{ route('menu.delete', $producto) }}" onclick="return confirm('¿Estás seguro que deseas eliminar este producto? \n\n'+
-                                            'Al eliminar un ingrediente, se eliminarán todos los registros de este.\n\n'+ 
+                                            'Al eliminar un producto, se eliminarán todos los registros de este.\n\n'+ 
                                             'ESTA INFORMACIÓN NO SE PUEDE RECUPERAR.');">
                           <svg width="2em" height="2em" viewBox="0 0 16 16" class="bi bi-trash" fill="red" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
