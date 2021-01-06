@@ -43,7 +43,9 @@ Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@
 Route::get('/gastosFijos', 'gastosFijosController@index')->name('gastosFijos.index');
 Route::get('/gastosFijos/nuevoGasto', 'gastosFijosController@create')->name('gastosFijos.create');
 Route::post('/gastosFijos/nuevoGasto', 'gastosFijosController@store')->name('gastosFijos.store');
-
+Route::get('/gastosFijos/modificar/{gasto}', 'gastosFijosController@modificar')->name('gastosFijos.modificar');
+Route::post('/gastosFijos/modificar', 'gastosFijosController@ingresarModificacion')->name('gastosFijos.ingresarModificacion');
+Route::get('/gastosFijos/borrar/{gasto}', 'gastosFijosController@borrar')->name('gastosFijos.borrar');
 
 Route::get('/menu', 'MenuController@index')->name('menu.index');
 Route::get('/menu/nuevoProducto', 'MenuController@create')->name('menu.create');
@@ -55,3 +57,7 @@ Route::get('/menu/borrarProducto/{producto}', 'MenuController@delete')->name('me
 Route::get('/vender', 'VenderController@index')->name('vender.index');
 Route::post('/vender/store', 'VenderController@store')->name('vender.store');
 Route::post('/vender/store2/{venta}', 'VenderController@store2')->name('vender.store2');
+
+Route::get('/ventas', 'VentasController@index')->name('ventas.index');
+Route::post('/ventas/{local}', 'VentasController@buscar')->name('ventas.buscar');
+Route::get('/ventas/descargar/{desde}/{hasta}', 'VentasController@descargarDocumento')->name('ventas.descargarDocumento');

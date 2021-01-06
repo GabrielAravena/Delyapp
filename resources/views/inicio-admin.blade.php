@@ -78,10 +78,10 @@
         label: 'Ventas del mes',
         data: @json($infoMes -> ventasMesPorDia),
         backgroundColor: [
-          'rgba(255, 99, 132, 0)',
+          'rgba(249, 177, 41, 0)',
         ],
         borderColor: [
-          '#ec5353',
+          '#F9B129',
         ],
         borderWidth: 3,
         lineTension: 0,

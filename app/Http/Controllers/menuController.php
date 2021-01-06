@@ -43,7 +43,7 @@ class menuController extends Controller
 
     protected function store(Request $request){
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         $producto = Productos::create([
                     'nombre' => request('nombre_ingrediente'),
@@ -108,7 +108,7 @@ class menuController extends Controller
 
         $rutaImagen = $this->guardarImagen($request->file('imagen'));
      
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         $producto = Productos::where('local_id', $local_id)->get()->last();
 

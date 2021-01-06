@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="nav-item pt-3">
-                            <a class="nav-link h5 text-white" href="#">
+                            <a class="nav-link h5 text-white" href="{{ route('ventas.index') }}">
                                 Ventas
                             </a>
                         </li>

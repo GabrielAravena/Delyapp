@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Ventas;
-use App\Productos_user;
-use App\Productos;
 use App\Local;
 use App\Registro_ventas;
 use Carbon\Carbon;
@@ -39,9 +36,11 @@ class InicioAdminController extends Controller
         $ventasSemana = $this->ventasSemana($local_id);
 
         $ventasSemanaPorDia = $this->ventasSemanaPorDia($local_id);
-
+ 
         $infoSemana = ["ventasSemana" => $ventasSemana, "ventasSemanaPorDia" => $ventasSemanaPorDia];
         $infoSemana = (object)($infoSemana);
+
+        
 
         /* Info día */
         $ventasDia = $this->ventasDia($local_id);
@@ -49,19 +48,19 @@ class InicioAdminController extends Controller
         return view('inicio-admin', compact('infoMes', 'infoSemana', 'ventasDia', 'local'));
     }
 
-    protected function activar(Request $request){
+    protected function activar(Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
-        
+
         $local_id = $request->user()->local_id;
-        
+
         $local = Local::find($local_id);
 
-        if($local->estado == 'activado'){
+        if ($local->estado == 'activado') {
             $local->estado = 'desactivado';
             $local->save();
-
-        }else{
+        } else {
             $local->estado = 'activado';
             $local->save();
         }
@@ -79,12 +78,13 @@ class InicioAdminController extends Controller
 
     protected function ventasMesPorDia($local_id)
     {
-        $ventasMesPorDia = Registro_ventas::select('created_at', 'valor')
+        $ventasMesPorDia = Registro_ventas::select('updated_at', 'valor')
             ->where('local_id', $local_id)
-            ->whereMonth('created_at', date('m'))
-            ->get()->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->format('Y-m-d');
-        });
+            ->whereMonth('updated_at', date('m'))
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->updated_at)->format('Y-m-d');
+            });
 
         $precioVentasMesPorDia = [];
         foreach ($ventasMesPorDia as $fecha => $ventasPorDia) {
@@ -108,9 +108,9 @@ class InicioAdminController extends Controller
     }
 
     protected function ventasMes($local_id)
-    {   
+    {
         return Registro_ventas::where('local_id', $local_id)
-            ->whereMonth('created_at', date('m'))
+            ->whereMonth('updated_at', date('m'))
             ->get()
             ->sum('valor');
     }
@@ -125,7 +125,7 @@ class InicioAdminController extends Controller
         }
 
         return Registro_ventas::where('local_id', $local_id)
-            ->where('created_at', '>=', $week_start)
+            ->where('updated_at', '>=', $week_start)
             ->get()
             ->sum('valor');
     }
@@ -139,34 +139,38 @@ class InicioAdminController extends Controller
         }
 
         $ventasSemanaPorDia = Registro_ventas::where('local_id', $local_id)
-            ->where('created_at', '>=', $week_start)
+            ->where('updated_at', '>=', $week_start)
             ->get()
             ->groupBy(function ($date) {
-            return Carbon::parse($date->created_at)->format('Y-m-d');
-        });
-
+                return Carbon::parse($date->updated_at)->format('Y-m-d');
+            });
+     
         $precioVentasSemanaPorDia = [];
         foreach ($ventasSemanaPorDia as $fecha => $ventasDia) {
+ 
             $precioVentasDia = 0;
             foreach ($ventasDia as $venta) {
                 $precioVentasDia += $venta->valor;
             }
-            $precioVentasSemanaPorDia[date("w", strtotime($fecha))] = $precioVentasDia;
+            $precioVentasSemanaPorDia[date("N", strtotime($fecha))] = $precioVentasDia;
         }
 
         $ventaPorDia = [];
-        for($i=1; $i <= 7; $i++){
-            if(isset($precioVentasSemanaPorDia[$i])){
+        for ($i = 1; $i <= 7; $i++) {
+            if (isset($precioVentasSemanaPorDia[$i])) {
                 $ventaPorDia[] = $precioVentasSemanaPorDia[$i];
-            }else{
+            } else {
                 $ventaPorDia[] = 0;
             }
         }
+
         return $ventaPorDia;
     }
 
-    protected function ventasDia($local_id){
-        return Registro_ventas::where('local_id', $local_id)->where('created_at', ">=", date("Y-m-d"))
-            ->get()->where('local_id', $local_id)->sum('valor');
+    protected function ventasDia($local_id)
+    {
+        return Registro_ventas::where('local_id', $local_id)->where('updated_at', ">=", date("Y-m-d"))
+            ->get()
+            ->sum('valor');
     }
 }

@@ -30,7 +30,7 @@ class CarritoController extends Controller
         $monto = 1;
         $sessionId = 0;
         $buyOrder = 0;
-
+      
         if ($request->user() == null) {
 
             $codigoInvitado = $request->session()->get('codigoInvitado');
@@ -268,7 +268,7 @@ class CarritoController extends Controller
 
             foreach ($productos as $producto) {
 
-                if ($producto->user_id != 1) {
+                if ($producto->users_id != 1) {
                     $user_id = $producto->users_id;
                     $invitado = null;
                 } else {
@@ -287,7 +287,7 @@ class CarritoController extends Controller
                     $local_id = $inventario->local_id;
                 }
             }
-
+            
             Registro_ventas::create([
                 'local_id' => $local_id,
                 'users_id' => $user_id,

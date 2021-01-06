@@ -22,7 +22,7 @@ class InventarioController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
 
@@ -44,7 +44,7 @@ class InventarioController extends Controller
     protected function store(Request $request)
     {
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         $valor = request('precio') * request('cantidad');
 
@@ -78,7 +78,7 @@ class InventarioController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $inventario = Inventario::find($inventario_id)->where('local_id', $request->user()->local_id)->get()->first();
+        $inventario = Inventario::where('id', $inventario_id)->where('local_id', $request->user()->local_id)->get()->first();
 
         if ($inventario) {
             return view('compraIngrediente', compact('inventario'));
@@ -123,7 +123,7 @@ class InventarioController extends Controller
 
         $local_id = $request->user()->local_id;
 
-        $inventario = Inventario::find($inventario_id)->where('local_id', $local_id)->get()->first();
+        $inventario = Inventario::where('id', $inventario_id)->where('local_id', $local_id)->get()->first();
 
         if ($inventario) {
             $compras_historicas = Compras_historicas::where('inventario_id', $inventario->id);

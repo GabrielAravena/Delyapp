@@ -17,7 +17,7 @@ class GastosFijosController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         $gastosFijos = Gastos_fijos::where('local_id', $local_id)->get();
 
@@ -28,7 +28,7 @@ class GastosFijosController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
 
         return view('nuevoGasto', compact('local_id'));
     }
@@ -42,5 +42,38 @@ class GastosFijosController extends Controller
         ]);
 
         return redirect()->route('gastosFijos.index');
+    }
+
+    protected function modificar($gasto_id, Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $gasto = Gastos_fijos::where('id', $gasto_id)->where('local_id', $request->user()->local_id)->get()->first();
+
+        if ($gasto) {
+            return view('modificarGasto', compact('gasto'));
+        } 
+
+        return redirect()->route('gastosFijos.index');
+    }
+
+    protected function ingresarModificacion(Request $request){
+
+        $gastoFijo = Gastos_fijos::find($request->gasto_id); 
+
+        $gastoFijo->monto = $request->monto;
+        $gastoFijo->save();
+
+        return redirect()->route('gastosFijos.index');
+    }
+
+    protected function borrar($gasto_id, Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        Gastos_fijos::where('id', $gasto_id)->where('local_id', $request->user()->local_id)->get()->first()->delete();
+
+        return redirect()->route('gastosFijos.index');
+
     }
 }
