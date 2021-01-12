@@ -6,11 +6,19 @@
             <div class="col-12">
                 <!-- Header -->
                 <div class="header mt-5 mb-3">
-                    <div class="header-body form-inline col-12">
+                    <div class="header-body col-12">
                         <!-- Title -->
                         <h3 class="header-title">
                             Gastos fijos
                         </h3>
+                        @if(session('mensaje'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>Perfecto: </strong> {{ session('mensaje') }}
+                            <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 <!-- Team name -->

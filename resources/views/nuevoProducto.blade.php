@@ -1,6 +1,5 @@
 @extends('layouts.dashboard')
 @section('content')
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
@@ -14,6 +13,14 @@
                             <h3 class="header-title">
                                 Nuevo producto
                             </h3>
+                            @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>Error: </strong> {{ session('error') }}
+                                <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -35,7 +42,7 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
-                                    <div class="card-header">Ingredientes</div>
+                                        <div class="card-header">Ingredientes</div>
                                         <table id="tablaNuevoProducto" class="table table-md">
                                             <tbody>
                                                 <tr>
@@ -83,7 +90,7 @@
                             </div>
                         </div>
                         <div class="row justify-content-center">
-                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-green justify-center text-white" >Confirmar ingredientes</button>
+                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-green justify-center text-white">Confirmar ingredientes</button>
                         </div>
                     </form>
                 </div>

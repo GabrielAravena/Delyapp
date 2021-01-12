@@ -70,7 +70,7 @@ class InventarioController extends Controller
             'inventario_id' => $inventario->id,
         ]);
 
-        return redirect()->route('inventario.index');
+        return redirect()->route('inventario.index')->with('mensaje', ' El ingrediente se creó correctamente.');
     }
 
     protected function comprar($inventario_id, Request $request)
@@ -113,7 +113,7 @@ class InventarioController extends Controller
 
         $inventario->save();
 
-        return redirect()->route('inventario.index');
+        return redirect()->route('inventario.index')->with('mensaje', ' Se registró la compra de ingrediente correctamente.');
     }
 
     protected function delete($inventario_id, Request $request)
@@ -142,6 +142,6 @@ class InventarioController extends Controller
             Inventario::destroy($inventario->id);
 
         }
-        return redirect()->route('inventario.index');
+        return redirect()->route('inventario.index')->with('mensaje', ' El ingrediente se eliminó correctamente.');
     }
 }

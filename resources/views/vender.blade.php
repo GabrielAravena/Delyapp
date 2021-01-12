@@ -15,6 +15,14 @@
                             <h3 class="header-title">
                                 Vender
                             </h3>
+                            @if(session('mensaje'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Perfecto:</strong> {{ session('mensaje') }}
+                                <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -54,8 +62,13 @@
                                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                             </svg>
                         </a>
-                        <div class="row justify-content-center text-center mt-5">
-                            <button type="submit" id="confirmarIngredientes" class="col-md-4 btn btn-green text-white">Confirmar productos</button>
+                        <div class="form-inline row mt-5 mb-3 mt-5 text-center">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-green">
+                                    Confirmar productos
+                                </button>
+                                <a href="{{ route('vender.index') }}" class="btn btn-primary">Volver</a>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -74,7 +87,7 @@
             c++;
             $('#tablaNuevoProducto').append(
                 '<div>' +
-                
+
                 '<div class="form-inline row mt-5 justify-content-center">' +
                 '<div class="col-md-2 text-md-right">' +
                 '<label class="col-md-12 col-form-label text-md-right">Producto</label>' +

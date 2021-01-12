@@ -35,11 +35,12 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
+                        <div class="form-inline row mb-3 text-center">
+                            <div class="col-12">
                                 <button type="submit" class="btn btn-green">
                                     Ingresar
                                 </button>
+                                <a href="{{ route('inventario.index') }}" class="btn btn-primary btn-sm">Volver</a>
                             </div>
                         </div>
                     </form>

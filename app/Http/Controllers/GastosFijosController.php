@@ -41,7 +41,7 @@ class GastosFijosController extends Controller
             'local_id' => $request->local_id,
         ]);
 
-        return redirect()->route('gastosFijos.index');
+        return redirect()->route('gastosFijos.index')->with('mensaje', ' Gasto fijo creado correctamente.');
     }
 
     protected function modificar($gasto_id, Request $request){
@@ -64,7 +64,7 @@ class GastosFijosController extends Controller
         $gastoFijo->monto = $request->monto;
         $gastoFijo->save();
 
-        return redirect()->route('gastosFijos.index');
+        return redirect()->route('gastosFijos.index')->with('mensaje', ' Gasto fijo modificado correctamente.');
     }
 
     protected function borrar($gasto_id, Request $request){
@@ -73,7 +73,7 @@ class GastosFijosController extends Controller
 
         Gastos_fijos::where('id', $gasto_id)->where('local_id', $request->user()->local_id)->get()->first()->delete();
 
-        return redirect()->route('gastosFijos.index');
+        return redirect()->route('gastosFijos.index')->with('mensaje', ' Gasto fijo eliminado correctamente.');
 
     }
 }

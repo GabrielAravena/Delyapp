@@ -79,11 +79,12 @@
                             </div>
                         </div>
 
-                        <div class="form-group row mt-5 mb-5 mt-5">
-                            <div class="col-md-6 offset-md-5">
-                                <button type="submit" class="btn btn-primary">
+                        <div class="form-inline row mt-5 mb-5 mt-5 text-center">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-green">
                                     Finalizar
                                 </button>
+                                <a href="{{ route('vender.index') }}" class="btn btn-primary">Volver</a>
                             </div>
                         </div>
                     </form>

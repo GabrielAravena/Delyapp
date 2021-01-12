@@ -90,6 +90,6 @@ class VenderController extends Controller
         $venta->estado = 'finalizado';
         $venta->save();
 
-        return redirect()->route('inicioAdmin.index');
+        return redirect()->route('vender.index')->with('mensaje', ' La venta se registró correctamente.');
     }
 }

@@ -16,6 +16,14 @@
             </div>
           </div>
         </div>
+        @if(session('mensaje'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Perfecto: </strong> {{ session('mensaje') }}
+              <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                <span>&times;</span>
+              </button>
+            </div>
+            @endif
         <!-- Team name -->
         <div class="form-group">
           <div class="row">

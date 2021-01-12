@@ -84,7 +84,11 @@ class menuController extends Controller
                             $ingrediente->save();
                         }else{
                             $ingrediente->delete();
-                            return "Error: No es posible ingresar estos ingredientes, ya que la unidad de medida de ".$inventario->nombre." en el inventario es ".$unidadMedidaInv.", pero en los ingredientes es ". $unidadMedidaIng;
+
+                            $producto->delete();
+
+                            return redirect()->route('menu.create')->with('error', ' No es posible ingresar estos ingredientes, ya que la unidad de medida de "'.$inventario->nombre.'" en el inventario es "'.$unidadMedidaInv.'", pero en los ingredientes es "'. $unidadMedidaIng.'".');
+
                         }
 
                         $sumaPreciosIngredientes += $ingrediente->valor * (100/(100 - $ingrediente->merma));
@@ -126,7 +130,7 @@ class menuController extends Controller
 
         $producto->save();
 
-        return redirect()->route('menu.index')->with('mensaje', 'El producto se creó correctamente');
+        return redirect()->route('menu.index')->with('mensaje', ' El producto se creó correctamente.');
     }
 
     protected function activar(Productos $producto, Request $request){
@@ -155,7 +159,7 @@ class menuController extends Controller
             Productos::eliminar($producto);
         }
         
-        return redirect()->route('menu.index');
+        return redirect()->route('menu.index')->with('mensaje', ' El producto se eliminó correctamente.');
     }
 
     protected function guardarImagen($imagen){
@@ -211,6 +215,6 @@ class menuController extends Controller
 
         $producto->save();
 
-        return redirect()->route('menu.index');
+        return redirect()->route('menu.index')->with('mensaje', ' El producto se modificó correctamente.');
     }
 }
