@@ -197,7 +197,7 @@ class CarritoController extends Controller
             $user_id = $request->user()->id;
 
             $productos_user = Productos_user::where('productos_users.id', $id)
-            ->where('user_id', $user_id)
+            ->where('users_id', $user_id)
             ->join('productos', 'productos_users.producto_id', 'productos.id')
             ->select('productos_users.*', 'productos.precio')
             ->get()

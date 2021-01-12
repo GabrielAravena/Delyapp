@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Local;
-use Illuminate\Support\Facades\Auth;
 
 class InicioController extends Controller
 {
@@ -13,4 +12,13 @@ class InicioController extends Controller
 
         return view('inicio', compact('locales'));
     } 
+
+    protected function buscador(Request $request){
+ 
+        $locales = Local::where('estado', 'activado')
+            ->where('nombre', 'like', $request->texto.'%')
+            ->get();
+
+        return view('buscadorLocales', compact('locales'));
+    }
 }

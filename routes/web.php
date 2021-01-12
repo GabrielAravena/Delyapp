@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::get('/', 'InicioController@index')->name('inicio');
+Route::get('/buscador', 'InicioController@buscador')->name('inicio.buscador');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -51,6 +52,8 @@ Route::get('/menu', 'MenuController@index')->name('menu.index');
 Route::get('/menu/nuevoProducto', 'MenuController@create')->name('menu.create');
 Route::post('/menu/nuevoProducto', 'MenuController@store')->name('menu.store');
 Route::post('/menu/nuevoProducto2', 'MenuController@store2')->name('menu.store2');
+Route::get('/menu/modificarProducto/{producto}', 'MenuController@modificar')->name('menu.modificar');
+Route::post('/menu/modificarProducto', 'MenuController@ingresarModificacion')->name('menu.ingresarModificacion');
 Route::get('/menu/activar/{producto}', 'MenuController@activar')->name('menu.activar');
 Route::get('/menu/borrarProducto/{producto}', 'MenuController@delete')->name('menu.delete');
 

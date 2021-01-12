@@ -175,4 +175,42 @@ class menuController extends Controller
             return null;
         }
     }
+
+    protected function modificar(Request $request, $producto_id){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $producto = Productos::where('id', $producto_id)->where('local_id', $request->user()->local_id)->get()->first();
+        $ingredientes = Ingredientes::where('producto_id', $producto_id)->get();
+
+        if ($producto) {
+            return view('modificarProducto', compact('producto', 'ingredientes'));
+        } 
+
+        return redirect()->route('menu.index');
+    }
+
+    protected function ingresarModificacion(Request $request){
+
+        $producto = Productos::find($request->producto_id);
+
+        $producto->tiempo_preparacion = $request->tiempo_preparacion;
+        $producto->descripcion = $request->descripcion;
+        $producto->categoria = $request->categoria;
+
+        if($request->radio == 'sugerido'){
+            $producto->precio = $producto->precio_sugerido;
+        }else{
+            $producto->precio = $request->precio;
+        }
+
+        if($request->file('imagen')){
+            $rutaImagen = $this->guardarImagen($request->file('imagen'));
+            $producto->imagen = $rutaImagen;
+        }
+
+        $producto->save();
+
+        return redirect()->route('menu.index');
+    }
 }

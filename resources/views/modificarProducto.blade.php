@@ -5,48 +5,47 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card mt-5 mb-5">
-                <div class="card-header">Nuevo producto</div>
-                <div class="card-body">
-                    <div>
-                        <div class="form-inline row">
-                            <label class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
-                            <label class="col-md-2 col-form-label text-md-left"><strong>{{ $producto->nombre }}</strong></label>
-                        </div>
-                        <div class="form-group mt-3">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card justify-content-center">
-                                        <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">Nombre</th>
-                                                    <th scope="col">Cantidad</th>
-                                                    <th scope="col">Unidad de medida</th>
-                                                </tr>
-                                            </thead>
+                <div class="card-header">Modificar producto</div>
+                <form method="POST" action="{{ route('menu.ingresarModificacion') }}" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-body">
+                        <div>
+                            <div class="form-inline row">
+                                <label class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
+                                <input id="nombre" type="text" class="col-md-2 form-control text-md-left" name="nombre" value="{{ $producto->nombre }}" required>
+                            </div>
+                            <div class="form-group mt-3">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card justify-content-center">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="text-align:left">Nombre</th>
+                                                        <th style="text-align:center">Cantidad</th>
+                                                        <th style="text-align:center">Unidad de medida</th>
+                                                    </tr>
+                                                </thead>
 
-                                            <tbody>
-                                                @foreach($ingredientes as $ingrediente)
-                                                <tr>
-                                                    <td>{{$ingrediente->nombre}}</td>
-                                                    <td>{{$ingrediente->cantidad}}</td>
-                                                    <td>{{$ingrediente->unidad_medida}}</td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                <tbody>
+                                                    @foreach($ingredientes as $ingrediente)
+                                                    <tr>
+                                                        <td style="text-align:left">{{ $ingrediente->nombre }}</td>
+                                                        <td style="text-align:center">{{ number_format($ingrediente->cantidad, 0, ',', '') }}</td>
+                                                        <td style="text-align:center">{{ $ingrediente->unidad_medida }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <form method="POST" action="{{ route('menu.store2') }}" enctype="multipart/form-data">
-                            @csrf
 
                             <div class="form-inline row mt-3">
                                 <label class="col-md-2 col-form-label" style="justify-content: right;">Categoria</label>
                                 <div class="col-md-3 pl-0">
-                                    <select class="col-md-2 form-control" name="categoria" id="categoria">
+                                    <select class="col-md-2 form-control text-center" name="categoria" id="categoria" selected="Combo">
                                         <option value="promoción">Promoción</option>
                                         <option value="promoción principal">Promoción principal</option>
                                         <option value="combo">Combo</option>
@@ -72,7 +71,7 @@
 
                             <div class="form-inline row mt-3">
                                 <label class="col-md-2 col-form-label" style="justify-content: right;">Tiempo de preparación</label>
-                                <input id="cantidad_en_inventario" max="99999999" type="number" class="col-md-2 form-control text-md-left" name="tiempo_preparacion" required>
+                                <input id="cantidad_en_inventario" max="99999999" type="number" class="col-md-2 form-control text-center" name="tiempo_preparacion" value="{{ number_format($producto->tiempo_preparacion, 0, ',', '') }}" required>
                                 <label class="col-md-2 col-form-label" style="justify-content: left;">minutos</label>
                             </div>
 
@@ -103,22 +102,22 @@
                                     <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
                                     <span class="ml-3">Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="99999" min="1" type="number" class="col-md-2 form-control text-md-left ml-5" name="precio" style="display:none" />
-                                <input id="precioSugerido" type="number" class="col-md-2 form-control text-md-left" name="precioSugerido" value="{{ $producto->precio_sugerido }}" style="display:none" />
+                                <input id="precio" max="99999" min="1" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
                             </div>
 
                             <input class="d-none" type="text" name="producto_id" value="{{ $producto->id }}">
 
                             <div class="form-group row mt-5 mb-3">
-                                <div class="col-md-6 offset-md-5">
-                                    <button type="submit" class="btn btn-green">
-                                        Ingresar
+                                <div class="col-12 text-center">
+                                    <button type="submit" class="btn btn-green mr-3">
+                                        Guardar
                                     </button>
+                                    <a href="{{ route('menu.index') }}" class="btn btn-primary">Volver</a>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>

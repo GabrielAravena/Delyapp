@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-<div class="cuerpo">
+<div class="cuerpo" id="contenedor">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-md justify-content-center h4" style="background-color: #791313; ">
         <label class="justify-content-center text-white">LOCALES</label>
     </nav>
-    <div class="container-wide mt-5">
+    <div class="container-wide mt-5" id="containerLocales">
         <div class="row justify-content-xs-center mt-5 mb-5">
 
             @foreach($locales as $local)
@@ -70,5 +70,42 @@
         </div>
     </section>
 </footer>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#navbarSupportedContent').append(
+            '<ul class="navbar-nav float-left">' +
+            '<div class="nav-item form-inline">' +
+            '<svg id="iconoBuscador" width="1.5em" height="1.5em" viewBox="0 0 16 16" class="ml-5" fill="white" xmlns="http://www.w3.org/2000/svg">' +
+            '<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />' +
+            '<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />' +
+            '</svg>' +
+            '<form class="nav-item form-inline text-left mt-0">' +
+            '<input class="form-control form-control-md ml-1 w-100 text-white" style="background-color: #791313; border-color: #791313;" id="buscador" type="text" placeholder="Buscar local">' +
+            '</form>' +
+            '</div>' +
+            '</ul>'
+        )
+    })
+    
+    $(document).on('keyup', '#buscador', function(){
+            var texto = $(this).val();
+            buscar(texto);
+        });
 
+    function buscar(texto){
+        $.ajax({
+            url: 'buscador?texto='+texto,
+            type: 'GET',
+            dataType: 'html'
+        })
+        .done(function(respuesta){
+            $('#containerLocales').html(respuesta);
+        })
+        .fail(function(){
+            console.log("error");
+        })
+    }
+
+</script>
 @endsection

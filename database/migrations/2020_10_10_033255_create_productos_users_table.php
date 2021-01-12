@@ -19,7 +19,7 @@ class CreateProductosUsersTable extends Migration
             $table->integer('cantidad');
             $table->foreignId('users_id')->constrained('users');
             $table->foreignId('ventas_id')->constrained('ventas');
-            $table->nigInteger('invitado')->nullable();
+            $table->bigInteger('invitado')->nullable();
             $table->timestamps();
         });
     }
