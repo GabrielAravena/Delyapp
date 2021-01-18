@@ -40,8 +40,6 @@ class InicioAdminController extends Controller
         $infoSemana = ["ventasSemana" => $ventasSemana, "ventasSemanaPorDia" => $ventasSemanaPorDia];
         $infoSemana = (object)($infoSemana);
 
-        
-
         /* Info día */
         $ventasDia = $this->ventasDia($local_id);
 

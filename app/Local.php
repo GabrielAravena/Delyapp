@@ -37,4 +37,9 @@ class Local extends Model
         return $this->hasMany('App\Gastos_fijos');
     }
 
+    public function desperdicios()
+    {
+        return $this->hasMany('App\Desperdicios');
+    }
+
 }

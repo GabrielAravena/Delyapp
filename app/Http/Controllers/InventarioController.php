@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Inventario;
 use App\Compras_historicas;
+use App\Desperdicio;
+use App\Detalle_desperdicio;
 use App\Productos;
 use App\Ingredientes;
 use App\Mermas;
-use App\Local;
+use Carbon\Carbon;
 
 class InventarioController extends Controller
 {
@@ -30,10 +32,10 @@ class InventarioController extends Controller
     }
 
     protected function create($local_id, Request $request)
-    {   
+    {
         $request->user()->authorizeRoles(['admin']);
 
-        if($local_id = $request->user()->local_id){
+        if ($local_id = $request->user()->local_id) {
 
             $mermas = Mermas::all();
             return view('nuevoIngrediente', compact('mermas'));
@@ -55,8 +57,8 @@ class InventarioController extends Controller
             'cantidad' => request('cantidad'),
             'unidad_medida' => request('unidad_medida'),
             'valor' => $valor,
-            'pmp' => (request('precio')),
-            'ultimo_precio' => (request('precio')),
+            'pmp' => request('precio'),
+            'ultimo_precio' => request('precio'),
             'merma' => $merma->porcentaje,
             'local_id' => $local_id,
 
@@ -89,13 +91,12 @@ class InventarioController extends Controller
 
     protected function compra(Inventario $inventario)
     {
-
         Compras_historicas::create([
-            'nombre' => "{$inventario->nombre}",
+            'nombre' => $inventario->nombre,
             'cantidad' => request('cantidad'),
-            'unidad_medida' => "{$inventario->unidad_medida}",
+            'unidad_medida' => $inventario->unidad_medida,
             'valor' => request('valor'),
-            'inventario_id' => "{$inventario->id}",
+            'inventario_id' => $inventario->id,
         ]);
 
         $sumaValores = Compras_historicas::where('inventario_id', $inventario->id)->sum('valor');
@@ -140,8 +141,121 @@ class InventarioController extends Controller
             $ingredientes->delete();
 
             Inventario::destroy($inventario->id);
-
         }
         return redirect()->route('inventario.index')->with('mensaje', ' El ingrediente se eliminó correctamente.');
+    }
+
+    protected function realizarInventario(Request $request)
+    {
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $local_id = $request->user()->local_id;
+
+        $inventarios = Inventario::where('local_id', $local_id)->get();
+
+        return view('realizarInventario', compact('inventarios'));
+    }
+
+    protected function ingresarInventario(Request $request)
+    {
+
+        $local_id = $request->user()->local_id;
+
+        $inventarios = Inventario::where('local_id', $local_id)->get();
+
+        $desperdicio = Desperdicio::create([
+            'local_id' => $local_id,
+        ]);
+
+        foreach ($inventarios as $inventario) {
+
+            Detalle_desperdicio::create([
+                'nombre' => $inventario->nombre,
+                'cantidad' => request($inventario->id),
+                'desperdicio' => $inventario->cantidad - request($inventario->id),
+                'unidad_medida' => $inventario->unidad_medida,
+                'valor_desperdiciado' => ($inventario->cantidad - request($inventario->id)) * $inventario->pmp,
+                'desperdicio_id' => $desperdicio->id,
+            ]);
+
+            $inventario->cantidad = request($inventario->id);
+            $inventario->valor = request($inventario->id) * $inventario->pmp;
+            $inventario->save();
+        }
+        return redirect()->route('inventario.index')->with('mensaje', 'El inventario se ha actualizado correctamente');
+    }
+
+    protected function perdidas(Request $request)
+    {
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $local_id = $request->user()->local_id;
+
+        $perdidas = Desperdicio::where('local_id', $local_id)->get();
+
+        $ultimosDoceMeses = $this->ultimosDoceMeses();
+
+        $perdidasDoceMeses = $this->perdidasDoceMeses($local_id);
+        //dd($perdidasDoceMeses);
+
+        $infoMes = ["ultimosDoceMeses" => $ultimosDoceMeses, "perdidasDoceMeses" => $perdidasDoceMeses];
+        $infoMes = (object)($infoMes);
+
+
+        return view('perdidas', compact('perdidas', 'infoMes'));
+    }
+
+    private function ultimosDoceMeses()
+    {
+
+        $n = date("n");
+
+        $meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+        $ultimosDoce = [];
+
+        for ($i = 0; $i < 12; $i++) {
+            if ($n >= 12) {
+                $n -= 12;
+            }
+            $ultimosDoce[] = $meses[$n];
+            $n++;
+        }
+        return $ultimosDoce;
+    }
+
+    private function perdidasDoceMeses($local_id)
+    {
+
+        $perdidas = Desperdicio::where('local_id', $local_id)
+            ->whereMonth('created_at', '>=', date('n') - 12)
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->created_at)->format('Y-m-d');
+            });
+
+        $perdidasDoceMeses = [];
+        for ($i = 1; $i < 12; $i++) {
+
+            $perdidasDoceMeses[$i] = 0;
+        }
+     
+        foreach ($perdidas as $fecha => $perdida) {
+
+            $detalle_desperdicio = Detalle_desperdicio::where('desperdicio_id', $perdida[0]->id)->get()->sum('valor_desperdiciado');
+
+            $mes = date('n', strtotime($fecha));
+
+            $perdidasDoceMeses[$mes-1] = $detalle_desperdicio;
+        }
+
+        $perdidasDoceMeses2 = [];
+        foreach($perdidasDoceMeses as $indice => $valor){
+
+            $perdidasDoceMeses2[] = $valor; 
+        }
+       
+        return $perdidasDoceMeses2;
     }
 }

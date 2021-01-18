@@ -40,6 +40,10 @@ Route::post('/inventario/nuevoIngrediente', 'InventarioController@store')->name(
 Route::get('/inventario/compraIngrediente/{inventario}', 'inventarioController@comprar')->name('inventario.comprar');
 Route::get('/inventario/borrarIngrediente/{inventario}', 'inventarioController@delete')->name('inventario.delete');
 Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@compra')->name('inventario.compra');
+Route::get('/inventario/realizarInventario', 'inventarioController@realizarInventario')->name('inventario.realizarInventario');
+Route::post('/inventario/ingresarInventario', 'InventarioController@ingresarInventario')->name('inventario.ingresarInventario');
+Route::get('/inventario/perdidas', 'inventarioController@perdidas')->name('inventario.perdidas');
+
 
 Route::get('/gastosFijos', 'gastosFijosController@index')->name('gastosFijos.index');
 Route::get('/gastosFijos/nuevoGasto', 'gastosFijosController@create')->name('gastosFijos.create');

@@ -85,6 +85,7 @@
                                 Ventas
                             </a>
                         </li>
+            
                         <li class="nav-item" style="padding-top: 100px; padding-bottom: 25px;">
                             <form method="get" action="{{ route('vender.index') }}">
                                 <button class="btn btn-primary" style="width: 170px; height: 100px;">

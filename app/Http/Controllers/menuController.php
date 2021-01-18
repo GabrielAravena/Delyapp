@@ -8,18 +8,18 @@ use Intervention\Image\Facades\Image;
 use App\Productos;
 use App\Ingredientes;
 use App\Inventario;
-use App\Productos_user;
 use App\Local;
 use Illuminate\Support\Facades\Storage;
 
 class menuController extends Controller
-{   
+{
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    protected function index(Request $request){
+    protected function index(Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -30,7 +30,8 @@ class menuController extends Controller
         return view('menu', compact('productos'));
     }
 
-    protected function create(Request $request){
+    protected function create(Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -41,66 +42,66 @@ class menuController extends Controller
         return view('nuevoProducto', compact('inventarios'));
     }
 
-    protected function store(Request $request){
+    protected function store(Request $request)
+    {
 
         $local_id = $request->user()->local_id;
 
         $producto = Productos::create([
-                    'nombre' => request('nombre_ingrediente'),
-                    'estado' => 'desactivado',
-                    'local_id' => $local_id,
-                    ]);
-        
-        $ingredientes = [];
-        $sumaPreciosIngredientes = 0;  
-        foreach($request as $elemento){
-            foreach($elemento as $key => $val ){
-                for($i=1; $i < count($elemento); $i++ ){
-                    if($key == 'ingrediente'.$i){
+            'nombre' => request('nombre_ingrediente'),
+            'estado' => 'desactivado',
+            'local_id' => $local_id,
+        ]);
 
-                        $inventario = Inventario::find(request('ingrediente'.$i));
-                        
+        $ingredientes = [];
+        $sumaPreciosIngredientes = 0;
+        foreach ($request as $elemento) {
+            foreach ($elemento as $key => $val) {
+                for ($i = 1; $i < count($elemento); $i++) {
+                    if ($key == 'ingrediente' . $i) {
+
+                        $inventario = Inventario::find(request('ingrediente' . $i));
+
                         $ingrediente = Ingredientes::create([
-                                'nombre' => $inventario->nombre,
-                                'cantidad' => request('cantidad'.$i),
-                                'unidad_medida' => request('unidad_medida'.$i),
-                                'producto_id' => $producto->id,
-                                'valor' => ($inventario->pmp * request('cantidad'.$i)),
-                                'merma' => $inventario->merma,
-                                'inventario_id' => request('ingrediente'.$i),
-                                ]);
+                            'nombre' => $inventario->nombre,
+                            'cantidad' => request('cantidad' . $i),
+                            'unidad_medida' => request('unidad_medida' . $i),
+                            'producto_id' => $producto->id,
+                            'valor' => ($inventario->pmp * request('cantidad' . $i)),
+                            'merma' => $inventario->merma,
+                            'inventario_id' => request('ingrediente' . $i),
+                        ]);
 
                         $unidadMedidaInv = $inventario->unidad_medida;
                         $unidadMedidaIng = $ingrediente->unidad_medida;
 
-                        if($unidadMedidaInv == $unidadMedidaIng){
-                            $ingrediente-> valor = ($inventario->pmp * $ingrediente->cantidad);
+                        if ($unidadMedidaInv == $unidadMedidaIng) {
+                            $ingrediente->valor = ($inventario->pmp * $ingrediente->cantidad);
                             $ingrediente->save();
-                        }elseif(($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')){
-                            $ingrediente-> valor = (($inventario->pmp/1000) * $ingrediente->cantidad);
+                        } elseif (($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')) {
+                            $ingrediente->valor = (($inventario->pmp / 1000) * $ingrediente->cantidad);
                             $ingrediente->save();
-                        }elseif(($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')){
-                            $ingrediente-> valor = (($inventario->pmp * 1000) * $ingrediente->cantidad);
+                        } elseif (($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')) {
+                            $ingrediente->valor = (($inventario->pmp * 1000) * $ingrediente->cantidad);
                             $ingrediente->save();
-                        }else{
+                        } else {
                             $ingrediente->delete();
 
                             $producto->delete();
 
-                            return redirect()->route('menu.create')->with('error', ' No es posible ingresar estos ingredientes, ya que la unidad de medida de "'.$inventario->nombre.'" en el inventario es "'.$unidadMedidaInv.'", pero en los ingredientes es "'. $unidadMedidaIng.'".');
-
+                            return redirect()->route('menu.create')->with('error', ' No es posible ingresar estos ingredientes, ya que la unidad de medida de "' . $inventario->nombre . '" en el inventario es "' . $unidadMedidaInv . '", pero en los ingredientes es "' . $unidadMedidaIng . '".');
                         }
 
-                        $sumaPreciosIngredientes += $ingrediente->valor * (100/(100 - $ingrediente->merma));
+                        $sumaPreciosIngredientes += $ingrediente->valor * (100 / (100 - $ingrediente->merma));
 
                         array_push($ingredientes, $ingrediente);
                     }
                 }
             }
         }
-        
 
-        $precioSugerido = round(($sumaPreciosIngredientes/(1 - 0.3)), -2);
+
+        $precioSugerido = round(($sumaPreciosIngredientes / (1 - 0.3)), -2);
 
         $producto->precio_sugerido = $precioSugerido;
         $producto->save();
@@ -108,10 +109,11 @@ class menuController extends Controller
         return view('nuevoProducto2', compact('producto', 'ingredientes', 'precioSugerido'));
     }
 
-    protected function store2(Request $request){
+    protected function store2(Request $request)
+    {
 
         $rutaImagen = $this->guardarImagen($request->file('imagen'));
-     
+
         $local_id = $request->user()->local_id;
 
         $producto = Productos::where('local_id', $local_id)->get()->last();
@@ -122,9 +124,9 @@ class menuController extends Controller
         $producto->estado = 'activado';
         $producto->imagen = $rutaImagen;
 
-        if($request->radio == 'sugerido'){
+        if ($request->radio == 'sugerido') {
             $producto->precio = $producto->precio_sugerido;
-        }else{
+        } else {
             $producto->precio = request('precio');
         }
 
@@ -133,16 +135,17 @@ class menuController extends Controller
         return redirect()->route('menu.index')->with('mensaje', ' El producto se creó correctamente.');
     }
 
-    protected function activar(Productos $producto, Request $request){
+    protected function activar(Productos $producto, Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
-        if($producto->local_id == $request->user()->local_id){
+        if ($producto->local_id == $request->user()->local_id) {
 
-            if($producto->estado == 'activado'){
+            if ($producto->estado == 'activado') {
                 $producto->estado = 'desactivado';
                 $producto->save();
-            }else{
+            } else {
                 $producto->estado = 'activado';
                 $producto->save();
             }
@@ -151,36 +154,39 @@ class menuController extends Controller
         return redirect()->route('menu.index');
     }
 
-    protected function delete(Productos $producto, Request $request){
+    protected function delete(Productos $producto, Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
-        if($producto->local_id == $request->user()->local_id){
+        if ($producto->local_id == $request->user()->local_id) {
             Productos::eliminar($producto);
         }
-        
+
         return redirect()->route('menu.index')->with('mensaje', ' El producto se eliminó correctamente.');
     }
 
-    protected function guardarImagen($imagen){
-        
-        if($imagen){
-            $nombre = Str::random(20).'.jpg';
+    protected function guardarImagen($imagen)
+    {
+
+        if ($imagen) {
+            $nombre = Str::random(20) . '.jpg';
             $img = Image::make($imagen)->encode('jpg', 75);
-            $img->resize(530, 470, function($constraint){
+            $img->resize(530, 470, function ($constraint) {
                 $constraint->upsize();
             });
 
             Storage::disk('public')->put("imagenes/productos/$nombre", $img->stream());
 
             return Storage::url("imagenes/productos/$nombre");
-        }else{
+        } else {
 
             return null;
         }
     }
 
-    protected function modificar(Request $request, $producto_id){
+    protected function modificar(Request $request, $producto_id)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -189,12 +195,13 @@ class menuController extends Controller
 
         if ($producto) {
             return view('modificarProducto', compact('producto', 'ingredientes'));
-        } 
+        }
 
         return redirect()->route('menu.index');
     }
 
-    protected function ingresarModificacion(Request $request){
+    protected function ingresarModificacion(Request $request)
+    {
 
         $producto = Productos::find($request->producto_id);
 
@@ -202,13 +209,13 @@ class menuController extends Controller
         $producto->descripcion = $request->descripcion;
         $producto->categoria = $request->categoria;
 
-        if($request->radio == 'sugerido'){
+        if ($request->radio == 'sugerido') {
             $producto->precio = $producto->precio_sugerido;
-        }else{
+        } else {
             $producto->precio = $request->precio;
         }
 
-        if($request->file('imagen')){
+        if ($request->file('imagen')) {
             $rutaImagen = $this->guardarImagen($request->file('imagen'));
             $producto->imagen = $rutaImagen;
         }

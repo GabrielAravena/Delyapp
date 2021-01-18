@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdministradoresTable extends Migration
+class CreateDetalleDesperdiciosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,15 @@ class CreateAdministradoresTable extends Migration
      */
     public function up()
     {
-        Schema::create('administradores', function (Blueprint $table) {
+        Schema::create('detalle_desperdicios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
+            $table->decimal('cantidad');
+            $table->decimal('desperdicio');
+            $table->string('unidad_medida');
+            $table->decimal('valor_desperdiciado');
+            $table->foreignId('desperdicio_id')->constrained('desperdicios');
             $table->timestamps();
-
-            $table->foreignId('local_id')->constrained('local');            
         });
     }
 
@@ -33,6 +32,6 @@ class CreateAdministradoresTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('administradores');
+        Schema::dropIfExists('detalle_desperdicios');
     }
 }
