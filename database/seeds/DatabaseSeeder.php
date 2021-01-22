@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RoleTableSeeder::class);
         $this->call(MermasTableSeeder::class);
+        $this->call(LocalTableSeeder::class);
+        $this->call(Role_userTableSeeder::class);
         $this->call(UserTableSeeder::class);
+       
     }
 }

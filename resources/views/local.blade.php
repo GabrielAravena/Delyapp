@@ -3,7 +3,7 @@
 
 <section class="bg-image-5">
   <section class="parallax-container parallax-light" data-parallax-img="{{asset('images/parallax-03.png')}}">
-<div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt=""></div>
+    <div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt=""></div>
     <div class="parallax-content">
       <div class="container section-80 section-sm-top-140 section-sm-bottom-150 text-center">
         <div class="row justify-content-xs-center">
@@ -85,6 +85,9 @@
       @endforeach
     </div>
   </div>
+  <div class="form-group row justify-content-center" style="display: flex; margin-top: 200px; margin-bottom: 200px;">
+    <div id="map" style="height: 300px;"></div>
+  </div>
 </section>
 
 <footer class="page-foot text-sm-left">
@@ -116,4 +119,38 @@
     </div>
   </section>
 </footer>
+
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+
+<script>
+  var user_location = [{{ $local->longitud }}, {{ $local->latitud }}];
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+  var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: user_location,
+    zoom: 14
+  });
+
+  var marker;
+
+  function addMarker(ltlng) {
+
+    marker = new mapboxgl.Marker({
+        draggable: false,
+        color: "#791313"
+      })
+      .setLngLat(user_location)
+      .addTo(map);
+  }
+
+  map.on('load', function() {
+    addMarker(user_location, 'load');
+  });
+</script>
 @endsection

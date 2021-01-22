@@ -10,7 +10,6 @@
  */
 /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 @import url('https://fonts.googleapis.com/css2?family=Changa+One&display=swap');
-@import '~bootstrap/dist/css/bootstrap.min.css';
 
 html {
 	font-family: sans-serif;

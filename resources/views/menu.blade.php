@@ -43,6 +43,7 @@
                       <th style="text-align:center" scope="col">Descripción</th>
                       <th style="text-align:center" scope="col">Imagen</th>
                       <th style="text-align:center" scope="col">Precio</th>
+                      <th style="text-align:center" scope="col">Precio sugerido</th>
                       <th style="text-align:center" scope="col">Activar/Desactivar</th>
                       <th style="text-align:center" scope="col">Modificar</th>
                       <th style="text-align:center" scope="col">Eliminar</th>
@@ -54,7 +55,8 @@
                       <td style="vertical-align: middle">{{ $producto->nombre }}</td>
                       <td style="vertical-align: middle">{{ $producto->descripcion }}</td>
                       <td style="text-align:center"><img src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" alt="Imagen producto" width="150px" height="80px" /></td>
-                      <td style="text-align:right; vertical-align: middle">{{ number_format($producto->precio, 0, ",", ".") }}</td>
+                      <td style="text-align:right; vertical-align: middle"><strong>{{ number_format($producto->precio, 0, ",", ".") }}</strong></td>
+                      <td style="text-align:right; vertical-align: middle">{{ number_format($producto->precio_sugerido, 0, ",", ".") }}</td>
                       <td style="text-align:center; vertical-align: middle">
                         @if($producto->estado == 'activado')
                         <a href="{{ route('menu.activar', $producto)}}">

@@ -17,6 +17,7 @@ class Local extends Model
         'telefono',
         'imagen',
         'estado',
+        'ingreso_mensual',
         'delivery',
     ];
 

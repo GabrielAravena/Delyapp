@@ -18,6 +18,9 @@ class CreateInvitadosTable extends Migration
             $table->string('nombre');
             $table->string('email');
             $table->string('direccion');
+            $table->string('latitud');
+            $table->string('longitud');
+            $table->string('telefono');
             $table->timestamps();
         });
     }

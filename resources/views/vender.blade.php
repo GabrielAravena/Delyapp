@@ -29,7 +29,6 @@
             </div>
 
             <div class="card">
-                <div class="card-header">Ingresar productos</div>
                 <div class="card-body">
                     <form method="POST" action="{{ route('vender.store') }}">
                         @csrf
@@ -51,7 +50,7 @@
                                         <label class="col-md-12 col-form-label text-md-right">Cantidad</label>
                                     </div>
                                     <div class="col-md-2">
-                                        <input id="cantidad1" max="999999" type="number" class="col-md-12 form-control text-md-left" name="cantidad1" required>
+                                        <input id="cantidad1" min="1" max="20" type="number" class="col-md-12 form-control text-center" name="cantidad1" required>
                                     </div>
                                 </div>
                             </tr>
@@ -67,7 +66,6 @@
                                 <button type="submit" class="btn btn-green">
                                     Confirmar productos
                                 </button>
-                                <a href="{{ route('vender.index') }}" class="btn btn-primary">Volver</a>
                             </div>
                         </div>
                     </form>
@@ -103,7 +101,7 @@
                 '<label class="col-md-12 col-form-label text-md-right">Cantidad</label>' +
                 '</div>' +
                 '<div class="col-md-2">' +
-                '<input id="cantidad' + c + '" max="999999" type="number" class="form-control col-md-12 text-md-left" name="cantidad' + c + '" required>' +
+                '<input id="cantidad' + c + '" min="1" max="20" type="number" class="form-control col-md-12 text-center" name="cantidad' + c + '" required>' +
                 '</div>' +
                 '</div>' +
                 '</div>'

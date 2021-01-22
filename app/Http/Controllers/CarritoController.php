@@ -9,6 +9,7 @@ use App\Invitado;
 use App\Ingredientes;
 use App\Inventario;
 use App\Registro_ventas;
+use App\Local;
 use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use \Illuminate\Http\JsonResponse;
@@ -24,6 +25,7 @@ class CarritoController extends Controller
 
     protected function index(Request $request)
     {
+        $local = null;
         $productos = null;
         $user_id = null;
         $codigoInvitado = null;
@@ -69,6 +71,8 @@ class CarritoController extends Controller
 
         if ($productos != null) {
 
+            $local = Local::find($productos[0]->local_id);
+
             $buyOrder = $productos[0]->ventas_id;
 
             if ($user_id) {
@@ -93,7 +97,7 @@ class CarritoController extends Controller
         $token_ws = $initResult->token;
         $url = $initResult->url;
 
-        return view('carrito', compact('productos', 'token_ws', 'url'));
+        return view('carrito', compact('productos', 'token_ws', 'url', 'local'));
     }
 
     protected function agregar(Productos $producto, Request $request)
@@ -136,6 +140,10 @@ class CarritoController extends Controller
 
         if ($productos_user) {
 
+            if($producto->local_id != $productos_user->local_id){
+                return redirect()->route('carrito.index')->with('error', 'No es posible agregar el producto ya que pertenece a otro local. Solo puedes comprar productos de un local a la vez.');
+            }
+
             if ($user_id) {
 
                 Productos_user::create([
@@ -158,6 +166,7 @@ class CarritoController extends Controller
             $venta = Ventas::find($productos_user->ventas_id);
             $venta->precio += $producto->precio * $request->cantidad;
             $venta->save();
+
         } else {
 
             $venta = Ventas::create([
@@ -242,6 +251,9 @@ class CarritoController extends Controller
                 'nombre' => $request->name,
                 'email' => $request->email,
                 'direccion' => $request->direccion,
+                'latitud' => $request->latitud,
+                'longitud' => $request->longitud,
+                'telefono' => $request->telefono,
             ]);
         }
 

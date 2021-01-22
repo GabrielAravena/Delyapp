@@ -18,8 +18,11 @@ class CreateLocalTable extends Migration
             $table->string('nombre');
             $table->string('direccion');
             $table->string('telefono');
-            $table->string('imagen');
+            $table->string('imagen')->nullable();
             $table->string('estado');
+            $table->string('latitud');
+            $table->string('longitud');
+            $table->decimal('ingreso_mensual', 10, 2);
             $table->boolean('delivery');
             $table->timestamps();
         });

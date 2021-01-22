@@ -52,7 +52,7 @@
                             <label for="cantidad_en_inventario" class="col-md-4 col-form-label text-md-right">Cantidad en inventario</label>
 
                             <div class="col-md-6">
-                                <input id="cantidad_en_inventario" type="number" class="form-control" name="cantidad" required>
+                                <input id="cantidad_en_inventario" type="number" min="1" max="1000" class="form-control text-center" name="cantidad" required>
                             </div>
                         </div>
 
@@ -62,7 +62,7 @@
                                 <label id="precio_por_cada">Gramo</label>
                             </div>
                             <div class="col-md-6">
-                                <input id="precio" type="number" class="form-control" name="precio" required>
+                                <input id="precio" type="number" min="1" max="100000" class="form-control text-center" name="precio" required>
                             </div>
                         </div>
 

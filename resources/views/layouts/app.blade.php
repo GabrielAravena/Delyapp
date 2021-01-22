@@ -14,8 +14,6 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-
-
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
@@ -34,8 +32,19 @@
             background-color: #095603;
             border-color: #095603;
         }
-    </style>
 
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+
+        }
+
+        #telefono::placeholder {
+            color: #9d9d9d;
+        }
+    </style>
 </head>
 
 <body>

@@ -20,7 +20,6 @@
             </div>
 
             <div class="card">
-                <div class="card-header">Vender</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">

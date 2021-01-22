@@ -3,7 +3,7 @@
 <div class="main-content">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-12">
+      <div class="col-12 mb-5">
         <!-- Header -->
         <div class="header mt-5 mb-3">
           <div class="header-body form-inline col-12">

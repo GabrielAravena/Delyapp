@@ -13,18 +13,31 @@
               <h3 class="header-title">
                 Carrito de compras
               </h3>
+              @if(session('error'))
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error:</strong> {{ session('error') }}
+                <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                  <span>&times;</span>
+                </button>
+              </div>
+              @endif
             </div>
           </div> <!-- / .row -->
         </div>
       </div>
-
       <div class="card">
         @if($productos)
+        <div class="mt-3 text-center">
+          <label class="h5">
+            <strong>
+              Estás comprando en {{ $local->nombre }}
+            </strong>
+          </label>
+        </div>
         <div class="card-body">
           <div class="row">
             <div class="col-12">
               <div class="card justify-content-center text-center">
-
                 <table class="table table-sm">
                   <thead>
                     <tr class="text-center">
@@ -36,7 +49,6 @@
                     </tr>
                   </thead>
                   <tbody>
-
                     @foreach($productos as $producto)
                     <tr>
                       <td>{{ $producto->nombre }}</td>
@@ -63,16 +75,24 @@
             <label class="h6 mr-3" style="text-align:right;">Precio total</label>
             <label class="h5" style="text-align:right;"><strong></strong>${{ number_format($producto->total, 0, ",", ".") }}</label>
           </div>
-          
+          @if($local->delivery)
           <div class="form-inline row justify-content-center mt-3">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
               <path fill-rule="evenodd" d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
             </svg>
             <label class="ml-3">
-              Este local cuenta con delivery
+              <strong>
+                Este local cuenta con delivery
+              </strong>
             </label>
           </div>
-
+          @else
+          <div class="form-inline row justify-content-center mt-5" style="text-align:right;">
+            <label class="ml-3">
+              <strong>Este local no cuenta con delivery</strong>
+            </label>
+          </div>
+          @endif
           @guest
           <div class="mt-5" style="margin-bottom: 100px">
             <div class="form-group offset-md-2">
@@ -163,14 +183,32 @@
                 </div>
 
                 <div class="form-group row">
-                  <label for="direccion" class="col-md-4 col-form-label text-md-right">Dirección</label>
+                  <label for="telefono" class="col-md-4 col-form-label text-md-right">Teléfono</label>
 
                   <div class="col-md-6">
-                    <input id="direccion" type="text" class="form-control" name="direccion" required>
+                    <input id="telefono" type="tel" class="form-control" name="telefono" placeholder="Ejemplo: 912345678" pattern="[0-9]{9}" required>
                   </div>
                 </div>
 
-                <div class="form-group row mb-5 mt-5">
+                <div class="form-group row">
+                  <label for="direccion" class="col-md-4 col-form-label text-md-right">Dirección</label>
+                  <div class="col-md-6">
+                    <div class="geocoder">
+                      <div id="geocoder"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group row justify-content-center" style="display: flex;">
+                  <div class="col-md-4">
+                    <div id="map" style="height: 150px;"></div>
+                  </div>
+                </div>
+                <input type="text" id="direccion" name="direccion" hidden required>
+                <input type="text" id="latitud" name="latitud" hidden>
+                <input type="text" id="longitud" name="longitud" hidden>
+
+                <div class="form-group row mb-5" style="margin-top: 180px;">
                   <div class="col-md-6 offset-md-4">
                     <button type="submit" class="btn btn-green">
                       Pagar
@@ -210,6 +248,13 @@
     </div>
   </div>
 
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
+
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
+  <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
+
+
   <script>
     function iniciar() {
       document.getElementById('iniciar_sesion').style.display = 'block';
@@ -227,6 +272,54 @@
       $('#email_invitado').prop("required", true);
       $('#direccion').prop("required", true);
     }
+
+    var user_location = [-70.65028, -33.43778];
+
+    var marker = null;
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: user_location,
+      zoom: 10
+    });
+    //  geocoder here
+    var geocoder = new MapboxGeocoder({
+      accessToken: mapboxgl.accessToken,
+      country: 'CL',
+      placeholder: 'Escriba su dirección',
+    });
+
+    // After the map style has loaded on the page, add a source layer and default
+    // styling for a single point.
+    geocoder.on('result', function(ev) {
+
+      user_location = ev.result.center;
+
+      if (marker != null) {
+        marker.remove();
+      }
+
+      addMarker(user_location);
+
+      $('#direccion').val(ev.result.place_name);
+      $('#latitud').val(ev.result.center[1]);
+      $('#longitud').val(ev.result.center[0]);
+
+    });
+
+    function addMarker(ltlng) {
+
+      marker = new mapboxgl.Marker({
+          draggable: false,
+          color: "#791313"
+        })
+        .setLngLat(user_location)
+        .addTo(map);
+    }
+
+    document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
   </script>
 
   @endsection

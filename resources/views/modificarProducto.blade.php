@@ -4,13 +4,25 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="card mt-5 mb-5">
-                <div class="card-header">Modificar producto</div>
+                <!-- Header -->
+                <div class="header mt-5 mb-3">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Title -->
+                            <h3 class="header-title">
+                                Modificar producto
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-5">
                 <form method="POST" action="{{ route('menu.ingresarModificacion') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <div>
-                            <div class="form-inline row">
+                            <div class="form-inline row mt-3">
                                 <label class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
                                 <input id="nombre" type="text" class="col-md-2 form-control text-md-left" name="nombre" value="{{ $producto->nombre }}" required>
                             </div>
@@ -71,7 +83,7 @@
 
                             <div class="form-inline row mt-3">
                                 <label class="col-md-2 col-form-label" style="justify-content: right;">Tiempo de preparación</label>
-                                <input id="cantidad_en_inventario" max="99999999" type="number" class="col-md-2 form-control text-center" name="tiempo_preparacion" value="{{ number_format($producto->tiempo_preparacion, 0, ',', '') }}" required>
+                                <input id="cantidad_en_inventario" max="1000" min="1" type="number" class="col-md-2 form-control text-center" name="tiempo_preparacion" value="{{ number_format($producto->tiempo_preparacion, 0, ',', '') }}" required>
                                 <label class="col-md-2 col-form-label" style="justify-content: left;">minutos</label>
                             </div>
 
@@ -102,7 +114,7 @@
                                     <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
                                     <span class="ml-3">Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="99999" min="1" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
+                                <input id="precio" max="100000" min="1" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
                             </div>
 
                             <input class="d-none" type="text" name="producto_id" value="{{ $producto->id }}">

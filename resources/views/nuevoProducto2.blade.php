@@ -1,11 +1,21 @@
 @extends('layouts.dashboard')
 @section('content')
-
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="card mt-5 mb-5">
-                <div class="card-header">Nuevo producto</div>
+        <div class="header mt-5 mb-3">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <!-- Title -->
+                            <h3 class="header-title">
+                                Nuevo producto
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-5">
                 <div class="card-body">
                     <div>
                         <div class="form-inline row">
@@ -88,7 +98,8 @@
 
                             <div class="form-inline row offset-md-2 mt-5">
                                 <label class="col-md-2">Precio sugerido</label>
-                                <label class="col-md-2 h5"><strong>$ {{ number_format($producto->precio_sugerido, 0, ",", ".") }}</strong></label>
+                                <label class="h5"><strong>$ {{ number_format($producto->precio_sugerido, 0, ",", ".") }}</strong></label>
+                                <label class="ml-3">Iva incluido</label>
                             </div>
 
                             <div class="form-inline row offset-md-2 mt-5">

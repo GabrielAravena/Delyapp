@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
+Route::get('/register', function(){
+    return view('auth/register');
+})->name('register');
+
 Route::get('/', 'InicioController@index')->name('inicio');
 Route::get('/buscador', 'InicioController@buscador')->name('inicio.buscador');
 
@@ -43,7 +47,8 @@ Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@
 Route::get('/inventario/realizarInventario', 'inventarioController@realizarInventario')->name('inventario.realizarInventario');
 Route::post('/inventario/ingresarInventario', 'InventarioController@ingresarInventario')->name('inventario.ingresarInventario');
 Route::get('/inventario/perdidas', 'inventarioController@perdidas')->name('inventario.perdidas');
-
+Route::get('/inventario/perdidas/detallePerdida/{perdida}', 'inventarioController@detallePerdida')->name('inventario.detallePerdida');
+Route::get('/inventario/perdidas/detallePerdida/descargar/{perdida}', 'inventarioController@descargarDetallePerdida')->name('inventario.descargarDetallePerdida');
 
 Route::get('/gastosFijos', 'gastosFijosController@index')->name('gastosFijos.index');
 Route::get('/gastosFijos/nuevoGasto', 'gastosFijosController@create')->name('gastosFijos.create');

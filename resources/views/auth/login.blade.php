@@ -1,17 +1,29 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Iniciar sesión</div>
+        <!-- Header -->
+        <div class="header mt-5 mb-3">
+                <div class="header-body">
+                    <div class="row align-items-center">
+                        <div class="col">
 
+                            <!-- Title -->
+                            <h3 class="header-title">
+                                Iniciar sesión
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-5">
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
-                        <div class="form-group row">
+                        <div class="form-group row mt-5">
                             <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
                             <div class="col-md-6">
@@ -39,23 +51,26 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
+                        <div class="form-inline row">
+                            <div class="col-md-6 offset-2">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                                    <label class="form-check-label ml-5" for="remember">
+                                    <label class="form-check-label ml-3" for="remember">
                                         Recuérdame
                                     </label>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-green">
+                        <div class="form-group row justify-content-center mb-3">
+                            <div class="col-md-8 text-center">
+                                <button type="submit" class="btn btn-green mr-1 mt-3">
                                     Ingresar
                                 </button>
+                                <a href="{{ route('register') }}" class="btn btn-primary ml-1 mt-3" type="button">
+                                    Registrarse
+                                </a>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">

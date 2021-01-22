@@ -146,7 +146,6 @@
     <script src="{{asset('js/script.js')}}"></script>
     <script src="https://checkout.culqi.com/js/v3"></script>
     <script src="{{asset('js/bootstrap-fileinput/js/fileinput.min.js')}}" type="text/javascript"></script>
-    <script src="{{asset('js/bootstrap-fileinput/js/locales/es.js')}}" type="text/javascript"></script>
     <script src="{{asset('js/bootstrap-fileinput/themes/fas/theme.min.js')}}" type="text/javascript"></script>
 
 </html>

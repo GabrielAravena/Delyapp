@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Gastos_fijos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -46,6 +47,12 @@ class menuController extends Controller
     {
 
         $local_id = $request->user()->local_id;
+
+        $gastos_fijos = Gastos_fijos::where('local_id', $local_id)->get()->sum('monto');
+        
+        $ingresoMensual = Local::find($local_id)->ingreso_mensual;
+
+        $porcentajeGasto = ($gastos_fijos/$ingresoMensual);
 
         $producto = Productos::create([
             'nombre' => request('nombre_ingrediente'),
@@ -101,7 +108,7 @@ class menuController extends Controller
         }
 
 
-        $precioSugerido = round(($sumaPreciosIngredientes / (1 - 0.3)), -2);
+        $precioSugerido = round((($sumaPreciosIngredientes / (1 - 0.3))*(1 + $porcentajeGasto)), -2) * 1.19;
 
         $producto->precio_sugerido = $precioSugerido;
         $producto->save();

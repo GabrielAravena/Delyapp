@@ -11,6 +11,8 @@ use App\Productos;
 use App\Ingredientes;
 use App\Mermas;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class InventarioController extends Controller
 {
@@ -207,6 +209,24 @@ class InventarioController extends Controller
         return view('perdidas', compact('perdidas', 'infoMes'));
     }
 
+    protected function detallePerdida(Request $request, $perdida_id){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $local_id = $request->user()->local_id;
+
+        $desperdicio = Desperdicio::where('local_id', $local_id)->where('id', $perdida_id)->limit(1)->get();
+
+        $detalleDesperdicio = Detalle_desperdicio::where('desperdicio_id', $desperdicio[0]->id)->get();
+
+        $totalPerdida = 0;
+        foreach($detalleDesperdicio as $detalle){
+            $totalPerdida += $detalle->valor_desperdiciado;
+        } 
+
+        return view('detallePerdida', compact('detalleDesperdicio', 'totalPerdida', 'perdida_id'));
+    }
+
     private function ultimosDoceMeses()
     {
 
@@ -230,6 +250,7 @@ class InventarioController extends Controller
 
         $perdidas = Desperdicio::where('local_id', $local_id)
             ->whereMonth('created_at', '>=', date('n') - 12)
+            ->limit(12)
             ->get()
             ->groupBy(function ($date) {
                 return Carbon::parse($date->created_at)->format('Y-m-d');
@@ -257,5 +278,49 @@ class InventarioController extends Controller
         }
        
         return $perdidasDoceMeses2;
+    }
+
+    protected function descargarDetallePerdida(Request $request, $perdida_id){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $local_id = $request->user()->local_id;
+
+        $desperdicio = Desperdicio::where('local_id', $local_id)->where('id', $perdida_id)->limit(1)->get();
+
+        $detalleDesperdicio = Detalle_desperdicio::where('desperdicio_id', $desperdicio[0]->id)->get();
+
+        
+        $spreadsheetResultado = new Spreadsheet();
+        $hoja = $spreadsheetResultado->getActiveSheet();
+
+        $titulosTabla = ["NOMBRE", "CANTIDAD DESPERDICIADA", "UNIDAD DE MEDIDA", "VALOR DESPERDICIADO", "FECHA DE REGISTRO"];
+
+        $columna = 1;
+        foreach($titulosTabla as $titulo){
+            $hoja->setCellValueByColumnAndRow($columna, 1, $titulo);
+            $columna++;
+        }
+
+        $fila = 2;
+        foreach($detalleDesperdicio as $detalle){
+            $hoja->setCellValueByColumnAndRow(1, $fila, $detalle->nombre);
+        
+            $hoja->setCellValueByColumnAndRow(2, $fila, $detalle->desperdicio);
+            $hoja->setCellValueByColumnAndRow(3, $fila, $detalle->unidad_medida);
+            $hoja->setCellValueByColumnAndRow(4, $fila, $detalle->valor_desperdiciado);
+            $hoja->setCellValueByColumnAndRow(5, $fila, $detalle->created_at);
+            $fila++;
+        }
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment;filename=Pérdidas(".$desperdicio[0]->created_at.").xlsx");
+        header('Cache-Control: max-age=0');
+
+        $writer = IOFactory::createWriter($spreadsheetResultado, 'Xlsx');
+        $writer->save('php://output');
+
+        exit;
+
     }
 }

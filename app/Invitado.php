@@ -10,6 +10,9 @@ class Invitado extends Model
         'id', 
         'nombre', 
         'email',
-        'direccion',  
+        'direccion', 
+        'latitud',
+        'longitud', 
+        'telefono',
     ];
 }

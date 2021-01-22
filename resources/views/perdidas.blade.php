@@ -32,12 +32,12 @@
                                     </thead>
 
                                     <tbody>
-                                        @foreach($perdidas as $perdidas)
+                                        @foreach($perdidas as $perdida)
                                         <tr>
                                             <td style="text-align:center">Desperdicios registrado en:</td>
-                                            <td style="text-align:center">{{ $perdidas->created_at }}</td>
+                                            <td style="text-align:center">{{ $perdida->created_at }}</td>
                                             <td style="text-align:center">
-                                                <a href="#">
+                                                <a href="{{ route('inventario.detallePerdida', $perdida->id) }}">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" fill="green" class="bi bi-zoom-in" viewBox="0 0 16 16">
                                                         <path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
                                                         <path d="M10.344 11.742c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1 6.538 6.538 0 0 1-1.398 1.4z" />
@@ -87,7 +87,7 @@
         yAxes: [{
           scaleLabel: {
             display: true,
-            labelString: 'Valor ventas diarias'
+            labelString: 'Valor desperdiciado',
           },
           ticks: {
             beginAtZero: true
@@ -96,7 +96,7 @@
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: 'Días del mes'
+            labelString: 'Últimos 12 meses',
           },
           ticks: {
             beginAtZero: true
