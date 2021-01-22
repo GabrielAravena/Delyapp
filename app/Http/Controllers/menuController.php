@@ -24,7 +24,20 @@ class menuController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $local_id = Local::find($request->user()->local_id)->id;
+        $local_id = $request->user()->local_id;
+
+        $inventario = Inventario::where('local_id', $local_id)->first();
+
+        $gastos_fijos = Gastos_fijos::where('local_id', $local_id)->first();
+        
+        if(!$inventario){
+            return redirect()->route('inventario.index')->with('primeraVez', 'Aún no has agregado ingredientes. El primer paso para utilizar la aplicación, es agregar los ingredientes que tienes en bodega, luego debes ingresar los gastos fijos de tu local y finalmente, puedes crear productos y comenzar a vender.');
+        }
+
+        if(!$gastos_fijos){
+            return redirect()->route('inventario.index')->with('sinGastosFijos', 'Antes de crear productos, debes ingresar los gastos fijos de tu local, de esta forma podremos sugerirte un precio correcto para tus productos.');
+
+        }
 
         $productos = Productos::where('local_id', $local_id)->get();
 

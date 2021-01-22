@@ -17,7 +17,7 @@ class CreateVentasTable extends Migration
             $table->id();
             $table->string('estado');
             $table->string('tipo')->nullable();
-            $table->decimal('precio')->nullable();
+            $table->decimal('precio', 12, 2)->nullable();
             $table->timestamps();
         });
     }

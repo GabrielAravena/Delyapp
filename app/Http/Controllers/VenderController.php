@@ -21,7 +21,21 @@ class VenderController extends Controller
 
         $request->user()->authorizeRoles(['admin']);
 
-        $productos = Productos::where('estado', 'activado')->get();
+        $local_id = $request->user()->local_id;
+
+        $inventario = Inventario::where('local_id', $local_id)->first();
+      
+        if(!$inventario){
+            return redirect()->route('inventario.index')->with('primeraVez', 'Aún no has agregado ingredientes. El primer paso para utilizar la aplicación, es agregar los ingredientes que tienes en bodega, luego debes ingresar los gastos fijos de tu local y finalmente, puedes crear productos y comenzar a vender.');
+        }
+
+        $productos = Productos::where('local_id', $local_id)->where('estado', 'activado')->get();
+   
+
+        if(!$productos->first()){
+            return redirect()->route('menu.index')->with('sinProductos', 'Aún no han creado productos para vender. Los puede crear en esta página.');
+        }
+
         return view('vender', compact('productos'));
     }
 

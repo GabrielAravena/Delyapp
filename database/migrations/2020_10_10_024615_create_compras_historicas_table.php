@@ -16,9 +16,9 @@ class CreateComprasHistoricasTable extends Migration
         Schema::create('compras_historicas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('cantidad');
+            $table->decimal('cantidad', 8, 2);
             $table->string('unidad_medida');
-            $table->decimal('valor');
+            $table->decimal('valor', 10, 2);
             $table->timestamps();
 
             $table->foreignId('inventario_id')->constrained('inventarios');

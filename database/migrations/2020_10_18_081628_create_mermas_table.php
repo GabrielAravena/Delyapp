@@ -16,7 +16,7 @@ class CreateMermasTable extends Migration
         Schema::create('mermas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('porcentaje');
+            $table->decimal('porcentaje', 8, 2);
             
         });
     }

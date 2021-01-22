@@ -10,7 +10,6 @@
                 <div class="header-body">
                     <div class="row align-items-center">
                         <div class="col">
-
                             <!-- Title -->
                             <h3 class="header-title">
                                 Vender

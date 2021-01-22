@@ -16,7 +16,7 @@ class CreateGastosFijosTable extends Migration
         Schema::create('gastos_fijos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('monto');
+            $table->decimal('monto', 10, 2);
             $table->timestamps();
 
             $table->foreignId('local_id')->constrained('local');

@@ -16,10 +16,10 @@ class CreateIngredientesTable extends Migration
         Schema::create('ingredientes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('cantidad');
+            $table->decimal('cantidad', 8, 2);
             $table->string('unidad_medida');
-            $table->decimal('valor')->nullable();
-            $table->decimal('merma');
+            $table->decimal('valor', 10, 2)->nullable();
+            $table->decimal('merma', 8, 2);
             $table->timestamps();
 
             $table->foreignId('producto_id')->constrained('productos');

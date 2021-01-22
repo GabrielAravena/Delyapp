@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Inventario;
 use App\Local;
 use App\Registro_ventas;
 use Carbon\Carbon;
@@ -19,6 +20,12 @@ class InicioAdminController extends Controller
         $request->user()->authorizeRoles(['admin']);
 
         $local_id = $request->user()->local_id;
+
+        $inventario = Inventario::where('local_id', $local_id)->first();
+        
+        if(!$inventario){
+            return redirect()->route('inventario.index')->with('primeraVez', 'Aún no has agregado ingredientes. El primer paso para utilizar la aplicación, es agregar los ingredientes que tienes en bodega, luego debes ingresar los gastos fijos de tu local y finalmente, puedes crear productos y comenzar a vender.');
+        }
 
         $local = Local::find($local_id);
 

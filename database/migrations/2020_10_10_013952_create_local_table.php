@@ -19,6 +19,8 @@ class CreateLocalTable extends Migration
             $table->string('direccion');
             $table->string('telefono');
             $table->string('imagen')->nullable();
+            $table->string('logo')->nullable();
+            $table->decimal('valor_delivery')->nullable();
             $table->string('estado');
             $table->string('latitud');
             $table->string('longitud');

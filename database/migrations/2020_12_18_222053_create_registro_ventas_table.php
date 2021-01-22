@@ -20,7 +20,7 @@ class CreateRegistroVentasTable extends Migration
             $table->integer('invitado')->nullable();
             $table->integer('venta_id');
             $table->string('tipo');
-            $table->decimal('valor');
+            $table->decimal('valor', 12, 2);
             $table->timestamps();
         });
     }

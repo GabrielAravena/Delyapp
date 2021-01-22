@@ -25,6 +25,22 @@
           </button>
         </div>
         @endif
+        @if(session('primeraVez'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>{{ session('primeraVez') }}</strong> 
+          <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        @endif
+        @if(session('sinGastosFijos'))
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>{{ session('sinGastosFijos') }}</strong> 
+          <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        @endif
         <!-- Team name -->
         <div class="form-group mb-0">
           <div class="row">

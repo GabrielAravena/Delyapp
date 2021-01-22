@@ -16,12 +16,12 @@ class CreateInventariosTable extends Migration
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('cantidad');
+            $table->decimal('cantidad', 8, 2);
             $table->string('unidad_medida');
-            $table->decimal('valor');
-            $table->decimal('pmp');
-            $table->decimal('ultimo_precio');
-            $table->decimal('merma');
+            $table->decimal('valor', 10, 2);
+            $table->decimal('pmp', 10, 2);
+            $table->decimal('ultimo_precio', 10, 2);
+            $table->decimal('merma', 8, 2);
             $table->timestamps();
             $table->foreignId('local_id')->constrained('local');
             

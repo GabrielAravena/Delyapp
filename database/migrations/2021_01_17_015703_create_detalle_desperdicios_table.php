@@ -16,10 +16,10 @@ class CreateDetalleDesperdiciosTable extends Migration
         Schema::create('detalle_desperdicios', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->decimal('cantidad');
-            $table->decimal('desperdicio');
+            $table->decimal('cantidad', 8, 2);
+            $table->decimal('desperdicio', 8, 2);
             $table->string('unidad_medida');
-            $table->decimal('valor_desperdiciado');
+            $table->decimal('valor_desperdiciado', 10, 2);
             $table->foreignId('desperdicio_id')->constrained('desperdicios');
             $table->timestamps();
         });
