@@ -6,12 +6,19 @@
     <input type="hidden" id="monto" name="monto" value="{{ $monto }}">
     <input type="hidden" id="codigo" name="codigo" value="{{ $codigoAutorizacion }}">
 </form>
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 <script>
+    $(document).ready(function agregar() {
 
-    window.localStorage.setItem("monto", document.getElementById('monto').value);
-    window.localStorage.setItem("codigoAutorizacion", document.getElementById('codigo').value);
+        var monto = $('#monto').val();
+        var codigo = $('#codigo').val();
 
-    document.getElementById('redirect_form').submit();
+        window.localStorage.setItem("monto", monto);
+        window.localStorage.setItem("codigoAutorizacion", codigo);
 
+        document.getElementById('redirect_form').submit();
+
+
+    });
 </script>
 @endsection

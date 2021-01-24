@@ -46,7 +46,7 @@ class CarritoController extends Controller
             $productos = Productos_user::where('invitado', $codigoInvitado)
                 ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
                 ->join('productos', 'productos_users.producto_id', 'productos.id')
-                ->select('productos_users.*', 'ventas.estado', 'productos.nombre', 'productos.precio', 'productos.imagen', 'productos.local_id', 'ventas.precio as total')
+                ->select('productos_users.*', 'ventas.delivery', 'ventas.estado', 'productos.nombre', 'productos.precio', 'productos.imagen', 'productos.local_id', 'ventas.precio as total')
                 ->where('ventas.estado', 'carrito')
                 ->orderBy('id')
                 ->get()
@@ -59,7 +59,7 @@ class CarritoController extends Controller
             $productos = Productos_user::where('users_id', $user_id)
                 ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
                 ->join('productos', 'productos_users.producto_id', 'productos.id')
-                ->select('productos_users.*', 'ventas.estado', 'productos.nombre', 'productos.precio', 'productos.imagen', 'productos.local_id', 'ventas.precio as total')
+                ->select('productos_users.*', 'ventas.delivery', 'ventas.estado', 'productos.nombre', 'productos.precio', 'productos.imagen', 'productos.local_id', 'ventas.precio as total')
                 ->where('ventas.estado', 'carrito')
                 ->orderBy('id')
                 ->get()
@@ -299,6 +299,11 @@ class CarritoController extends Controller
                     $local_id = $inventario->local_id;
                 }
             }
+
+            $venta = Ventas::find($buyOrder);
+            $venta->estado = 'finalizado';
+            $venta->save();
+    
             
             Registro_ventas::create([
                 'local_id' => $local_id,
@@ -307,12 +312,10 @@ class CarritoController extends Controller
                 'venta_id' => $buyOrder,
                 'tipo' => 'online',
                 'valor' => $monto,
+                'delivery' => $venta->delivery,
             ]);
 
-            $venta = Ventas::find($buyOrder);
-            $venta->estado = 'finalizado';
-            $venta->save();
-
+                
             return view('carrito_redirect', compact('token_ws', 'urlRedirection', 'codigoAutorizacion', 'monto'));
         } else {
 
@@ -323,6 +326,90 @@ class CarritoController extends Controller
     protected function final()
     {
         return view('carrito_final');
+    }
+
+    protected function agregarDelivery(Request $request){
+
+        if ($request->user() == null) {
+
+            $codigoInvitado = $request->session()->get('codigoInvitado');
+
+            if (!$codigoInvitado) {
+
+                $codigoInvitado = hexdec(uniqid());
+                $request->session()->put(['codigoInvitado' => $codigoInvitado]);
+            }
+
+            $productos_user = Productos_user::where('invitado', $codigoInvitado)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->select('productos_users.producto_id', 'ventas.id')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->last();
+        } else {
+
+            $user_id = $request->user()->id;
+
+            $productos_user = Productos_user::where('users_id', $user_id)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->select('productos_users.producto_id', 'ventas.id')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->last();
+        }
+
+        $local_id = Productos::find($productos_user->producto_id)->local_id;
+
+        $valor_delivery = Local::find($local_id)->valor_delivery;
+
+        $venta = Ventas::find($productos_user->id);
+        $venta->precio += $valor_delivery;
+        $venta->delivery = true;
+        $venta->save();
+        
+        return redirect()->route('carrito.index');
+    }
+
+    protected function quitarDelivery(Request $request){
+
+        if ($request->user() == null) {
+
+            $codigoInvitado = $request->session()->get('codigoInvitado');
+
+            if (!$codigoInvitado) {
+
+                $codigoInvitado = hexdec(uniqid());
+                $request->session()->put(['codigoInvitado' => $codigoInvitado]);
+            }
+
+            $productos_user = Productos_user::where('invitado', $codigoInvitado)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->select('productos_users.producto_id', 'ventas.id')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->last();
+        } else {
+
+            $user_id = $request->user()->id;
+
+            $productos_user = Productos_user::where('users_id', $user_id)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->select('productos_users.producto_id', 'ventas.id')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->last();
+        }
+
+        $local_id = Productos::find($productos_user->producto_id)->local_id;
+
+        $valor_delivery = Local::find($local_id)->valor_delivery;
+
+        $venta = Ventas::find($productos_user->id);
+        $venta->precio -= $valor_delivery;
+        $venta->delivery = false;
+        $venta->save();
+
+        return redirect()->route('carrito.index');
     }
 
 

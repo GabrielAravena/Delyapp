@@ -26,6 +26,7 @@ class CreateLocalTable extends Migration
             $table->string('longitud');
             $table->decimal('ingreso_mensual', 10, 2);
             $table->boolean('delivery');
+            $table->decimal('ganancia', 8, 2);
             $table->timestamps();
         });
     }

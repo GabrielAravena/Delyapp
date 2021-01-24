@@ -17,10 +17,11 @@ class CreateRegistroVentasTable extends Migration
             $table->id();
             $table->integer('local_id');
             $table->integer('users_id')->nullable();
-            $table->integer('invitado')->nullable();
+            $table->bigInteger('invitado')->nullable();
             $table->integer('venta_id');
             $table->string('tipo');
             $table->decimal('valor', 12, 2);
+            $table->boolean('delivery')->nullable();
             $table->timestamps();
         });
     }

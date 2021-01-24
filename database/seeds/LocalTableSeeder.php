@@ -21,6 +21,7 @@ class LocalTableSeeder extends Seeder
         $local->longitud = '-70.743356';
         $local->ingreso_mensual = '1000000';
         $local->delivery = 1;
+        $local->ganancia = 30;
         $local->save();
     }
 }

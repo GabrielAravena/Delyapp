@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('content')
 
-<div class="container">
+<div class="container" id="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
 
@@ -71,6 +71,17 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
+        <span class="visually-hidden"></span>
     </div>
 </div>
 

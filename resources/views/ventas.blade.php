@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('content')
 
-<div class="container">
+<div class="container" id="container">
     <div class="row">
         <div class="header mt-5 mb-3">
             <div class="header-body form-inline col-12">
@@ -38,6 +38,17 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
+        <span class="visually-hidden"></span>
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>

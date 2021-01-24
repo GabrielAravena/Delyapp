@@ -25,7 +25,7 @@
           </div> <!-- / .row -->
         </div>
       </div>
-      <div class="card">
+      <div class="card mb-5">
         @if($productos)
         <div class="mt-3 text-center">
           <label class="h5">
@@ -48,9 +48,9 @@
                       <th class="text-center" scope="col">Eliminar</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="tablaProductos">
                     @foreach($productos as $producto)
-                    <tr>
+                    <tr >
                       <td>{{ $producto->nombre }}</td>
                       <td>{{ $producto->cantidad }}</td>
                       <td style="text-align:right">{{ number_format($producto->precio, 0, ",", ".") }}</td>
@@ -65,6 +65,16 @@
                       </td>
                     </tr>
                     @endforeach
+                    @if($productos[0]->delivery)
+                    <tr >
+                      <td>Delivery</td>
+                      <td>1</td>
+                      <td style="text-align:right">{{ number_format($local->valor_delivery, 0, ",", ".") }}</td>
+                      <td style="text-align:right">{{ number_format($local->valor_delivery, 0, ",", ".") }}</td>
+                      <td style="text-align:center"></td>
+                    </tr>
+                    @endif
+                    <input id="deliveryExist" type="text" value="{{ $productos[0]->delivery }}" hidden>
                   </tbody>
                 </table>
               </div>
@@ -86,9 +96,25 @@
               </strong>
             </label>
           </div>
+
+          <div class="form-inline row justify-content-center mt-3">
+            <label>Soliciar delivery (+ ${{ number_format($local->valor_delivery, 0, ",", ".") }})</label>
+            <input class="ml-3" id="delivery" type="checkbox" name="delivery">
+            <div class="text-center ml-3" id="spinner" hidden>
+              <div class="spinner-grow" style="width: 1rem; height: 1rem; color: #791313;" role="status">
+                  <span class="visually-hidden"></span>
+              </div>
+              <div class="spinner-grow" style="width: 1rem; height: 1rem; color: #f9b129;" role="status">
+                  <span class="visually-hidden"></span>
+              </div>
+              <div class="spinner-grow" style="width: 1rem; height: 1rem; color: #137830;" role="status">
+                  <span class="visually-hidden"></span>
+              </div>
+          </div>
+          </div>
           @else
-          <div class="form-inline row justify-content-center mt-5" style="text-align:right;">
-            <label class="ml-3">
+          <div class="form-inline row justify-content-center mt-3" style="text-align:right;">
+            <label>
               <strong>Este local no cuenta con delivery</strong>
             </label>
           </div>
@@ -108,7 +134,7 @@
                   <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
                   <div class="col-md-6">
-                    <input id="email_inicio" type="email" class="form-control col-form-label @error('email') is-invalid @enderror" name="email" value="" required autocomplete="email" autofocus>
+                    <input id="email_inicio" type="email" class="form-control col-form-label @error('email') is-invalid @enderror" name="email" value="" required autocomplete="email" >
 
                     @error('email')
                     <span class="invalid-feedback" role="alert">
@@ -158,7 +184,7 @@
                   <label for="name" class="col-md-4 col-form-label text-md-right">Nombre</label>
 
                   <div class="col-md-6">
-                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name">
 
                     @error('name')
                     <span class="invalid-feedback" role="alert">
@@ -254,8 +280,32 @@
   <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.min.js'></script>
   <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
 
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+
 
   <script>
+
+    $(document).ready(function(){
+
+      var delivery = $('#deliveryExist').val();
+      console.log(delivery);
+
+      if(delivery == 1){
+        $('#delivery').prop('checked', true);
+      }
+
+      $('#delivery').on('click', function(event){
+
+        $('#spinner').prop('hidden', false);
+        
+        if(delivery == 1){
+          window.location = "{{ route('carrito.quitarDelivery') }}";
+        }else{
+          window.location = "{{ route('carrito.agregarDelivery') }}";
+        }
+      });
+    });
+  
     function iniciar() {
       document.getElementById('iniciar_sesion').style.display = 'block';
       document.getElementById('comprar_invitado').style.display = 'none';
@@ -272,7 +322,7 @@
       $('#email_invitado').prop("required", true);
       $('#direccion').prop("required", true);
     }
-
+    
     var user_location = [-70.65028, -33.43778];
 
     var marker = null;

@@ -13,5 +13,6 @@ class Registro_ventas extends Model
         'venta_id',
         'tipo',
         'valor',
+        'delivery',
     ];
 }

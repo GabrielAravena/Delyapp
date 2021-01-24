@@ -19,6 +19,7 @@ class Local extends Model
         'estado',
         'ingreso_mensual',
         'delivery',
+        'ganancia',
     ];
 
     protected $table = 'local';

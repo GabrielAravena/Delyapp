@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
+<div id="container">
 <section class="bg-image-5">
   <section class="parallax-container parallax-light" data-parallax-img="{{asset('images/parallax-03.png')}}">
     <div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt=""></div>
@@ -25,9 +26,9 @@
     <div class="row justify-content-xs-center">
 
       @foreach($productos as $producto)
-      @if($producto->categoria == 'promoción' || $producto->categoria == 'combo')
+      @if($producto->categoria == 'promoción' || $producto->categoria == 'combo' && $producto->precio != 0)
       <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
-        <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}">
+        <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();">
           <img style="opacity: 0.6; max-width: 100%;" src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" width="380" height="250">
           <div class="caption text-center">
             <h3 class="text-italic">{{ $producto->nombre }}</h3>
@@ -61,7 +62,7 @@
         <div class="slick-slider slick-tab-centered" data-arrows="true" data-loop="true" data-dots="false" data-swipe="true" data-items="1" data-xs-items="1" data-sm-items="2" data-md-items="3" data-lg-items="3" data-xl-items="5" data-center-mode="true" data-center-padding="10">
 
           @foreach($productos as $producto)
-          @if ($cat->categoria == $producto->categoria && $producto->categoria != 'combo' && $producto->categoria != 'promoción')
+          @if ($cat->categoria == $producto->categoria && $producto->categoria != 'combo' && $producto->categoria != 'promoción' && $producto->precio != 0)
           <div class="item">
             <div class="thumbnail-menu-modern">
               <figure>
@@ -71,7 +72,7 @@
                 <h5 class="primary">{{ $producto->nombre }}</h5>
                 <p class="text-italic">{{ $producto->descripcion }}</p>
                 <p class="price">{{ number_format($producto->precio, 0, ",", ".") }}</p>
-                <a class="btn btn-shape-circle btn-burnt-sienna offset-top-15" href="{{ route('carrito.producto', $producto) }}" style="padding: 5px 20px !important;">
+                <a class="btn btn-shape-circle btn-burnt-sienna offset-top-15" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();" style="padding: 5px 20px !important;">
                   <span style="font-size: 23px !important;"></span> Comprar
                 </a>
               </div>
@@ -85,7 +86,7 @@
       @endforeach
     </div>
   </div>
-  <div class="form-group row justify-content-center" style="display: flex; margin-top: 200px; margin-bottom: 200px;">
+  <div class="form-group row justify-content-center" style="display: flex; margin-top: 50px; margin-bottom: 200px;">
     <div id="map" style="height: 300px;"></div>
   </div>
 </section>
@@ -94,10 +95,10 @@
   <section class="bg-gray-darker section-top-55 section-bottom-60">
     <div class="container">
       <div class="row border-left-cell">
-        <div class="col-sm-6 col-md-3 col-lg-4">
-          <a class="float-left  mr-5" href="{{ route('inicio') }}">
-            <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
-          </a>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          <div class="float-left mr-5">
+            <img src="{{ 'https://localhost/delyapp_gabriel/public'.$local->logo }}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
+          </div>
           <ul class="list-unstyled contact-info offset-top-5">
             <li>
               <div class="unit unit-horizontal unit-top unit-spacing-xxs">
@@ -119,6 +120,18 @@
     </div>
   </section>
 </footer>
+</div>
+<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+</div>
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
@@ -127,7 +140,7 @@
 <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
 
 <script>
-  var user_location = [{{ $local->longitud }}, {{ $local->latitud }}];
+  var user_location = [ {{$local-> longitud}}, {{$local-> latitud}} ];
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
   var map = new mapboxgl.Map({
@@ -152,5 +165,13 @@
   map.on('load', function() {
     addMarker(user_location, 'load');
   });
+
+  function enviar($producto){
+      $('#container').prop('hidden', true);
+      $('#spinner').prop('hidden', false);
+
+  }
+
+
 </script>
 @endsection

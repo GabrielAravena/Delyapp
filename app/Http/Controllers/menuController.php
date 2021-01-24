@@ -62,8 +62,10 @@ class menuController extends Controller
         $local_id = $request->user()->local_id;
 
         $gastos_fijos = Gastos_fijos::where('local_id', $local_id)->get()->sum('monto');
+
+        $local = Local::find($local_id);
         
-        $ingresoMensual = Local::find($local_id)->ingreso_mensual;
+        $ingresoMensual = $local->ingreso_mensual;
 
         $porcentajeGasto = ($gastos_fijos/$ingresoMensual);
 
@@ -121,7 +123,7 @@ class menuController extends Controller
         }
 
 
-        $precioSugerido = round((($sumaPreciosIngredientes / (1 - 0.3))*(1 + $porcentajeGasto)), -2) * 1.19;
+        $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia/100)))*(1 + $porcentajeGasto)), -2) * 1.19;
 
         $producto->precio_sugerido = $precioSugerido;
         $producto->save();

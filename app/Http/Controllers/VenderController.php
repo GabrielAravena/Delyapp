@@ -33,7 +33,7 @@ class VenderController extends Controller
    
 
         if(!$productos->first()){
-            return redirect()->route('menu.index')->with('sinProductos', 'Aún no han creado productos para vender. Los puede crear en esta página.');
+            return redirect()->route('menu.index')->with('sinProductos', 'Aún no has creado productos para vender. Los puedes crear en esta página.');
         }
 
         return view('vender', compact('productos'));

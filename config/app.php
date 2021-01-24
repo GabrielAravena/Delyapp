@@ -177,10 +177,6 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
 
-        App\providers\DropboxServiceProvider::class,
-
-        App\Providers\GoogleDriveServiceProvider::class,
-
     ],
 
     /*

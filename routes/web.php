@@ -34,6 +34,8 @@ Route::post('/carritoLogin', 'CarritoController@login')->name('carrito.login');
 Route::post('/carritoPagar', 'CarritoController@pagar')->name('carrito.pagar');
 Route::post('/carritoReturn', 'CarritoController@return')->name('carrito.return');
 Route::post('/carritoFinal', 'CarritoController@final')->name('carrito.final');
+Route::get('/carrito/agregarDelivery', 'CarritoController@agregarDelivery')->name('carrito.agregarDelivery');
+Route::get('/carrito/quitarDelivery', 'CarritoController@quitarDelivery')->name('carrito.quitarDelivery');
 
 Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
 Route::get('/inicioAdmin/activar/{local}', 'InicioAdminController@activar')->name('inicioAdmin.activar');
@@ -73,3 +75,6 @@ Route::post('/vender/store2/{venta}', 'VenderController@store2')->name('vender.s
 Route::get('/ventas', 'VentasController@index')->name('ventas.index');
 Route::post('/ventas/{local}', 'VentasController@buscar')->name('ventas.buscar');
 Route::get('/ventas/descargar/{desde}/{hasta}', 'VentasController@descargarDocumento')->name('ventas.descargarDocumento');
+
+Route::get('/configuracion', 'ConfiguracionController@index')->name('configuracion.index');
+Route::post('/configuracion/guardar', 'ConfiguracionController@guardar')->name('configuracion.guardar');

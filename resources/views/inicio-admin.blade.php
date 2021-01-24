@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 @section('content')
 
-<div class="container">
+<div class="container" id="container">
   <div class="header mt-5 mb-3">
     <div class="header-body form-inline col-12">
       <!-- Title -->
@@ -19,6 +19,14 @@
       @endif
     </div>
   </div>
+  @if(session('mensaje'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Perfecto: </strong> {{ session('mensaje') }}
+        <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+            <span>&times;</span>
+        </button>
+    </div>
+  @endif
   <div class="row justify-content-center">
     <div class="col-sm-4">
       <div class="card shadow">
@@ -49,6 +57,17 @@
     <canvas class="my-4 mr-5 w-100 shadow" id="grafico_mes" style="display: none" width="900" height="380"></canvas>
     <canvas class="my-4 mr-5 w-100 shadow" id="grafico_semana" style="display: block" width="900" height="380"></canvas>
   </div>
+</div>
+<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
+    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
+        <span class="visually-hidden"></span>
+    </div>
 </div>
 
 

@@ -16,6 +16,7 @@ class Ventas extends Model
         'fecha', 
         'tipo',
         'precio',
+        'delivery',
     ];
 
     public function clientes_productos()
