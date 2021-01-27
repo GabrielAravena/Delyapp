@@ -3,13 +3,13 @@
 
 <div id="container">
 <section class="bg-image-5">
-  <section class="parallax-container parallax-light" data-parallax-img="{{asset('images/parallax-03.png')}}">
-    <div class="material-parallax parallax"><img src="{{asset('images/parallax-03.png')}}" alt=""></div>
+  <section class="parallax-container parallax-light" data-parallax-img="{{asset('images/home-slide-1-1920x800.jpg')}}">
+    <div class="material-parallax parallax"><img src="{{asset('images/home-slide-1-1920x800.jpg')}}" alt=""></div>
     <div class="parallax-content">
       <div class="container section-80 section-sm-top-140 section-sm-bottom-150 text-center">
         <div class="row justify-content-xs-center">
           <div class="col-sm-10 col-lg-8">
-            <h4 class="text-italic divider-custom-small-primary">Bienvenido</h4>
+            <h4 class="text-italic divider-custom-small-primary">Bienvenido/a</h4>
             <h2 class="text-uppercase text-italic offset-top-5 offset-sm-top-0">{{ $local->nombre }}</h2>
             <div class="unit unit-horizontal unit-middle unit-spacing-xs">
             </div>
@@ -29,7 +29,7 @@
       @if($producto->categoria == 'promoción' || $producto->categoria == 'combo' && $producto->precio != 0)
       <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
         <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();">
-          <img style="opacity: 0.6; max-width: 100%;" src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" width="380" height="250">
+          <img style="opacity: 0.6; max-width: 100%;" src="{{ asset($producto->imagen) }}" width="380" height="250">
           <div class="caption text-center">
             <h3 class="text-italic">{{ $producto->nombre }}</h3>
             <p class="big">{{ $producto->descripcion }}</p>
@@ -66,14 +66,14 @@
           <div class="item">
             <div class="thumbnail-menu-modern">
               <figure>
-                <img class="img" src="{{ 'https://localhost/delyapp_gabriel/public'.$producto->imagen }}" alt="No se ha cargado la imagen" width="310" height="260" />
+                <img class="img" src="{{ asset($producto->imagen) }}" alt="No se ha cargado la imagen" width="310" height="260" />
               </figure>
               <div class="caption">
                 <h5 class="primary">{{ $producto->nombre }}</h5>
                 <p class="text-italic">{{ $producto->descripcion }}</p>
                 <p class="price">{{ number_format($producto->precio, 0, ",", ".") }}</p>
-                <a class="btn btn-shape-circle btn-burnt-sienna offset-top-15" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();" style="padding: 5px 20px !important;">
-                  <span style="font-size: 23px !important;"></span> Comprar
+                <a class="btn btn-shape-circle btn-burnt-sienna offset-top-15" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();">
+                  <span ></span> Comprar
                 </a>
               </div>
             </div>
@@ -86,7 +86,7 @@
       @endforeach
     </div>
   </div>
-  <div class="form-group row justify-content-center" style="display: flex; margin-top: 50px; margin-bottom: 200px;">
+  <div class="form-group row justify-content-center" style="display: flex; margin-top: 50px; margin-bottom: 200px; width: 100%;">
     <div id="map" style="height: 300px;"></div>
   </div>
 </section>
@@ -97,7 +97,7 @@
       <div class="row border-left-cell">
         <div class="col-sm-12 col-md-12 col-lg-12">
           <div class="float-left mr-5">
-            <img src="{{ 'https://localhost/delyapp_gabriel/public'.$local->logo }}" width="120" height="50" class=".d-inline-block align-top" alt="Delyapp" loading="lazy">
+            <img src="{{ asset($local->logo) }}" width="120" height="50" class=".d-inline-block align-top" alt="{{ $local->nombre }}" loading="lazy">
           </div>
           <ul class="list-unstyled contact-info offset-top-5">
             <li>
@@ -142,7 +142,7 @@
 <script>
   var user_location = [ {{$local-> longitud}}, {{$local-> latitud}} ];
 
-  mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+  mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Fib2J1ZG8iLCJhIjoiY2trNHM1enR4MW9kczJ4cGV6NHlrdTA1bSJ9.H8tB-u1v17oj7NclhK3iBA';
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',

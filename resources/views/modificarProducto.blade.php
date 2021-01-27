@@ -59,7 +59,6 @@
                                 <div class="col-md-3 pl-0">
                                     <select class="col-md-2 form-control text-center" name="categoria" id="categoria" selected="{{ $producto->categoria }}">
                                         <option value="promoción">Promoción</option>
-                                        <option value="promoción principal">Promoción principal</option>
                                         <option value="combo">Combo</option>
                                         <option value="pizzas">Pizzas</option>
                                         <option value="completos">Completos</option>
@@ -114,7 +113,7 @@
                                     <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
                                     <span class="ml-3">Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="100000" min="0" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
+                                <input id="precio" max="1000000" min="0" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
                             </div>
 
                             <input class="d-none" type="text" name="producto_id" value="{{ $producto->id }}">

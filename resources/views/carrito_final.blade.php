@@ -19,7 +19,10 @@
                         <h6 class="mt-5">Código de autorización: </h6>
                         <h6 class="mt-5 ml-3" id="codigo"></h6>
                     </div>
-                    <a class="btn btn-green text-white mb-5" type="button" href="{{ route('inicio') }}">
+                    <div class="col-12 text-center">
+                        <label>Te hemos enviado un correo electrónico con el detalle de tu compra</label>
+                    </div>
+                    <a class="btn btn-green text-white mt-5 mb-5" type="button" href="{{ route('inicio') }}">
                         Inicio
                     </a>
                 </div>

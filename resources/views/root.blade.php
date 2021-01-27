@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.app')
 @section('content')
 <div class="container" id="container">
     <div class="row justify-content-center">
@@ -10,23 +10,33 @@
                         <div class="col">
                             <!-- Title -->
                             <h3 class="header-title">
-                                Configuración de local
+                                Ingresar local
                             </h3>
+                            @if(session('mensaje'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <strong>Perfecto: </strong> {{ session('mensaje') }}
+                                <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card mb-5">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('configuracion.guardar') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('root.guardar') }}" enctype="multipart/form-data">
                         @csrf
+
+                        <h4 class="mt-3 text-center">Datos del local</h4>
 
                         <div class="form-group row mt-5">
                             <div class="col-md-4 col-form-label text-right">
                                 <label>Nombre del Local</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="nombre" type="text" class="form-control" value="{{ $local->nombre }}" name="nombre" required>
+                                <input id="nombre" type="text" class="form-control" name="nombre" required>
                             </div>
                         </div>
 
@@ -35,7 +45,7 @@
                                 <label>Teléfono</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="telefono" type="tel" class="form-control" name="telefono" value="{{ $local->telefono }}" placeholder="Ejemplo: +56912345678" required>
+                                <input id="telefono" type="tel" class="form-control" name="telefono" placeholder="Ejemplo: +56912345678" required>
                             </div>
                         </div>
 
@@ -44,7 +54,7 @@
                                 <label>Ingreso mensual aproximado</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ingreso_mensual" type="number" min="0" max="100000000000" class="form-control text-center" value="{{ number_format($local->ingreso_mensual, 0, '', '') }}" name="ingreso_mensual">
+                                <input id="ingreso_mensual" type="number" min="0" max="100000000000" class="form-control text-center" value="" name="ingreso_mensual">
                             </div>
                         </div>
 
@@ -62,7 +72,7 @@
                                 <label>Valor delivery</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="valor_delivery" type="number" min="0" max="100000" class="form-control text-center" value="{{ number_format($local->valor_delivery, 0, '', '') }}" name="valor_delivery">
+                                <input id="valor_delivery" type="number" min="0" max="100000" class="form-control text-center" name="valor_delivery">
                             </div>
                         </div>
 
@@ -71,7 +81,7 @@
                                 <label>Distancia máxima a la que despachas (en Km)</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="distancia_delivery" type="number" min="0" max="1000" class="form-control text-center" value="{{ number_format($local->distancia_delivery, 0, '', '') }}" name="distancia_delivery">
+                                <input id="distancia_delivery" type="number" min="0" max="100" class="form-control text-center" name="distancia_delivery">
                             </div>
                         </div>
 
@@ -80,7 +90,7 @@
                                 <label>Porcentaje de ganancia (%)</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" value="{{ number_format($local->ganancia, 0, '', '') }}" name="ganancia">
+                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" name="ganancia">
                             </div>
                         </div>
 
@@ -118,11 +128,28 @@
                                 <div id="map" style="height: 150px;"></div>
                             </div>
                         </div>
-                        <input type="text" id="direccion" name="direccion" value="{{ $local->direccion }}" hidden required>
-                        <input type="text" id="latitud" name="latitud" value="{{ $local->latitud }}" hidden>
-                        <input type="text" id="longitud" name="longitud" value="{{ $local->longitud }}" hidden>
 
-                        <div class="form-inline row mb-5 mt-5">
+                        <h4 class="text-center" style="margin-top: 180px;">Datos del administrador</h4>
+
+                        <div class="form-group row mt-5">
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="email" type="email" class="form-control col-form-label @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <input type="text" id="direccion" name="direccion" hidden required>
+                        <input type="text" id="latitud" name="latitud" hidden>
+                        <input type="text" id="longitud" name="longitud" hidden>
+
+                        <div class="form-inline row mt-5 mb-5">
                             <div class="col-md-12 text-center">
                                 <button type="submit" class="btn btn-green">
                                     Guardar
@@ -135,18 +162,6 @@
         </div>
     </div>
 </div>
-<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-</div>
-
 
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.48.0/mapbox-gl.css' rel='stylesheet' />
@@ -157,16 +172,6 @@
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
 
 <script>
-    $(document).ready(function(){
-        if({{ $local->delivery }}){
-            $('#delivery').prop("checked", true);
-            document.getElementById('valor_delivery_container').style.display = 'flex';
-            document.getElementById('distancia_delivery_container').style.display = 'flex';
-            $('#valor_delivery').prop("required", true);
-            $('#distancia_delivery').prop("required", true);
-        }
-    });
-
     $(document).ready(function() {
         $('#logo_local').fileinput({
             language: 'es',
@@ -178,7 +183,6 @@
             initialPreviewAsData: false,
             dropZoneEnabled: false,
             theme: 'fas',
-            placeholder: 'Seleccione una imagen',
         });
     });
 
@@ -211,7 +215,7 @@
         }
     }
 
-    var user_location = [{{ $local->longitud }}, {{ $local->latitud }}];
+    var user_location = [-70.65028, -33.43778];
 
     var marker = null;
 
@@ -220,13 +224,13 @@
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: user_location,
-        zoom: 15,
+        zoom: 10,
     });
     //  geocoder here
     var geocoder = new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
         country: 'CL',
-        placeholder: '{{ $local->direccion }}',
+        placeholder: 'Ingrese dirección',
     });
 
     // After the map style has loaded on the page, add a source layer and default
@@ -256,10 +260,6 @@
             .setLngLat(user_location)
             .addTo(map);
     }
-
-    map.on('load', function() {
-    addMarker(user_location, 'load');
-    });
 
     document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
 </script>

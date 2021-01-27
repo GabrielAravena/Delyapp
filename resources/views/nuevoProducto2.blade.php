@@ -58,7 +58,6 @@
                                 <div class="col-md-3 pl-0">
                                     <select class="col-md-2 form-control" name="categoria" id="categoria">
                                         <option value="promoción">Promoción</option>
-                                        <option value="promoción principal">Promoción principal</option>
                                         <option value="combo">Combo</option>
                                         <option value="pizzas">Pizzas</option>
                                         <option value="completos">Completos</option>

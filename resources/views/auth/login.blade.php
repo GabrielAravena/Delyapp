@@ -24,14 +24,14 @@
                         @csrf
 
                         <div class="form-group row mt-5">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control col-form-label @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                                 @error('email')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>Datos incorrectos</strong>
+                                        <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>
@@ -45,7 +45,7 @@
 
                                 @error('password')
                                     <span class="invalid-feedback" role="alert">
-                                        <strong>La contraseña es incorrecta</strong>
+                                        <strong>{{ $message }}</strong>
                                     </span>
                                 @enderror
                             </div>

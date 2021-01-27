@@ -52,9 +52,11 @@ class ConfiguracionController extends Controller
         if ($request->delivery) {
             $local->delivery = true;
             $local->valor_delivery = $request->valor_delivery;
+            $local->distancia_delivery = $request->distancia_delivery;
         } else {
             $local->delivery = false;
             $local->valor_delivery = null;
+            $local->distancia_delivery = null;
         }
 
         $local->save();
@@ -79,5 +81,23 @@ class ConfiguracionController extends Controller
 
             return null;
         }
+    }
+
+    protected function indexAdmin(Request $request)
+    {
+        $request->user()->authorizeRoles(['admin']);
+
+        $admin = $request->user();
+
+        return view('configuracionAdmin', compact('admin'));
+    }
+
+    protected function guardarAdmin(Request $request){
+
+        $admin = $request->user();
+        $admin->name = $request->nombre;
+        $admin->save();
+
+        return redirect()->route('inicioAdmin.index')->with('mensaje', 'Se ha modificado la configuración correctamente.');
     }
 }

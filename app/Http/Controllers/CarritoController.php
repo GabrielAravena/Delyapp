@@ -10,10 +10,14 @@ use App\Ingredientes;
 use App\Inventario;
 use App\Registro_ventas;
 use App\Local;
+use App\Mail\CompraConfirmada;
+use App\Mail\AdvertenciaDeInventario;
+use App\User;
 use Illuminate\Http\Request;
 use \Illuminate\Validation\ValidationException;
 use \Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Auth\RedirectsUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Transbank\Webpay\Webpay;
@@ -32,6 +36,7 @@ class CarritoController extends Controller
         $monto = 1;
         $sessionId = 0;
         $buyOrder = 0;
+        $invitado = null;
       
         if ($request->user() == null) {
 
@@ -173,6 +178,7 @@ class CarritoController extends Controller
                 'estado' => 'carrito',
                 'tipo' => 'online',
                 'precio' => 0,
+                'delivery' => false,
             ]);
 
             if ($user_id) {
@@ -241,28 +247,53 @@ class CarritoController extends Controller
 
     protected function pagar(Request $request)
     {
+        $local = Local::find($request->local_id);
 
-        $token_ws = $request->token_ws;
-        $url = $request->url;
+        if($local->estado == 'activado'){
+            $token_ws = $request->token_ws;
+            $url = $request->url;
+    
+            if ($request->user() == null) {
+                $invitado = Invitado::create([
+                    'id' => $request->session()->get('codigoInvitado'),
+                    'nombre' => $request->name,
+                    'email' => $request->email,
+                    'direccion' => $request->direccion,
+                    'latitud' => $request->latitud,
+                    'longitud' => $request->longitud,
+                    'telefono' => $request->telefono,
+                ]);
 
-        if ($request->user() == null) {
-            Invitado::create([
-                'id' => $request->session()->get('codigoInvitado'),
-                'nombre' => $request->name,
-                'email' => $request->email,
-                'direccion' => $request->direccion,
-                'latitud' => $request->latitud,
-                'longitud' => $request->longitud,
-                'telefono' => $request->telefono,
-            ]);
+                $user_latitud = $invitado->latitud;
+                $user_longitud = $invitado->longitud;
+
+            }else{
+                $user_latitud = $request->user()->latitud;
+                $user_longitud = $request->user()->longitud;
+            }
+
+            if($request->delivery == 1){
+                $distancia = $this->calcularDistancia($local->latitud, $local->longitud, $user_latitud, $user_longitud);
+
+                if($local->distancia_delivery < $distancia){
+                    $distancia_delivery = number_format($local->distancia_delivery, 0, ",", ".");
+                    $distancia = number_format($distancia, 0, ",", ".");
+                    return redirect()->route('carrito.index')->with('error', 'Oops... Este local solo cuenta con delivery a '
+                        .$distancia_delivery.' Km a la redonda, y tu dirección se encuentra a una distancia de '
+                        .$distancia.' Km. Puedes solicitar retiro en local, o modificar tu dirección.');
+                }
+            }
+
+            return view('carrito_pagar', compact('token_ws', 'url'));
+        }else{
+            return redirect()->route('carrito.index')->with('error', 'Oops... Este local ya no está recibiendo pedidos. Te invitamos a revisar otros locales.');
         }
 
-        return view('carrito_pagar', compact('token_ws', 'url'));
+        
     }
 
     protected function return(Request $request)
     {
-
         $transaction = (new Webpay(Configuration::forTestingWebpayPlusNormal()))->getNormalTransaction();
 
         $token_ws = $request->token_ws;
@@ -276,9 +307,10 @@ class CarritoController extends Controller
 
         if ($output->responseCode == 0) {
 
-            $productos = Productos_user::where('ventas_id', $buyOrder)->get();
+            $productos_user = Productos_user::where('ventas_id', $buyOrder)->get();
 
-            foreach ($productos as $producto) {
+            $ingredientesBajos = [];
+            foreach ($productos_user as $producto) {
 
                 if ($producto->users_id != 1) {
                     $user_id = $producto->users_id;
@@ -289,12 +321,22 @@ class CarritoController extends Controller
                 }
 
                 $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
-
+                
                 foreach ($ingredientes as $ingrediente) {
 
                     $inventario = Inventario::find($ingrediente->inventario_id);
                     $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
                     $inventario->save();
+
+                    if($inventario->cantidad < 10){
+                        $ingredientesBajos[] = $inventario;
+                    }
+
+                    if($inventario->cantidad <= 0){
+                        $producto = Productos::find($ingrediente->producto_id);
+                        $producto->estado = 'desactivado';
+                        $producto->save();
+                    }
 
                     $local_id = $inventario->local_id;
                 }
@@ -303,7 +345,6 @@ class CarritoController extends Controller
             $venta = Ventas::find($buyOrder);
             $venta->estado = 'finalizado';
             $venta->save();
-    
             
             Registro_ventas::create([
                 'local_id' => $local_id,
@@ -313,8 +354,21 @@ class CarritoController extends Controller
                 'tipo' => 'online',
                 'valor' => $monto,
                 'delivery' => $venta->delivery,
+                'entregado' => false,
             ]);
 
+            if(count($ingredientesBajos) != 0){
+                $admin = User::where('local_id', $local_id)->first();
+                Mail::to($admin->email)->send(new AdvertenciaDeInventario($ingredientesBajos));
+            }
+
+            if($user_id != null){
+                $user = User::find($user_id);
+                Mail::to($user->email)->send(new CompraConfirmada($buyOrder));
+            }else{
+                $invitado = Invitado::find($invitado);
+                Mail::to($invitado->email)->send(new CompraConfirmada($buyOrder));
+            }
                 
             return view('carrito_redirect', compact('token_ws', 'urlRedirection', 'codigoAutorizacion', 'monto'));
         } else {
@@ -411,6 +465,16 @@ class CarritoController extends Controller
 
         return redirect()->route('carrito.index');
     }
+
+    private function calcularDistancia($local_latitud, $local_longitud, $user_latitud, $user_longitud)
+    {
+        $grados = rad2deg(acos((sin(deg2rad($local_latitud)) * sin(deg2rad($user_latitud))) + (cos(deg2rad($local_latitud)) * cos(deg2rad($user_latitud)) * cos(deg2rad($local_longitud - $user_longitud)))));
+
+        $distancia = $grados * 111.13384;
+
+        return round($distancia, 2);
+    }
+
 
 
 

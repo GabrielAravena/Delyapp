@@ -31,9 +31,20 @@ class UserTableSeeder extends Seeder
 
         $user = new User();
         $user->id = 3;
+        $user->name = 'Root';
+        $user->email = 'root@gmail.com';
+        $user->password = Hash::make('root1234');
+        $user->save(); 
+
+        $user = new User();
+        $user->id = 4;
         $user->name = 'Usuario';
         $user->email = 'usuario@gmail.com';
         $user->password = Hash::make('usuario123');
+        $user->direccion = 'Los Batallones 1602, Maipú, Santiago Metropolitan 9250000, Chile';
+        $user->latitud = '-33.511342';
+        $user->longitud = '-70.743356';
+        $user->telefono = '972619115';
         $user->save(); 
     }
 }

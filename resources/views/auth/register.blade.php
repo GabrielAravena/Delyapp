@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
@@ -106,6 +105,7 @@
                                 <button type="submit" class="btn btn-green">
                                     Registrarse
                                 </button>
+                                <a href="javascript:history.back()" class="btn btn-primary">Volver</a>
                             </div>
                         </div>
                     </form>
@@ -126,12 +126,12 @@
 
     var marker = null;
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Fib2J1ZG8iLCJhIjoiY2trNHM1enR4MW9kczJ4cGV6NHlrdTA1bSJ9.H8tB-u1v17oj7NclhK3iBA';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/mapbox/streets-v11',
         center: user_location,
-        zoom: 10
+        zoom: 10,
     });
     //  geocoder here
     var geocoder = new MapboxGeocoder({

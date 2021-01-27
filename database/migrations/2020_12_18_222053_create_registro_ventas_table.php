@@ -22,6 +22,7 @@ class CreateRegistroVentasTable extends Migration
             $table->string('tipo');
             $table->decimal('valor', 12, 2);
             $table->boolean('delivery')->nullable();
+            $table->boolean('entregado');
             $table->timestamps();
         });
     }

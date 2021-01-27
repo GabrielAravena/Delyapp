@@ -25,7 +25,8 @@ class CreateLocalTable extends Migration
             $table->string('latitud');
             $table->string('longitud');
             $table->decimal('ingreso_mensual', 10, 2);
-            $table->boolean('delivery');
+            $table->boolean('delivery')->nullable();
+            $table->decimal('distancia_delivery', 8, 2)->nullable();
             $table->decimal('ganancia', 8, 2);
             $table->timestamps();
         });

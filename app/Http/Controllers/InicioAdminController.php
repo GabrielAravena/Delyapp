@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Inventario;
 use App\Local;
+use App\Productos;
 use App\Registro_ventas;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -66,8 +67,13 @@ class InicioAdminController extends Controller
             $local->estado = 'desactivado';
             $local->save();
         } else {
-            $local->estado = 'activado';
-            $local->save();
+            $productos = Productos::where('local_id', $local_id)->first();
+            if($productos){
+                $local->estado = 'activado';
+                $local->save();
+            }else{
+                return redirect()->route('inicioAdmin.index')->with('error', 'Antes de activar tu local, es necesario que agregues productos a tu menú.');
+            }
         }
         return redirect()->route('inicioAdmin.index');
     }

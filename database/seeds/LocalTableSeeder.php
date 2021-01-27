@@ -19,8 +19,10 @@ class LocalTableSeeder extends Seeder
         $local->estado = 'activado';
         $local->latitud = '-33.511342';
         $local->longitud = '-70.743356';
-        $local->ingreso_mensual = '1000000';
+        $local->ingreso_mensual = 1000000;
         $local->delivery = 1;
+        $local->distancia_delivery = 10;
+        $local->valor_delivery = 1000;
         $local->ganancia = 30;
         $local->save();
     }

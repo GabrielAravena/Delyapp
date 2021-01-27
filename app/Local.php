@@ -16,10 +16,16 @@ class Local extends Model
         'direccion', 
         'telefono',
         'imagen',
+        'logo',
         'estado',
         'ingreso_mensual',
         'delivery',
         'ganancia',
+        'valor_delivery',
+        'distancia_delivery',
+        'latitud',
+        'longitud',
+
     ];
 
     protected $table = 'local';

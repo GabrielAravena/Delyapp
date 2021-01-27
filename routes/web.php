@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\InicioController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +25,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/local/{id}', 'LocalController@index')->name('local.index');
 
+Route::get('/root', 'RootController@index')->name('root.index');
+Route::post('/root', 'RootController@guardar')->name('root.guardar');
+
 Route::get('/carrito', 'CarritoController@index')->name('carrito.index');
 Route::post('/carrito/{producto}', 'CarritoController@agregar')->name('carrito.agregar');
 Route::get('/carrito/delete/{id}', 'CarritoController@delete')->name('carrito.delete');
@@ -40,24 +42,27 @@ Route::get('/carrito/quitarDelivery', 'CarritoController@quitarDelivery')->name(
 Route::get('/inicioAdmin', 'InicioAdminController@index')->name('inicioAdmin.index');
 Route::get('/inicioAdmin/activar/{local}', 'InicioAdminController@activar')->name('inicioAdmin.activar');
 
-Route::get('/inventario', 'inventarioController@index')->name('inventario.index');
-Route::get('/inventario/nuevoIngrediente/{local_id}', 'inventarioController@create')->name('inventario.create');
-Route::post('/inventario/nuevoIngrediente', 'InventarioController@store')->name('inventario.store');
-Route::get('/inventario/compraIngrediente/{inventario}', 'inventarioController@comprar')->name('inventario.comprar');
-Route::get('/inventario/borrarIngrediente/{inventario}', 'inventarioController@delete')->name('inventario.delete');
-Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@compra')->name('inventario.compra');
-Route::get('/inventario/realizarInventario', 'inventarioController@realizarInventario')->name('inventario.realizarInventario');
-Route::post('/inventario/ingresarInventario', 'InventarioController@ingresarInventario')->name('inventario.ingresarInventario');
-Route::get('/inventario/perdidas', 'inventarioController@perdidas')->name('inventario.perdidas');
-Route::get('/inventario/perdidas/detallePerdida/{perdida}', 'inventarioController@detallePerdida')->name('inventario.detallePerdida');
-Route::get('/inventario/perdidas/detallePerdida/descargar/{perdida}', 'inventarioController@descargarDetallePerdida')->name('inventario.descargarDetallePerdida');
+Route::get('/pedidos', 'PedidosController@index')->name('pedidos.index');
+Route::get('/pedidos/confirmar/{producto}', 'PedidosController@confirmar')->name('pedidos.confirmar');
 
-Route::get('/gastosFijos', 'gastosFijosController@index')->name('gastosFijos.index');
-Route::get('/gastosFijos/nuevoGasto', 'gastosFijosController@create')->name('gastosFijos.create');
-Route::post('/gastosFijos/nuevoGasto', 'gastosFijosController@store')->name('gastosFijos.store');
-Route::get('/gastosFijos/modificar/{gasto}', 'gastosFijosController@modificar')->name('gastosFijos.modificar');
-Route::post('/gastosFijos/modificar', 'gastosFijosController@ingresarModificacion')->name('gastosFijos.ingresarModificacion');
-Route::get('/gastosFijos/borrar/{gasto}', 'gastosFijosController@borrar')->name('gastosFijos.borrar');
+Route::get('/inventario', 'InventarioController@index')->name('inventario.index');
+Route::get('/inventario/nuevoIngrediente/{local_id}', 'InventarioController@create')->name('inventario.create');
+Route::post('/inventario/nuevoIngrediente', 'InventarioController@store')->name('inventario.store');
+Route::get('/inventario/compraIngrediente/{inventario}', 'InventarioController@comprar')->name('inventario.comprar');
+Route::get('/inventario/borrarIngrediente/{inventario}', 'InventarioController@delete')->name('inventario.delete');
+Route::post('/inventario/compraIngrediente/{inventario}', 'InventarioController@compra')->name('inventario.compra');
+Route::get('/inventario/realizarInventario', 'InventarioController@realizarInventario')->name('inventario.realizarInventario');
+Route::post('/inventario/ingresarInventario', 'InventarioController@ingresarInventario')->name('inventario.ingresarInventario');
+Route::get('/inventario/perdidas', 'InventarioController@perdidas')->name('inventario.perdidas');
+Route::get('/inventario/perdidas/detallePerdida/{perdida}', 'InventarioController@detallePerdida')->name('inventario.detallePerdida');
+Route::get('/inventario/perdidas/detallePerdida/descargar/{perdida}', 'InventarioController@descargarDetallePerdida')->name('inventario.descargarDetallePerdida');
+
+Route::get('/gastosFijos', 'GastosFijosController@index')->name('gastosFijos.index');
+Route::get('/gastosFijos/nuevoGasto', 'GastosFijosController@create')->name('gastosFijos.create');
+Route::post('/gastosFijos/nuevoGasto', 'GastosFijosController@store')->name('gastosFijos.store');
+Route::get('/gastosFijos/modificar/{gasto}', 'GastosFijosController@modificar')->name('gastosFijos.modificar');
+Route::post('/gastosFijos/modificar', 'GastosFijosController@ingresarModificacion')->name('gastosFijos.ingresarModificacion');
+Route::get('/gastosFijos/borrar/{gasto}', 'GastosFijosController@borrar')->name('gastosFijos.borrar');
 
 Route::get('/menu', 'MenuController@index')->name('menu.index');
 Route::get('/menu/nuevoProducto', 'MenuController@create')->name('menu.create');
@@ -78,3 +83,8 @@ Route::get('/ventas/descargar/{desde}/{hasta}', 'VentasController@descargarDocum
 
 Route::get('/configuracion', 'ConfiguracionController@index')->name('configuracion.index');
 Route::post('/configuracion/guardar', 'ConfiguracionController@guardar')->name('configuracion.guardar');
+Route::get('/configuracionAdmin', 'ConfiguracionController@indexAdmin')->name('configuracion.indexAdmin');
+Route::post('/configuracion/guardarAdmin', 'ConfiguracionController@guardarAdmin')->name('configuracion.guardarAdmin');
+
+Route::get('/inicio/configuracion', 'InicioController@configuracion')->name('inicio.configuracion');
+Route::post('/inicio/configuracion', 'InicioController@guardarConfiguracion')->name('inicio.guardarConfiguracion');

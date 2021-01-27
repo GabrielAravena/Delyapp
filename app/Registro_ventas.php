@@ -14,5 +14,6 @@ class Registro_ventas extends Model
         'tipo',
         'valor',
         'delivery',
+        'entregado',
     ];
 }

@@ -74,7 +74,7 @@
                       <td style="text-align:center"></td>
                     </tr>
                     @endif
-                    <input id="deliveryExist" type="text" value="{{ $productos[0]->delivery }}" hidden>
+                    <input id="deliveryExist" name="delivery" type="text" value="{{ $productos[0]->delivery }}" hidden>
                   </tbody>
                 </table>
               </div>
@@ -180,6 +180,8 @@
                 @csrf
                 <input type="hidden" name="token_ws" value="{{ $token_ws }}">
                 <input type="hidden" name="url" value="{{ $url }}">
+                <input type="hidden" name="local_id" value="{{ $local->id }}">
+
                 <div class="form-group row">
                   <label for="name" class="col-md-4 col-form-label text-md-right">Nombre</label>
 
@@ -224,12 +226,15 @@
                     </div>
                   </div>
                 </div>
-
+                
                 <div class="form-group row justify-content-center" style="display: flex;">
-                  <div class="col-md-4">
-                    <div id="map" style="height: 150px;"></div>
-                  </div>
+                    <div class="col-md-4">
+                        <div id="map" style="height: 150px;"></div>
+                    </div>
                 </div>
+
+                <input name="delivery" type="text" value="{{ $productos[0]->delivery }}" hidden>
+
                 <input type="text" id="direccion" name="direccion" hidden required>
                 <input type="text" id="latitud" name="latitud" hidden>
                 <input type="text" id="longitud" name="longitud" hidden>
@@ -252,6 +257,8 @@
             @csrf
             <input type="hidden" name="token_ws" value="{{ $token_ws }}">
             <input type="hidden" name="url" value="{{ $url }}">
+            <input type="hidden" name="local_id" value="{{ $local->id }}">
+            <input name="delivery" type="hidden" value="{{ $productos[0]->delivery }}">
             <div class="form-group row mb-5 mt-5">
               <div class="col-md-6 offset-md-4">
                 <button type="submit" class="btn btn-green">
@@ -288,8 +295,7 @@
     $(document).ready(function(){
 
       var delivery = $('#deliveryExist').val();
-      console.log(delivery);
-
+   
       if(delivery == 1){
         $('#delivery').prop('checked', true);
       }
@@ -327,7 +333,7 @@
 
     var marker = null;
 
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZmFraHJhd3kiLCJhIjoiY2pscWs4OTNrMmd5ZTNra21iZmRvdTFkOCJ9.15TZ2NtGk_AtUvLd27-8xA';
+    mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Fib2J1ZG8iLCJhIjoiY2trNHM1enR4MW9kczJ4cGV6NHlrdTA1bSJ9.H8tB-u1v17oj7NclhK3iBA';
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',

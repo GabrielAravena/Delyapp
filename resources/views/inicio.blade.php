@@ -2,13 +2,21 @@
 @section('content')
 <div class="cuerpo" id="contenedor">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" class="ml-3 mr-3"></li>
+            <li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+        </ol>
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <a href="local/1">
-                    <img class="d-block w-100" id="imgCarrusel" src="https://dcrk.cl/web2018/wp-content/uploads/2018/03/bajada_comidarapida.jpg" alt="First slide" width="100%" height="400px">
+            <div class="carousel-item active" data-bs-interval="1000">
+
+                <img class="d-block w-100" id="imgCarrusel" src="https://dcrk.cl/web2018/wp-content/uploads/2018/03/bajada_comidarapida.jpg" alt="First slide" width="100%" height="200dp">
             </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" id="imgCarrusel" src="https://media-cdn.tripadvisor.com/media/photo-s/11/a4/05/c1/local.jpg" alt="Second slide" width="100%" height="400px">
+            <div class="carousel-item" data-bs-interval="1000">
+                <img class="d-block w-100" id="imgCarrusel" src="https://media-cdn.tripadvisor.com/media/photo-s/11/a4/05/c1/local.jpg" alt="Second slide" width="100%" height="200dp">
+            </div>
+            <div class="carousel-item" data-bs-interval="1000">
+                <img class="d-block w-100" id="imgCarrusel" src="https://media-cdn.tripadvisor.com/media/photo-s/11/a4/05/c1/local.jpg" alt="Second slide" width="100%" height="200dp">
             </div>
 
         </div>
@@ -21,6 +29,7 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
+
     <nav class="navbar navbar-expand-md justify-content-center h4" style="background-color: #791313; ">
         <label class="justify-content-center text-white">LOCALES</label>
     </nav>
@@ -29,17 +38,19 @@
 
             @foreach($locales as $local)
             <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
-                <a class="thumbnail-variant-3" href="local/1">
-                    <img type="button" src="https://dcrk.cl/web2018/wp-content/uploads/2018/03/bajada_comidarapida.jpg" width="300px" height="250px">
+                <a class="thumbnail-variant-3" href="{{ route('local.index', $local['id']) }}">
+                    <img type="button" src="{{ asset($local['imagen']) }}" width="300px" height="250px">
                 </a>
-                <h4>{{ $local->nombre }}</h4>
-                <p class="mb-0 text-left" style="margin-left: 40px;">{{ $local->direccion }}</p>
-                <a class="float-left" style="margin-left: 40px;" href="tel: {{ $local->telefono }}">{{ $local->telefono }}</a>
+                <h4>{{ $local['nombre'] }}</h4>
+                <p class="mb-0 text-left" style="margin-left: 40px;">{{ $local['direccion']}}</p>
+                <a class="float-left" style="margin-left: 40px;" href="tel: {{ $local['telefono'] }}">{{ $local['telefono'] }}</a>
             </div>
             @endforeach
-
         </div>
     </div>
+</div>
+<div class="mt-5 mb-5 col-12 text-center">
+    {{ $locales->onEachSide(3)->links() }}
 </div>
 <footer class="page-foot text-sm-left">
     <section class="bg-gray-darker section-top-55 section-bottom-60">
@@ -52,16 +63,12 @@
                     <ul class="list-unstyled contact-info offset-top-5">
                         <li>
                             <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <div class="unit-left"><span class="text-white">Dirección:</span></div>
-                                <div class="unit-body text-left text-gray-light">
-                                    <p>direccion</p>
-                                </div>
+                                <a href="#" class="text-light">Registra tu local</a>
                             </div>
                         </li>
                         <li>
-                            <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <div class="unit-left"><span class="text-white">Teléfono:</span></div>
-                                <div class="unit-body"><a class="link-gray-light" href="#">telefono</a></div>
+                        <div class="unit unit-horizontal unit-top unit-spacing-xxs">
+                                <a href="#" class="text-light">Contáctate con nosotros</a>
                             </div>
                         </li>
                     </ul>
@@ -87,25 +94,32 @@
             '</ul>'
         )
     })
-    
-    $(document).on('keyup', '#buscador', function(){
-            var texto = $(this).val();
-            buscar(texto);
-        });
 
-    function buscar(texto){
+    $(document).on('keyup', '#buscador', function() {
+        var texto = $(this).val();
+        buscar(texto);
+    });
+
+    function buscar(texto) {
         $.ajax({
-            url: 'buscador?texto='+texto,
-            type: 'GET',
-            dataType: 'html'
-        })
-        .done(function(respuesta){
-            $('#containerLocales').html(respuesta);
-        })
-        .fail(function(){
-            console.log("error");
-        })
+                url: 'buscador?texto=' + texto,
+                type: 'GET',
+                dataType: 'html'
+            })
+            .done(function(respuesta) {
+                $('#containerLocales').html(respuesta);
+            })
+            .fail(function() {
+                console.log("error");
+            })
     }
 
+    window.onload = function() {
+        var pos = window.name || 0;
+        window.scrollTo(0, pos);
+    }
+    window.onunload = function() {
+        window.name = self.pageYOffset || (document.documentElement.scrollTop + document.body.scrollTop);
+    }
 </script>
 @endsection

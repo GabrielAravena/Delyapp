@@ -8,7 +8,7 @@ use App\Local;
 class LocalController extends Controller
 {
     protected function index($id){
-        
+
         $categorias = Productos::select('categoria')->where('local_id', $id)->where('estado', 'activado')->get();
 
         $categoria = [];
