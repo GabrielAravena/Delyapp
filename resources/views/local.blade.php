@@ -19,7 +19,7 @@
     </div>
   </section>
 </section>
-
+@if($promociones)
 <section class="section-50" style="background: #791313 !important">
   <h3 class="text-white text-center" style="text-align:center text-white">Nuestras promociones y combos</h3>
   <div class="container-wide mt-5">
@@ -42,7 +42,8 @@
     </div>
   </div>
 </section>
-
+@endif
+@if($menu)
 <section class="section-50 section-sm-top-80 section-sm-bottom-100">
   <h3 style="text-align:center">Nuestro Menú</h3>
   <div class="responsive-tabs responsive-tabs-button responsive-tabs-horizontal responsive-tabs-carousel offset-top-40" style="text-align:center">
@@ -90,7 +91,7 @@
     <div id="map" style="height: 300px;"></div>
   </div>
 </section>
-
+@endif
 <footer class="page-foot text-sm-left">
   <section class="bg-gray-darker section-top-55 section-bottom-60">
     <div class="container">
@@ -140,7 +141,7 @@
 <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
 
 <script>
-  var user_location = [ {{$local-> longitud}}, {{$local-> latitud}} ];
+  var user_location = [ {{$local -> longitud}}, {{$local -> latitud}} ];
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Fib2J1ZG8iLCJhIjoiY2trNHM1enR4MW9kczJ4cGV6NHlrdTA1bSJ9.H8tB-u1v17oj7NclhK3iBA';
   var map = new mapboxgl.Map({

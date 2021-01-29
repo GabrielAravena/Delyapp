@@ -48,10 +48,11 @@
             @endforeach
         </div>
     </div>
+    <div class="mt-5 mb-5 col-12 text-center">
+        {{ $locales->onEachSide(3)->links() }}
+    </div>
 </div>
-<div class="mt-5 mb-5 col-12 text-center">
-    {{ $locales->onEachSide(3)->links() }}
-</div>
+
 <footer class="page-foot text-sm-left">
     <section class="bg-gray-darker section-top-55 section-bottom-60">
         <div class="container">
@@ -63,12 +64,12 @@
                     <ul class="list-unstyled contact-info offset-top-5">
                         <li>
                             <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <a href="#" class="text-light">Registra tu local</a>
+                                <a href="#" class="text-light"><u>Registra tu local</u></a>
                             </div>
                         </li>
                         <li>
-                        <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <a href="#" class="text-light">Contáctate con nosotros</a>
+                            <div class="unit unit-horizontal unit-top unit-spacing-xxs">
+                                <a href="#" class="text-light"><u>Contáctate con nosotros</u></a>
                             </div>
                         </li>
                     </ul>
@@ -107,7 +108,8 @@
                 dataType: 'html'
             })
             .done(function(respuesta) {
-                $('#containerLocales').html(respuesta);
+                document.getElementById('containerLocales').innerHTML = respuesta;
+                //$('#containerLocales').html(respuesta);
             })
             .fail(function() {
                 console.log("error");

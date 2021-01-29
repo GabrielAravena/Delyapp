@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Local;
+use App\Productos;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 
 class InicioController extends Controller
@@ -32,10 +33,12 @@ class InicioController extends Controller
 
         $locales = Local::where('local.estado', 'activado')
             ->join('productos', 'local.id', 'productos.local_id')
-            ->select('local.*', 'productos.categoria')
-            ->where('local.nombre', 'like', $request->texto . '%')
-            ->orWhere('productos.categoria', 'like', $request->texto . '%')
-            ->get();
+            ->select('local.*')
+            ->where('local.nombre', 'like', '%'.$request->texto.'%')
+            ->orWhere('local.direccion', 'like', '%'.$request->texto.'%')
+            ->orWhere('productos.categoria', 'like', '%'.$request->texto.'%')
+            ->get()
+            ->unique(); 
 
         if ($user = $request->user()) {
             if ($user->latitud) {
@@ -48,6 +51,7 @@ class InicioController extends Controller
         }
 
         $locales = $this->paginar($locales, $request);
+
 
         return view('buscadorLocales', compact('locales'));
     }

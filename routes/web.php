@@ -20,6 +20,10 @@ Route::get('/register', function(){
 
 Route::get('/', 'InicioController@index')->name('inicio');
 Route::get('/buscador', 'InicioController@buscador')->name('inicio.buscador');
+Route::get('/registraLocal', 'InicioController@registrarLocal')->name('inicio.registrarLocal');
+Route::post('/registraLocal', 'InicioController@enviarRegistroLocal')->name('inicio.enviarRegistroLocal');
+Route::get('/contactateConNosotros', 'InicioController@contactateConNosotros')->name('inicio.contactateConNosotros');
+Route::post('/contactateConNosotros', 'InicioController@enviarContacto')->name('inicio.enviarContacto');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
