@@ -132,9 +132,7 @@ class menuController extends Controller
     }
 
     protected function store2(Request $request)
-    {
-
-        $rutaImagen = $this->guardarImagen($request->file('imagen'));
+    { 
 
         $local_id = $request->user()->local_id;
 
@@ -144,7 +142,11 @@ class menuController extends Controller
         $producto->descripcion = request('descripcion');
         $producto->categoria = request('categoria');
         $producto->estado = 'activado';
-        $producto->imagen = $rutaImagen;
+
+        if ($request->file('imagen')) {
+            $rutaImagen = $this->guardarImagen($request->file('imagen'), $producto->imagen);
+            $producto->imagen = $rutaImagen;
+        }
 
         if ($request->radio == 'sugerido') {
             $producto->precio = $producto->precio_sugerido;
@@ -188,10 +190,14 @@ class menuController extends Controller
         return redirect()->route('menu.index')->with('mensaje', ' El producto se eliminó correctamente.');
     }
 
-    protected function guardarImagen($imagen)
+    protected function guardarImagen($imagen, $anterior)
     {
 
         if ($imagen) {
+            if($anterior){
+                $anterior = str_replace('/storage', '', $anterior);
+                Storage::disk('public')->delete($anterior);
+            }
             $nombre = Str::random(20) . '.jpg';
             $img = Image::make($imagen)->encode('jpg', 75);
             $img->resize(530, 470, function ($constraint) {
@@ -238,7 +244,7 @@ class menuController extends Controller
         }
 
         if ($request->file('imagen')) {
-            $rutaImagen = $this->guardarImagen($request->file('imagen'));
+            $rutaImagen = $this->guardarImagen($request->file('imagen'), $producto->imagen);
             $producto->imagen = $rutaImagen;
         }
 

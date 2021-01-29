@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Local;
-use App\Productos;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RegistrarLocal;
+use App\Mail\EnvioDeContacto;
 
 class InicioController extends Controller
 {
@@ -64,6 +66,28 @@ class InicioController extends Controller
         $user = $request->user();
 
         return view('inicioConfiguracion', compact('user'));
+    }
+
+    protected function registrarLocal(){
+        return view('registrarLocal');
+    }
+
+    protected function enviarRegistroLocal(Request $request){
+        
+        Mail::to('no-reply@delyapp.cl')->send(new RegistrarLocal($request));
+
+        return redirect()->route('inicio')->with('mensaje', 'Se ha enviado la información correctamente, nos comunicaremos contigo a la brevedad.');
+    }
+
+    protected function contactateConNosotros(){
+        return view('contactateConNosotros');
+    }
+
+    protected function enviarContacto(Request $request){
+
+        Mail::to('no-reply@delyapp.cl')->send(new EnvioDeContacto($request));
+
+        return redirect()->route('inicio')->with('mensaje', 'Se ha enviado la información correctamente, nos comunicaremos contigo a la brevedad.');
     }
 
     protected function guardarConfiguracion(Request $request)

@@ -22,7 +22,7 @@
                         @csrf
 
                         <div class="form-group row mt-5">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Nombre del Local</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Teléfono</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -40,7 +40,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Ingreso mensual aproximado</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Cuenta con delivery</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="form-group row mt-3" id="valor_delivery_container" style="display: none;">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Valor delivery</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -67,7 +67,7 @@
                         </div>
 
                         <div class="form-group row mt-3" id="distancia_delivery_container" style="display: none;">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Distancia máxima a la que despachas (en Km)</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -76,7 +76,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Porcentaje de ganancia (%)</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -85,7 +85,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Imagen del local</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -94,7 +94,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Logo local</label>
                             </div>
                             <div class="col-md-6 text-left">
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="form-group row mt-3">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Dirección</label>
                             </div>
                             <div class="col-md-6">

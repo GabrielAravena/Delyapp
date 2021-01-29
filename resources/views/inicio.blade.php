@@ -10,13 +10,13 @@
         <div class="carousel-inner">
             <div class="carousel-item active" data-bs-interval="1000">
 
-                <img class="d-block w-100" id="imgCarrusel" src="https://dcrk.cl/web2018/wp-content/uploads/2018/03/bajada_comidarapida.jpg" alt="First slide" width="100%" height="200dp">
+                <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner1.jpeg') }}" alt="First slide" width="100%" height="200dp">
             </div>
             <div class="carousel-item" data-bs-interval="1000">
-                <img class="d-block w-100" id="imgCarrusel" src="https://media-cdn.tripadvisor.com/media/photo-s/11/a4/05/c1/local.jpg" alt="Second slide" width="100%" height="200dp">
+                <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner2.jpeg') }}" alt="Second slide" width="100%" height="200dp">
             </div>
             <div class="carousel-item" data-bs-interval="1000">
-                <img class="d-block w-100" id="imgCarrusel" src="https://media-cdn.tripadvisor.com/media/photo-s/11/a4/05/c1/local.jpg" alt="Second slide" width="100%" height="200dp">
+                <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner3.jpeg') }}" alt="Second slide" width="100%" height="200dp">
             </div>
 
         </div>
@@ -33,6 +33,14 @@
     <nav class="navbar navbar-expand-md justify-content-center h4" style="background-color: #791313; ">
         <label class="justify-content-center text-white">LOCALES</label>
     </nav>
+    @if(session('mensaje'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Perfecto: </strong> {{ session('mensaje') }}
+          <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        @endif
     <div class="container-wide mt-5" id="containerLocales">
         <div class="row justify-content-xs-center mt-5 mb-5">
 
@@ -64,12 +72,12 @@
                     <ul class="list-unstyled contact-info offset-top-5">
                         <li>
                             <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <a href="#" class="text-light"><u>Registra tu local</u></a>
+                                <a href="{{ route('inicio.registrarLocal') }}" class="text-light"><u>Registra tu local</u></a>
                             </div>
                         </li>
                         <li>
                             <div class="unit unit-horizontal unit-top unit-spacing-xxs">
-                                <a href="#" class="text-light"><u>Contáctate con nosotros</u></a>
+                                <a href="{{ route('inicio.contactateConNosotros') }}" class="text-light"><u>Contáctate con nosotros</u></a>
                             </div>
                         </li>
                     </ul>

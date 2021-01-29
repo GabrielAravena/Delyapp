@@ -22,7 +22,7 @@
                         @csrf
 
                         <div class="form-group row mt-5">
-                            <div class="col-md-4 col-form-label text-right">
+                            <div class="col-md-4 col-form-label text-md-right">
                                 <label>Nombre</label>
                             </div>
                             <div class="col-md-6 text-left">

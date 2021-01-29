@@ -41,11 +41,11 @@ class ConfiguracionController extends Controller
         $local->ingreso_mensual = $request->ingreso_mensual;
         $local->ganancia = $request->ganancia;
         
-        if($rutaImagenLocal = $this->guardarImagen($request->file('imagen_local'))){
+        if($rutaImagenLocal = $this->guardarImagen($request->file('imagen_local'), $local->imagen)){
             $local->imagen = $rutaImagenLocal;
         }
 
-        if($rutaLogoLocal = $this->guardarImagen($request->file('logo_local'))){
+        if($rutaLogoLocal = $this->guardarImagen($request->file('logo_local'), $local->logo)){
             $local->logo = $rutaLogoLocal;
         }
       
@@ -64,10 +64,13 @@ class ConfiguracionController extends Controller
         return redirect()->route('inicioAdmin.index')->with('mensaje', 'Las configuraciones de tu local han sido modificadas correctamente');
     }
 
-    protected function guardarImagen($imagen)
+    protected function guardarImagen($imagen, $anterior)
     {
-
         if ($imagen) {
+            if($anterior){
+                $anterior = str_replace('/storage', '', $anterior);
+                Storage::disk('public')->delete($anterior);
+            }
             $nombre = Str::random(20) . '.jpg';
             $img = Image::make($imagen)->encode('jpg', 75);
             $img->resize(530, 470, function ($constraint) {
@@ -78,7 +81,6 @@ class ConfiguracionController extends Controller
 
             return Storage::url("imagenes/locales/$nombre");
         } else {
-
             return null;
         }
     }
