@@ -74,7 +74,7 @@ class InicioController extends Controller
 
     protected function enviarRegistroLocal(Request $request){
         
-        Mail::to('no-reply@delyapp.cl')->send(new RegistrarLocal($request));
+        Mail::to('contacto@delyapp.cl')->send(new RegistrarLocal($request));
 
         return redirect()->route('inicio')->with('mensaje', 'Se ha enviado la información correctamente, nos comunicaremos contigo a la brevedad.');
     }
@@ -85,7 +85,7 @@ class InicioController extends Controller
 
     protected function enviarContacto(Request $request){
 
-        Mail::to('no-reply@delyapp.cl')->send(new EnvioDeContacto($request));
+        Mail::to('contacto@delyapp.cl')->send(new EnvioDeContacto($request));
 
         return redirect()->route('inicio')->with('mensaje', 'Se ha enviado la información correctamente, nos comunicaremos contigo a la brevedad.');
     }
