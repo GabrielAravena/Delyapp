@@ -117,7 +117,7 @@ class InicioController extends Controller
     private function paginar($locales, $request){
 
         $total = count($locales);
-        $per_page = 2;
+        $per_page = 6;
         $current_page = $request->input("page") ?? 1;
 
         $starting_point = ($current_page * $per_page) - $per_page;
