@@ -21,11 +21,11 @@ class RootController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(Request $request)
+    public function ingresarLocal(Request $request)
     {
         $request->user()->authorizeRoles(['root']);
 
-        return view('root');
+        return view('ingresarLocal');
     }
 
     protected function guardar(Request $request)
@@ -86,9 +86,93 @@ class RootController extends Controller
         return redirect()->route('root.index')->with('mensaje', 'El local se ha ingresado correctamente');
     }
 
+    protected function listaLocales(Request $request){
+
+        $request->user()->authorizeRoles(['root']);
+
+        $locales = Local::paginate(10);
+
+        return view('listaLocales', compact('locales'));
+
+    }
+
+    protected function buscador(Request $request)
+    {
+        $request->user()->authorizeRoles(['root']);
+
+        $locales = Local::where('nombre', 'like', '%'.$request->texto.'%')
+            ->orWhere('direccion', 'like', '%'.$request->texto.'%')
+            ->orWhere('estado', 'like', $request->texto)
+            ->get(); 
+
+        return view('buscadorLocalesRoot', compact('locales'));
+    }
+
+    protected function modificar(Request $request, $local_id){
+
+        $request->user()->authorizeRoles(['root']);
+
+        $local = Local::find($local_id);
+
+        return view('modificarLocal', compact('local'));
+    }
+
+    protected function guardarModificacion(Request $request, $local_id)
+    {
+        $request->user()->authorizeRoles(['root']);
+
+        $local = Local::find($local_id);
+
+        $local->nombre = $request->nombre;
+        $local->direccion = $request->direccion;
+        $local->telefono = $request->telefono;
+        $local->latitud = $request->latitud;
+        $local->longitud = $request->longitud;
+        $local->ingreso_mensual = $request->ingreso_mensual;
+        $local->ganancia = $request->ganancia;
+        
+        if($rutaImagenLocal = $this->guardarImagen($request->file('imagen_local'), $local->imagen)){
+            $local->imagen = $rutaImagenLocal;
+        }
+
+        if($rutaLogoLocal = $this->guardarImagen($request->file('logo_local'), $local->logo)){
+            $local->logo = $rutaLogoLocal;
+        }
+      
+        if ($request->delivery) {
+            $local->delivery = true;
+            $local->valor_delivery = $request->valor_delivery;
+            $local->distancia_delivery = $request->distancia_delivery;
+        } else {
+            $local->delivery = false;
+            $local->valor_delivery = null;
+            $local->distancia_delivery = null;
+        }
+
+        $local->save();
+
+        return redirect()->route('root.listaLocales')->with('mensaje', 'El local se ha modificado correctamente.');
+    }
+
+    protected function activarLocal(Request $request, $local_id){
+
+        $request->user()->authorizeRoles(['root']);
+
+        $local = Local::find($local_id);
+
+        if($local->estado == 'activado'){
+            $local->estado = 'desactivado';
+        }else{
+            $local->estado = 'activado';
+        }
+
+        $local->save();
+
+        return redirect()->route('root.listaLocales')->with('mensaje', 'Estado modificado correctamente.');
+    }
+
     protected function guardarImagen($imagen)
     {
-
         if ($imagen) {
             $nombre = Str::random(20) . '.jpg';
             $img = Image::make($imagen)->encode('jpg', 75);

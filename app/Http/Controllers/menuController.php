@@ -123,7 +123,7 @@ class menuController extends Controller
         }
 
 
-        $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia/100)))*(1 + $porcentajeGasto)), -2) * 1.19;
+        $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia/100)))*(1 + $porcentajeGasto)) * 1.19, -2);
 
         $producto->precio_sugerido = $precioSugerido;
         $producto->save();

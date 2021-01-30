@@ -46,7 +46,7 @@ class LoginController extends Controller
         if (User::find(auth()->user()->id)->hasRole('admin')) {
             return route('inicioAdmin.index');
         }else if(User::find(auth()->user()->id)->hasRole('root')){
-            return route('root.index');
+            return route('root.listaLocales');
         }
 
         return route('inicio');

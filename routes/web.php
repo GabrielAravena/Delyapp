@@ -29,8 +29,14 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/local/{id}', 'LocalController@index')->name('local.index');
 
-Route::get('/root', 'RootController@index')->name('root.index');
-Route::post('/root', 'RootController@guardar')->name('root.guardar');
+Route::get('/root/ingresarLocal', 'RootController@ingresarLocal')->name('root.ingresarLocal');
+Route::post('/root/ingresarLocal', 'RootController@guardar')->name('root.guardar');
+Route::get('/root/listaLocales', 'RootController@listaLocales')->name('root.listaLocales');
+Route::get('/root/buscadorLocales', 'RootController@buscador')->name('root.buscador');
+Route::get('/root/modificar/{local}', 'RootController@modificar')->name('root.modificar');
+Route::post('/root/guardarModificacion/{local}', 'RootController@guardarModificacion')->name('root.guardarModificacion');
+Route::get('/root/activar/{local}', 'RootController@activarLocal')->name('root.activarLocal');
+
 
 Route::get('/carrito', 'CarritoController@index')->name('carrito.index');
 Route::post('/carrito/{producto}', 'CarritoController@agregar')->name('carrito.agregar');
@@ -60,6 +66,9 @@ Route::post('/inventario/ingresarInventario', 'InventarioController@ingresarInve
 Route::get('/inventario/perdidas', 'InventarioController@perdidas')->name('inventario.perdidas');
 Route::get('/inventario/perdidas/detallePerdida/{perdida}', 'InventarioController@detallePerdida')->name('inventario.detallePerdida');
 Route::get('/inventario/perdidas/detallePerdida/descargar/{perdida}', 'InventarioController@descargarDetallePerdida')->name('inventario.descargarDetallePerdida');
+Route::get('/inventario/comprasIngredientes', 'InventarioController@comprasIngredientes')->name('inventario.comprasIngredientes');
+Route::post('/inventario/comprasIngredientes/{local}', 'InventarioController@buscarComprasIngredientes')->name('inventario.buscarComprasIngredientes');
+Route::get('/inventario/comprasIngredientes/descargar/{desde}/{hasta}', 'InventarioController@descargarComprasIngredientes')->name('inventario.descargarComprasIngredientes');
 
 Route::get('/gastosFijos', 'GastosFijosController@index')->name('gastosFijos.index');
 Route::get('/gastosFijos/nuevoGasto', 'GastosFijosController@create')->name('gastosFijos.create');

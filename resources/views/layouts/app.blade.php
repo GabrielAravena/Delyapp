@@ -114,8 +114,11 @@
                                     Panel de administración
                                 </a>
                                 @elseif(Auth::user()->hasRole('root'))
-                                <a class="dropdown-item" href="{{ route('root.index') }}">
-                                    Ingresar local
+                                <a class="dropdown-item" href="{{ route('root.listaLocales') }}">
+                                    Lista locales
+                                </a>
+                                <a class="dropdown-item" href="{{ route('root.ingresarLocal') }}">
+                                    Ingresar Local
                                 </a>
                                 @elseif(Auth::user()->hasRole('user'))
                                 <div class="mt-3 justify-content-center form-inline">

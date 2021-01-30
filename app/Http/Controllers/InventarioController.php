@@ -7,12 +7,16 @@ use App\Inventario;
 use App\Compras_historicas;
 use App\Desperdicio;
 use App\Detalle_desperdicio;
+use App\Gastos_fijos;
 use App\Productos;
 use App\Ingredientes;
+use App\Local;
 use App\Mermas;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CambioEnPrecioSugerido;
 
 class InventarioController extends Controller
 {
@@ -79,10 +83,11 @@ class InventarioController extends Controller
 
     protected function comprar($inventario_id, Request $request)
     {
-
         $request->user()->authorizeRoles(['admin']);
 
-        $inventario = Inventario::where('id', $inventario_id)->where('local_id', $request->user()->local_id)->get()->first();
+        $local_id = $request->user()->local_id;
+
+        $inventario = Inventario::where('id', $inventario_id)->where('local_id', $local_id)->first();
 
         if ($inventario) {
             return view('compraIngrediente', compact('inventario'));
@@ -91,7 +96,7 @@ class InventarioController extends Controller
         }
     }
 
-    protected function compra(Inventario $inventario)
+    protected function compra(Request $request, Inventario $inventario)
     {
         Compras_historicas::create([
             'nombre' => $inventario->nombre,
@@ -101,20 +106,23 @@ class InventarioController extends Controller
             'inventario_id' => $inventario->id,
         ]);
 
-        $sumaValores = Compras_historicas::where('inventario_id', $inventario->id)->sum('valor');
+        $sumaValores = Compras_historicas::where('inventario_id', $inventario->id)
+        ->whereDate('created_at', '>=', Carbon::now()->add(-3, 'month')->format('Y-m-d'))
+        ->sum('valor');
+
         $cantidadinventario = $inventario->cantidad + request('cantidad');
 
         $precioMedioPonderado = $sumaValores / $cantidadinventario;
 
-
         $inventario = Inventario::find($inventario->id);
-
         $inventario->cantidad = $cantidadinventario;
         $inventario->valor = $precioMedioPonderado * $cantidadinventario;
         $inventario->pmp = $precioMedioPonderado;
         $inventario->ultimo_precio = (request('valor') / request('cantidad'));
-
         $inventario->save();
+
+        $this->recalcularPrecioSugerido($request, $inventario);
+
 
         return redirect()->route('inventario.index')->with('mensaje', ' Se registró la compra de ingrediente correctamente.');
     }
@@ -190,7 +198,6 @@ class InventarioController extends Controller
 
     protected function perdidas(Request $request)
     {
-
         $request->user()->authorizeRoles(['admin']);
 
         $local_id = $request->user()->local_id;
@@ -200,7 +207,6 @@ class InventarioController extends Controller
         $ultimosDoceMeses = $this->ultimosDoceMeses();
 
         $perdidasDoceMeses = $this->perdidasDoceMeses($local_id);
-        //dd($perdidasDoceMeses);
 
         $infoMes = ["ultimosDoceMeses" => $ultimosDoceMeses, "perdidasDoceMeses" => $perdidasDoceMeses];
         $infoMes = (object)($infoMes);
@@ -225,6 +231,74 @@ class InventarioController extends Controller
         } 
 
         return view('detallePerdida', compact('detalleDesperdicio', 'totalPerdida', 'perdida_id'));
+    }
+
+    protected function comprasIngredientes(Request $request){
+
+        $request->user()->authorizeRoles(['admin']);
+        $local_id = $request->user()->local_id;
+
+        return view('comprasIngredientes', compact('local_id'));
+    }
+
+    protected function buscarComprasIngredientes(Request $request, $local_id){
+
+        if($local_id == $request->user()->local_id){
+            $compras = Compras_historicas::where('inventarios.local_id', $local_id)
+            ->join('inventarios', 'inventarios.id', 'compras_historicas.inventario_id')
+            ->select('compras_historicas.*', 'inventarios.local_id')
+            ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta])
+            ->get();
+
+            return view('comprasIngredientes2', compact('compras', 'local_id'));
+        }
+
+        return redirect()->route('inventario.comprasIngredientes');
+    }
+
+    protected function descargarComprasIngredientes(Request $request, $desde, $hasta){
+
+        $request->user()->authorizeRoles(['admin']);
+
+        $local_id = $request->user()->local_id;
+
+        $compras = Compras_historicas::where('inventarios.local_id', $local_id)
+            ->join('inventarios', 'inventarios.id', 'compras_historicas.inventario_id')
+            ->select('compras_historicas.*', 'inventarios.local_id')
+            ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta])
+            ->get();
+
+        $spreadsheetResultado = new Spreadsheet();
+        $hoja = $spreadsheetResultado->getActiveSheet();
+
+        $titulosTabla = ["NOMBRE", "CANTIDAD", "UNIDAD DE MEDIDA", "VALOR", "FECHA REGISTRO"];
+
+        $columna = 1;
+        foreach($titulosTabla as $titulo){
+            $hoja->setCellValueByColumnAndRow($columna, 1, $titulo);
+            $columna++;
+        }
+        
+        $fila = 2;
+        foreach($compras as $compra){
+            $hoja->setCellValueByColumnAndRow(1, $fila, $compra->nombre);
+            $hoja->setCellValueByColumnAndRow(2, $fila, $compra->cantidad);
+            $hoja->setCellValueByColumnAndRow(3, $fila, $compra->unidad_medida);
+            $hoja->setCellValueByColumnAndRow(4, $fila, $compra->valor);
+            $hoja->setCellValueByColumnAndRow(5, $fila, $compra->created_at);
+
+            $fila++;
+        }
+            
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header("Content-Disposition: attachment;filename=Compras de ingredientes (desde:".$desde.", hasta:".$hasta.").xlsx");
+            header('Cache-Control: max-age=0');
+
+            $writer = IOFactory::createWriter($spreadsheetResultado, 'Xlsx');
+            $writer->save('php://output');
+
+            exit;
+        
     }
 
     private function ultimosDoceMeses()
@@ -322,5 +396,59 @@ class InventarioController extends Controller
 
         exit;
 
+    }
+
+    private function recalcularPrecioSugerido($request, $inventario){
+
+        $ingredientes = Ingredientes::where('inventario_id', $inventario->id)->get();
+
+        $productos = [];
+        foreach($ingredientes as $ingrediente){
+
+            $unidadMedidaInv = $inventario->unidad_medida;
+            $unidadMedidaIng = $ingrediente->unidad_medida;
+
+            if ($unidadMedidaInv == $unidadMedidaIng) {
+                $valorActual = $inventario->pmp * $ingrediente->cantidad;
+            } elseif (($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')) {
+                $valorActual = (($inventario->pmp / 1000) * $ingrediente->cantidad);
+            } elseif (($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')) {
+                $valorActual = (($inventario->pmp * 1000) * $ingrediente->cantidad);
+            } 
+
+            $ingrediente->valor = $valorActual;
+            $ingrediente->save();
+
+            $ingredientesProducto = Ingredientes::where('producto_id', $ingrediente->producto_id)->get();
+
+            $sumaPreciosIngredientes = 0;
+            foreach($ingredientesProducto as $ingredienteProducto){
+                $sumaPreciosIngredientes += $ingredienteProducto->valor * (100 / (100 - $ingredienteProducto->merma));
+            }
+
+            $local = Local::find($inventario->local_id);
+
+            $gastosFijos = Gastos_fijos::where('local_id', $local->id)->sum('monto');
+
+            $porcentajeGasto = ($gastosFijos/$local->ingreso_mensual);
+
+            $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia/100)))*(1 + $porcentajeGasto)) * 1.19, -2);
+            
+            $producto = Productos::find($ingrediente->producto_id);
+            $producto->precio_sugerido = $precioSugerido;
+            $producto->save();
+
+            $diferencia = $precioSugerido - $producto->precio;
+
+            if($diferencia > $producto->precio * 0.2 || $diferencia < -1 * ($producto->precio * 0.2)){
+                $productos[] = $producto; 
+            }
+        }
+
+        if(count($productos) > 0){
+
+            Mail::to($request->user()->email)->send(new CambioEnPrecioSugerido($productos));
+
+        }
     }
 }

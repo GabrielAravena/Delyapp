@@ -13,10 +13,14 @@
                 <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner1.jpeg') }}" alt="First slide" width="100%" height="200dp">
             </div>
             <div class="carousel-item" data-bs-interval="1000">
-                <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner2.jpeg') }}" alt="Second slide" width="100%" height="200dp">
+                <a href="{{ route('register') }}">
+                    <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner2.jpeg') }}" alt="Second slide" width="100%" height="200dp">
+                </a>
             </div>
             <div class="carousel-item" data-bs-interval="1000">
-                <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner3.jpeg') }}" alt="Second slide" width="100%" height="200dp">
+                <a href="{{ route('inicio.registrarLocal') }}">
+                    <img class="d-block w-100" id="imgCarrusel" src="{{ asset('/images/banner3.jpeg') }}" alt="Second slide" width="100%" height="200dp">
+                </a>
             </div>
 
         </div>
@@ -40,7 +44,7 @@
             <span>&times;</span>
           </button>
         </div>
-        @endif
+    @endif
     <div class="container-wide mt-5" id="containerLocales">
         <div class="row justify-content-xs-center mt-5 mb-5">
 

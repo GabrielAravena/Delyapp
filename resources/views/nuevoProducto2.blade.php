@@ -81,7 +81,7 @@
 
                             <div class="form-inline row mt-3">
                                 <label class="col-md-2 col-form-label" style="justify-content: right;">Tiempo de preparación</label>
-                                <input id="cantidad_en_inventario" max="99999999" type="number" class="col-md-2 form-control text-md-left" name="tiempo_preparacion" required>
+                                <input id="cantidad_en_inventario" min="1" max="1000" type="number" class="col-md-2 form-control text-md-left" name="tiempo_preparacion" required>
                                 <label class="col-md-2 col-form-label" style="justify-content: left;">minutos</label>
                             </div>
 
@@ -113,7 +113,7 @@
                                     <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
                                     <span class="ml-3">Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="99999" min="1" type="number" class="col-md-2 form-control text-md-left ml-5" name="precio" style="display:none" />
+                                <input id="precio" max="1000000" min="1" type="number" class="col-md-2 form-control text-md-left ml-5" name="precio" style="display:none" />
                                 <input id="precioSugerido" type="number" class="col-md-2 form-control text-md-left" name="precioSugerido" value="{{ $producto->precio_sugerido }}" style="display:none" />
                             </div>
 

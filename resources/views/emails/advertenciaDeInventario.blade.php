@@ -25,8 +25,8 @@
                     </ul>
 
                     <h4 style="margin-top: 30px; width: 70%; text-align: justify;">
-                        Cuando la cantidad de un ingrediente llegue a cero, los productos que requieren ese ingrediente se desactivarán. 
-                        Por lo que es muy importante que registres todas las compras de ingredientes que realices y mantengas tu inventario actualizado. 
+                        Cuando la cantidad de un ingrediente llegue a cero, los productos que requieren ese ingrediente se desactivarán.
+                        Por lo que es muy importante que registres todas las compras de ingredientes que realices y mantengas tu inventario actualizado.
                     </h4>
 
                     <p>Saludos, Delyapp.</p>

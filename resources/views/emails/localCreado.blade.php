@@ -37,7 +37,9 @@
                         En la sección "Configuración" podrás modificar los datos de tu local, subir una foto y un logo. 
                         Antes de comenzar a vender, debes registrar los ingredientes que tienes en bodega y los gastos fijos de tu local,
                         para finalmente publicar tus productos. Esta información nos permite sugerirte un precio para tus productos, 
-                        y un informe de las pérdidas de tu local.
+                        y un informe de las pérdidas de tu local. Para que tu local aparezca en nuestra página y tus clientes puedan comprar, 
+                        debes activar el local presionando el botón "ACTIVAR LOCAL" en la sección "Inicio", 
+                        esto solo se puede hacer una vez que hayas agregado productos a tu menú.
                     </h4>
 
                     <h2 style="margin-top: 30px;">¡Gracias por preferirnos!</h2>

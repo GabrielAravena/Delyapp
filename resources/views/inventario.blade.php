@@ -98,11 +98,14 @@
             </div>
           </div>
         </div>
-        <div class="col-md-3 mt-3" style="float:left">
+        <div class="col-md-12 mt-3" style="float:right">
+          <a href="{{ route('inventario.create', $local_id)}}" class="btn btn-green btn-sm">Nuevo ingrediente</a>
+        </div>
+        <div class="col-md-12 mt-5" style="float:right">
           <a href="{{ route('inventario.perdidas') }}" class="btn btn-primary btn-sm">Registro de pérdidas</a>
         </div>
-        <div class="col-md-3 mt-3" style="float:right">
-          <a href="{{ route('inventario.create', $local_id)}}" class="btn btn-green btn-sm">Nuevo ingrediente</a>
+        <div class="col-md-12 mt-3" style="float:right">
+          <a href="{{ route('inventario.comprasIngredientes') }}" class="btn btn-primary btn-sm">Registro de compras</a>
         </div>
       </div>
     </div>
