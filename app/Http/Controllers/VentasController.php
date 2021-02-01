@@ -34,13 +34,13 @@ class VentasController extends Controller
 
         if($local_id == $request->user()->local_id){
             $ventas = Registro_ventas::where('registro_ventas.local_id', $local_id)
-            ->whereBetween('registro_ventas.updated_at', [$request->desde, $request->hasta])
+            ->whereBetween('registro_ventas.updated_at', [$request->desde, $request->hasta.' 23:59:59'])
             ->leftJoin('users', 'users.id', '=', 'registro_ventas.users_id')
             ->leftJoin('invitados', 'invitados.id', '=', 'registro_ventas.invitado')
             ->select('registro_ventas.*', 'users.name as userNombre', 'users.email as userEmail', 'users.direccion as userDireccion', 'invitados.nombre as invitadoNombre', 'invitados.email as invitadoEmail', 'invitados.direccion as invitadoDireccion')
             ->get();
 
-            return view('ventas2', compact('ventas', 'local_id'));
+            return view('ventas2', compact('ventas', 'local_id', 'request'));
         }
 
         return redirect()->route('ventas.index');
@@ -51,7 +51,7 @@ class VentasController extends Controller
         $request->user()->authorizeRoles(['admin']);
 
         $ventas = Registro_ventas::where('registro_ventas.local_id', $request->user()->local_id)
-            ->whereBetween('registro_ventas.updated_at', [$desde, $hasta])
+            ->whereBetween('registro_ventas.updated_at', [$desde, $hasta.' 23:59:59'])
             ->leftJoin('users', 'users.id', '=', 'registro_ventas.users_id')
             ->leftJoin('invitados', 'invitados.id', '=', 'registro_ventas.invitado')
             ->select('registro_ventas.*', 'users.name as userNombre', 'users.email as userEmail', 'users.direccion as userDireccion', 'invitados.nombre as invitadoNombre', 'invitados.email as invitadoEmail', 'invitados.direccion as invitadoDireccion')

@@ -43,7 +43,7 @@
                                 <label>Ingreso mensual aproximado</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ingreso_mensual" type="number" min="0" max="100000000000" class="form-control text-center" value="{{ number_format($local->ingreso_mensual, 0, '', '') }}" name="ingreso_mensual">
+                                <input id="ingreso_mensual" type="number" min="1" max="100000000000" class="form-control text-center" value="{{ number_format($local->ingreso_mensual, 0, '', '') }}" name="ingreso_mensual" required>
                             </div>
                         </div>
 
@@ -79,7 +79,7 @@
                                 <label>Porcentaje de ganancia (%)</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" value="{{ number_format($local->ganancia, 0, '', '') }}" name="ganancia">
+                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" value="{{ number_format($local->ganancia, 0, '', '') }}" name="ganancia" required>
                             </div>
                         </div>
 

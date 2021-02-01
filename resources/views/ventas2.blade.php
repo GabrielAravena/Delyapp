@@ -21,11 +21,11 @@
                         <div class="form-inline ml-5 mr-5 mt-5">
                             <div class="form-inline">
                                 <label for="desde">Desde</label>
-                                <input class="ml-3 mr-5" type="date" name="desde" id="desde" required>
+                                <input class="ml-3 mr-5" type="date" name="desde" id="desde" value="{{ $request->desde }}" required>
                             </div>
                             <div class="form-inline">
                                 <label for="hasta">Hasta</label>
-                                <input class="ml-3" type="date" name="hasta" id="hasta" required>
+                                <input class="ml-3" type="date" name="hasta" id="hasta" value="{{ $request->hasta }}" required>
                             </div>
                         </div>
                         <div class="form-inline ml-5 mr-5 mt-5 mb-5">
@@ -84,7 +84,7 @@
         var desde = $('#desde').val();
         var hasta = $('#hasta').val();
 
-        if (desde != "" && hasta != "" && desde < hasta) {
+        if (desde != "" && hasta != "" && desde <= hasta) {
 
             window.location = "descargar/" + desde + "/" + hasta + "";
 

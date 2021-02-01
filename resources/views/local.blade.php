@@ -29,7 +29,11 @@
         @if($producto->categoria == 'promoción' || $producto->categoria == 'combo' && $producto->precio != 0)
         <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
           <a class="thumbnail-variant-3" href="{{ route('carrito.producto', $producto) }}" onclick="enviar();">
+          @if($producto->imagen)
             <img style="opacity: 0.6; max-width: 100%;" src="{{ asset($producto->imagen) }}" width="380" height="250">
+          @else
+            <img style="opacity: 0.6; max-width: 100%;" class="img" src="{{ asset('/images/sinImagen.jpeg') }}" alt="No se ha cargado la imagen" width="380" height="250" />
+          @endif
             <div class="caption text-center">
               <h3 class="text-italic">{{ $producto->nombre }}</h3>
               <p class="big">{{ $producto->descripcion }}</p>
@@ -67,7 +71,11 @@
             <div class="item">
               <div class="thumbnail-menu-modern">
                 <figure>
+                @if($producto->imagen)
                   <img class="img" src="{{ asset($producto->imagen) }}" alt="No se ha cargado la imagen" width="310" height="260" />
+                @else
+                  <img class="img" src="{{ asset('/images/sinImagen.jpeg') }}" alt="No se ha cargado la imagen" width="310" height="260" />
+                @endif
                 </figure>
                 <div class="caption">
                   <h5 class="primary">{{ $producto->nombre }}</h5>
@@ -98,7 +106,11 @@
         <div class="row border-left-cell">
           <div class="col-sm-12 col-md-12 col-lg-12">
             <div class="float-left mr-5">
+            @if($local->logo)
               <img src="{{ asset($local->logo) }}" width="120" height="50" class=".d-inline-block align-top" alt="{{ $local->nombre }}" loading="lazy">
+            @else
+              <img src="{{asset('/images/logo0.png')}}" width="120" height="50" class=".d-inline-block align-top" alt="{{ $local->nombre }}" loading="lazy">
+            @endif
             </div>
             <ul class="list-unstyled contact-info offset-top-5">
               <li>

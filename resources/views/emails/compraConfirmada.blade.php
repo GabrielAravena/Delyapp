@@ -12,7 +12,7 @@
             <div style="margin-top: 30px;">
                 <div style="width: 80%">
                     <div style="margin-top: 30px; display: flex; flex-flow: row wrap; align-items: center;">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Commons-emblem-success.svg/1024px-Commons-emblem-success.svg.png" alt="Producto" width="80" height="80">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Commons-emblem-success.svg/1024px-Commons-emblem-success.svg.png" width="80" height="80">
                         <h1>¡Compra exitosa!</h1>
                     </div>
                     <h3 style="margin-top: 30px;">Detalle de la compra</h3>
@@ -60,6 +60,7 @@
                     @endif
                     <h2 style="margin-top: 30px;">¡Gracias por preferirnos!</h2>
                     <p>Saludos, Delyapp.</p>
+                    <img src="{{ asset('/images/logo_mail.jpeg') }}" width="120" height="50" alt="Delyapp">
                 </div>
             </div>
         </div>

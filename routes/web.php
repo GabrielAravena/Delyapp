@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
-|
+| 
 */
 
 Auth::routes();
@@ -17,6 +17,10 @@ Auth::routes();
 Route::get('/register', function(){
     return view('auth/register');
 })->name('register');
+
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
+});
 
 Route::get('/', 'InicioController@index')->name('inicio');
 Route::get('/buscador', 'InicioController@buscador')->name('inicio.buscador');
@@ -34,7 +38,7 @@ Route::post('/root/ingresarLocal', 'RootController@guardar')->name('root.guardar
 Route::get('/root/listaLocales', 'RootController@listaLocales')->name('root.listaLocales');
 Route::get('/root/buscadorLocales', 'RootController@buscador')->name('root.buscador');
 Route::get('/root/modificar/{local}', 'RootController@modificar')->name('root.modificar');
-Route::post('/root/guardarModificacion/{local}', 'RootController@guardarModificacion')->name('root.guardarModificacion');
+Route::post('/root/modificar/{local}', 'RootController@guardarModificacion')->name('root.guardarModificacion');
 Route::get('/root/activar/{local}', 'RootController@activarLocal')->name('root.activarLocal');
 
 

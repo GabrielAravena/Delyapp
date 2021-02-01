@@ -60,7 +60,7 @@
         var desde = $('#desde').val();
         var hasta = $('#hasta').val();
 
-        if (desde != "" && hasta != "" && desde < hasta) {
+        if (desde != "" && hasta != "" && desde <= hasta) {
 
             window.location = "ventas/descargar/" + desde + "/" + hasta + "";
 

@@ -10,6 +10,10 @@
 
     <title>DelyApp</title>
 
+    <!-- Fav Icon -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('/images/favicon.png') }}">
+    <link rel="shortcut icon" sizes="192x192" href="{{ asset('/images/favicon.png') }}">
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">

@@ -37,7 +37,7 @@ class CarritoController extends Controller
         $sessionId = 0;
         $buyOrder = 0;
         $invitado = null;
-      
+
         if ($request->user() == null) {
 
             $codigoInvitado = $request->session()->get('codigoInvitado');
@@ -145,7 +145,7 @@ class CarritoController extends Controller
 
         if ($productos_user) {
 
-            if($producto->local_id != $productos_user->local_id){
+            if ($producto->local_id != $productos_user->local_id) {
                 return redirect()->route('carrito.index')->with('error', 'No es posible agregar el producto ya que pertenece a otro local. Solo puedes comprar productos de un local a la vez.');
             }
 
@@ -171,7 +171,6 @@ class CarritoController extends Controller
             $venta = Ventas::find($productos_user->ventas_id);
             $venta->precio += $producto->precio * $request->cantidad;
             $venta->save();
-
         } else {
 
             $venta = Ventas::create([
@@ -208,32 +207,31 @@ class CarritoController extends Controller
 
     protected function delete(Request $request, $id)
     {
-        if($request->user()){
+        if ($request->user()) {
             $user_id = $request->user()->id;
 
             $productos_user = Productos_user::where('productos_users.id', $id)
-            ->where('users_id', $user_id)
-            ->join('productos', 'productos_users.producto_id', 'productos.id')
-            ->select('productos_users.*', 'productos.precio')
-            ->get()
-            ->last();
-
-        }else{
+                ->where('users_id', $user_id)
+                ->join('productos', 'productos_users.producto_id', 'productos.id')
+                ->select('productos_users.*', 'productos.precio')
+                ->get()
+                ->last();
+        } else {
             $invitado = $request->session()->get('codigoInvitado');
 
             $productos_user = Productos_user::where('productos_users.id', $id)
-            ->where('invitado', $invitado)
-            ->join('productos', 'productos_users.producto_id', 'productos.id')
-            ->select('productos_users.*', 'productos.precio')
-            ->get()
-            ->last();
+                ->where('invitado', $invitado)
+                ->join('productos', 'productos_users.producto_id', 'productos.id')
+                ->select('productos_users.*', 'productos.precio')
+                ->get()
+                ->last();
         }
 
-        if($productos_user){
+        if ($productos_user) {
             $venta = Ventas::find($productos_user->ventas_id);
             $venta->precio -= $productos_user->precio * $productos_user->cantidad;
             $venta->save();
-    
+
             $productos_user->delete();
         }
 
@@ -247,49 +245,84 @@ class CarritoController extends Controller
 
     protected function pagar(Request $request)
     {
+
         $local = Local::find($request->local_id);
 
-        if($local->estado == 'activado'){
-            $token_ws = $request->token_ws;
-            $url = $request->url;
-    
-            if ($request->user() == null) {
-                $invitado = Invitado::create([
-                    'id' => $request->session()->get('codigoInvitado'),
-                    'nombre' => $request->name,
-                    'email' => $request->email,
-                    'direccion' => $request->direccion,
-                    'latitud' => $request->latitud,
-                    'longitud' => $request->longitud,
-                    'telefono' => $request->telefono,
-                ]);
+        if ($request->user() == null) {
 
-                $user_latitud = $invitado->latitud;
-                $user_longitud = $invitado->longitud;
+            $codigoInvitado = $request->session()->get('codigoInvitado');
 
-            }else{
-                $user_latitud = $request->user()->latitud;
-                $user_longitud = $request->user()->longitud;
-            }
+            $productos = Productos_user::where('invitado', $codigoInvitado)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->join('productos', 'productos_users.producto_id', 'productos.id')
+                ->select('productos.nombre', 'productos.estado')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->groupBy('ventas_id')
+                ->last();
+        } else {
 
-            if($request->delivery == 1){
-                $distancia = $this->calcularDistancia($local->latitud, $local->longitud, $user_latitud, $user_longitud);
+            $user_id = $request->user()->id;
 
-                if($local->distancia_delivery < $distancia){
-                    $distancia_delivery = number_format($local->distancia_delivery, 0, ",", ".");
-                    $distancia = number_format($distancia, 0, ",", ".");
-                    return redirect()->route('carrito.index')->with('error', 'Oops... Este local solo cuenta con delivery a '
-                        .$distancia_delivery.' Km a la redonda, y tu dirección se encuentra a una distancia de '
-                        .$distancia.' Km. Puedes solicitar retiro en local, o modificar tu dirección.');
-                }
-            }
-
-            return view('carrito_pagar', compact('token_ws', 'url'));
-        }else{
-            return redirect()->route('carrito.index')->with('error', 'Oops... Este local ya no está recibiendo pedidos. Te invitamos a revisar otros locales.');
+            $productos = Productos_user::where('users_id', $user_id)
+                ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
+                ->join('productos', 'productos_users.producto_id', 'productos.id')
+                ->select('productos.nombre', 'productos.estado')
+                ->where('ventas.estado', 'carrito')
+                ->get()
+                ->groupBy('ventas_id')
+                ->last();
         }
 
-        
+        $productosDesactivados = "";
+        foreach ($productos as $producto) {
+            if ($producto->estado == 'desactivado') {
+                $productosDesactivados = $productosDesactivados . " - " . $producto->nombre . " - ";
+            }
+        }
+
+        if ($local->estado == 'activado') {
+            if ($productosDesactivados == "") {
+                $token_ws = $request->token_ws;
+                $url = $request->url;
+
+                if ($request->user() == null) {
+                    $invitado = Invitado::create([
+                        'id' => $request->session()->get('codigoInvitado'),
+                        'nombre' => $request->name,
+                        'email' => $request->email,
+                        'direccion' => $request->direccion,
+                        'latitud' => $request->latitud,
+                        'longitud' => $request->longitud,
+                        'telefono' => $request->telefono,
+                    ]);
+
+                    $user_latitud = $invitado->latitud;
+                    $user_longitud = $invitado->longitud;
+                } else {
+                    $user_latitud = $request->user()->latitud;
+                    $user_longitud = $request->user()->longitud;
+                }
+
+                if ($request->delivery == 1) {
+                    $distancia = $this->calcularDistancia($local->latitud, $local->longitud, $user_latitud, $user_longitud);
+
+                    if ($local->distancia_delivery < $distancia) {
+                        $distancia_delivery = number_format($local->distancia_delivery, 0, ",", ".");
+                        $distancia = number_format($distancia, 0, ",", ".");
+                        return redirect()->route('carrito.index')->with('error', 'Oops... Este local solo cuenta con delivery a '
+                            . $distancia_delivery . ' Km a la redonda, y tu dirección se encuentra a una distancia de '
+                            . $distancia . ' Km. Puedes solicitar retiro en local, o modificar tu dirección.');
+                    }
+                }
+
+                return view('carrito_pagar', compact('token_ws', 'url'));
+            } else {
+                return redirect()->route('carrito.index')->with('error', 'Oops... algunos de los productos ya no están disponibles. Los productos son los siguientes: ' . $productosDesactivados);
+            }
+        } else {
+            return redirect()->route('carrito.index')->with('error', 'Oops... Este local ya no está recibiendo pedidos. Te invitamos a revisar otros locales.');
+        }
     }
 
     protected function return(Request $request)
@@ -321,18 +354,18 @@ class CarritoController extends Controller
                 }
 
                 $ingredientes = Ingredientes::where('producto_id', $producto->producto_id)->get();
-                
+
                 foreach ($ingredientes as $ingrediente) {
 
                     $inventario = Inventario::find($ingrediente->inventario_id);
                     $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
                     $inventario->save();
 
-                    if($inventario->cantidad < 10){
+                    if ($inventario->cantidad < 10) {
                         $ingredientesBajos[] = $inventario;
                     }
 
-                    if($inventario->cantidad <= 0){
+                    if ($inventario->cantidad <= 0) {
                         $producto = Productos::find($ingrediente->producto_id);
                         $producto->estado = 'desactivado';
                         $producto->save();
@@ -345,7 +378,7 @@ class CarritoController extends Controller
             $venta = Ventas::find($buyOrder);
             $venta->estado = 'finalizado';
             $venta->save();
-            
+
             Registro_ventas::create([
                 'local_id' => $local_id,
                 'users_id' => $user_id,
@@ -357,19 +390,19 @@ class CarritoController extends Controller
                 'entregado' => false,
             ]);
 
-            if(count($ingredientesBajos) != 0){
+            if (count($ingredientesBajos) != 0) {
                 $admin = User::where('local_id', $local_id)->first();
                 Mail::to($admin->email)->send(new AdvertenciaDeInventario($ingredientesBajos));
             }
 
-            if($user_id != null){
+            if ($user_id != null) {
                 $user = User::find($user_id);
                 Mail::to($user->email)->send(new CompraConfirmada($buyOrder));
-            }else{
+            } else {
                 $invitado = Invitado::find($invitado);
                 Mail::to($invitado->email)->send(new CompraConfirmada($buyOrder));
             }
-                
+
             return view('carrito_redirect', compact('token_ws', 'urlRedirection', 'codigoAutorizacion', 'monto'));
         } else {
 
@@ -382,7 +415,8 @@ class CarritoController extends Controller
         return view('carrito_final');
     }
 
-    protected function agregarDelivery(Request $request){
+    protected function agregarDelivery(Request $request)
+    {
 
         if ($request->user() == null) {
 
@@ -420,11 +454,12 @@ class CarritoController extends Controller
         $venta->precio += $valor_delivery;
         $venta->delivery = true;
         $venta->save();
-        
+
         return redirect()->route('carrito.index');
     }
 
-    protected function quitarDelivery(Request $request){
+    protected function quitarDelivery(Request $request)
+    {
 
         if ($request->user() == null) {
 

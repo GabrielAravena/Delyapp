@@ -107,8 +107,8 @@ class InventarioController extends Controller
         ]);
 
         $sumaValores = Compras_historicas::where('inventario_id', $inventario->id)
-        ->whereDate('created_at', '>=', Carbon::now()->add(-3, 'month')->format('Y-m-d'))
-        ->sum('valor');
+            ->whereDate('created_at', '>=', Carbon::now()->add(-3, 'month')->format('Y-m-d'))
+            ->sum('valor');
 
         $cantidadinventario = $inventario->cantidad + request('cantidad');
 
@@ -164,7 +164,10 @@ class InventarioController extends Controller
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
 
-        return view('realizarInventario', compact('inventarios'));
+        if (count($inventarios) > 0) { 
+            return view('realizarInventario', compact('inventarios'));
+         }
+        return redirect()->route('inventario.index')->with('error', 'Para realizar un inventario debes tener ingredientes registrados.');
     }
 
     protected function ingresarInventario(Request $request)
@@ -173,27 +176,30 @@ class InventarioController extends Controller
         $local_id = $request->user()->local_id;
 
         $inventarios = Inventario::where('local_id', $local_id)->get();
+        
+        
 
-        $desperdicio = Desperdicio::create([
-            'local_id' => $local_id,
-        ]);
-
-        foreach ($inventarios as $inventario) {
-
-            Detalle_desperdicio::create([
-                'nombre' => $inventario->nombre,
-                'cantidad' => request($inventario->id),
-                'desperdicio' => $inventario->cantidad - request($inventario->id),
-                'unidad_medida' => $inventario->unidad_medida,
-                'valor_desperdiciado' => ($inventario->cantidad - request($inventario->id)) * $inventario->pmp,
-                'desperdicio_id' => $desperdicio->id,
+            $desperdicio = Desperdicio::create([
+                'local_id' => $local_id,
             ]);
 
-            $inventario->cantidad = request($inventario->id);
-            $inventario->valor = request($inventario->id) * $inventario->pmp;
-            $inventario->save();
-        }
-        return redirect()->route('inventario.index')->with('mensaje', 'El inventario se ha actualizado correctamente');
+            foreach ($inventarios as $inventario) {
+
+                Detalle_desperdicio::create([
+                    'nombre' => $inventario->nombre,
+                    'cantidad' => request($inventario->id),
+                    'desperdicio' => $inventario->cantidad - request($inventario->id),
+                    'unidad_medida' => $inventario->unidad_medida,
+                    'valor_desperdiciado' => ($inventario->cantidad - request($inventario->id)) * $inventario->pmp,
+                    'desperdicio_id' => $desperdicio->id,
+                ]);
+
+                $inventario->cantidad = request($inventario->id);
+                $inventario->valor = request($inventario->id) * $inventario->pmp;
+                $inventario->save();
+            }
+            return redirect()->route('inventario.index')->with('mensaje', 'El inventario se ha actualizado correctamente');
+      
     }
 
     protected function perdidas(Request $request)
@@ -215,7 +221,8 @@ class InventarioController extends Controller
         return view('perdidas', compact('perdidas', 'infoMes'));
     }
 
-    protected function detallePerdida(Request $request, $perdida_id){
+    protected function detallePerdida(Request $request, $perdida_id)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -226,14 +233,15 @@ class InventarioController extends Controller
         $detalleDesperdicio = Detalle_desperdicio::where('desperdicio_id', $desperdicio[0]->id)->get();
 
         $totalPerdida = 0;
-        foreach($detalleDesperdicio as $detalle){
+        foreach ($detalleDesperdicio as $detalle) {
             $totalPerdida += $detalle->valor_desperdiciado;
-        } 
+        }
 
         return view('detallePerdida', compact('detalleDesperdicio', 'totalPerdida', 'perdida_id'));
     }
 
-    protected function comprasIngredientes(Request $request){
+    protected function comprasIngredientes(Request $request)
+    {
 
         $request->user()->authorizeRoles(['admin']);
         $local_id = $request->user()->local_id;
@@ -241,22 +249,24 @@ class InventarioController extends Controller
         return view('comprasIngredientes', compact('local_id'));
     }
 
-    protected function buscarComprasIngredientes(Request $request, $local_id){
+    protected function buscarComprasIngredientes(Request $request, $local_id)
+    {
 
-        if($local_id == $request->user()->local_id){
+        if ($local_id == $request->user()->local_id) {
             $compras = Compras_historicas::where('inventarios.local_id', $local_id)
-            ->join('inventarios', 'inventarios.id', 'compras_historicas.inventario_id')
-            ->select('compras_historicas.*', 'inventarios.local_id')
-            ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta])
-            ->get();
+                ->join('inventarios', 'inventarios.id', 'compras_historicas.inventario_id')
+                ->select('compras_historicas.*', 'inventarios.local_id')
+                ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta . ' 23:59:59'])
+                ->get();
 
-            return view('comprasIngredientes2', compact('compras', 'local_id'));
+            return view('comprasIngredientes2', compact('compras', 'local_id', 'request'));
         }
 
         return redirect()->route('inventario.comprasIngredientes');
     }
 
-    protected function descargarComprasIngredientes(Request $request, $desde, $hasta){
+    protected function descargarComprasIngredientes(Request $request, $desde, $hasta)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -265,7 +275,7 @@ class InventarioController extends Controller
         $compras = Compras_historicas::where('inventarios.local_id', $local_id)
             ->join('inventarios', 'inventarios.id', 'compras_historicas.inventario_id')
             ->select('compras_historicas.*', 'inventarios.local_id')
-            ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta])
+            ->whereBetween('compras_historicas.created_at', [$request->desde, $request->hasta . ' 23:59:59'])
             ->get();
 
         $spreadsheetResultado = new Spreadsheet();
@@ -274,13 +284,13 @@ class InventarioController extends Controller
         $titulosTabla = ["NOMBRE", "CANTIDAD", "UNIDAD DE MEDIDA", "VALOR", "FECHA REGISTRO"];
 
         $columna = 1;
-        foreach($titulosTabla as $titulo){
+        foreach ($titulosTabla as $titulo) {
             $hoja->setCellValueByColumnAndRow($columna, 1, $titulo);
             $columna++;
         }
-        
+
         $fila = 2;
-        foreach($compras as $compra){
+        foreach ($compras as $compra) {
             $hoja->setCellValueByColumnAndRow(1, $fila, $compra->nombre);
             $hoja->setCellValueByColumnAndRow(2, $fila, $compra->cantidad);
             $hoja->setCellValueByColumnAndRow(3, $fila, $compra->unidad_medida);
@@ -289,16 +299,15 @@ class InventarioController extends Controller
 
             $fila++;
         }
-            
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header("Content-Disposition: attachment;filename=Compras de ingredientes (desde:".$desde.", hasta:".$hasta.").xlsx");
-            header('Cache-Control: max-age=0');
 
-            $writer = IOFactory::createWriter($spreadsheetResultado, 'Xlsx');
-            $writer->save('php://output');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment;filename=Compras de ingredientes (desde:" . $desde . ", hasta:" . $hasta . ").xlsx");
+        header('Cache-Control: max-age=0');
 
-            exit;
-        
+        $writer = IOFactory::createWriter($spreadsheetResultado, 'Xlsx');
+        $writer->save('php://output');
+
+        exit;
     }
 
     private function ultimosDoceMeses()
@@ -335,26 +344,27 @@ class InventarioController extends Controller
 
             $perdidasDoceMeses[$i] = 0;
         }
-     
+
         foreach ($perdidas as $fecha => $perdida) {
 
             $detalle_desperdicio = Detalle_desperdicio::where('desperdicio_id', $perdida[0]->id)->get()->sum('valor_desperdiciado');
 
             $mes = date('n', strtotime($fecha));
 
-            $perdidasDoceMeses[$mes-1] = $detalle_desperdicio;
+            $perdidasDoceMeses[$mes - 1] = $detalle_desperdicio;
         }
 
         $perdidasDoceMeses2 = [];
-        foreach($perdidasDoceMeses as $indice => $valor){
+        foreach ($perdidasDoceMeses as $indice => $valor) {
 
-            $perdidasDoceMeses2[] = $valor; 
+            $perdidasDoceMeses2[] = $valor;
         }
-       
+
         return $perdidasDoceMeses2;
     }
 
-    protected function descargarDetallePerdida(Request $request, $perdida_id){
+    protected function descargarDetallePerdida(Request $request, $perdida_id)
+    {
 
         $request->user()->authorizeRoles(['admin']);
 
@@ -364,46 +374,46 @@ class InventarioController extends Controller
 
         $detalleDesperdicio = Detalle_desperdicio::where('desperdicio_id', $desperdicio[0]->id)->get();
 
-        
+
         $spreadsheetResultado = new Spreadsheet();
         $hoja = $spreadsheetResultado->getActiveSheet();
 
         $titulosTabla = ["NOMBRE", "CANTIDAD DESPERDICIADA", "UNIDAD DE MEDIDA", "VALOR DESPERDICIADO", "FECHA DE REGISTRO"];
 
         $columna = 1;
-        foreach($titulosTabla as $titulo){
+        foreach ($titulosTabla as $titulo) {
             $hoja->setCellValueByColumnAndRow($columna, 1, $titulo);
             $columna++;
         }
 
         $fila = 2;
-        foreach($detalleDesperdicio as $detalle){
+        foreach ($detalleDesperdicio as $detalle) {
             $hoja->setCellValueByColumnAndRow(1, $fila, $detalle->nombre);
-        
+
             $hoja->setCellValueByColumnAndRow(2, $fila, $detalle->desperdicio);
             $hoja->setCellValueByColumnAndRow(3, $fila, $detalle->unidad_medida);
             $hoja->setCellValueByColumnAndRow(4, $fila, $detalle->valor_desperdiciado);
             $hoja->setCellValueByColumnAndRow(5, $fila, $detalle->created_at);
             $fila++;
         }
-        
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header("Content-Disposition: attachment;filename=Pérdidas(".$desperdicio[0]->created_at.").xlsx");
+        header("Content-Disposition: attachment;filename=Pérdidas(" . $desperdicio[0]->created_at . ").xlsx");
         header('Cache-Control: max-age=0');
 
         $writer = IOFactory::createWriter($spreadsheetResultado, 'Xlsx');
         $writer->save('php://output');
 
         exit;
-
     }
 
-    private function recalcularPrecioSugerido($request, $inventario){
+    protected function recalcularPrecioSugerido($request, $inventario)
+    {
 
         $ingredientes = Ingredientes::where('inventario_id', $inventario->id)->get();
 
         $productos = [];
-        foreach($ingredientes as $ingrediente){
+        foreach ($ingredientes as $ingrediente) {
 
             $unidadMedidaInv = $inventario->unidad_medida;
             $unidadMedidaIng = $ingrediente->unidad_medida;
@@ -414,7 +424,7 @@ class InventarioController extends Controller
                 $valorActual = (($inventario->pmp / 1000) * $ingrediente->cantidad);
             } elseif (($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')) {
                 $valorActual = (($inventario->pmp * 1000) * $ingrediente->cantidad);
-            } 
+            }
 
             $ingrediente->valor = $valorActual;
             $ingrediente->save();
@@ -422,7 +432,7 @@ class InventarioController extends Controller
             $ingredientesProducto = Ingredientes::where('producto_id', $ingrediente->producto_id)->get();
 
             $sumaPreciosIngredientes = 0;
-            foreach($ingredientesProducto as $ingredienteProducto){
+            foreach ($ingredientesProducto as $ingredienteProducto) {
                 $sumaPreciosIngredientes += $ingredienteProducto->valor * (100 / (100 - $ingredienteProducto->merma));
             }
 
@@ -430,25 +440,24 @@ class InventarioController extends Controller
 
             $gastosFijos = Gastos_fijos::where('local_id', $local->id)->sum('monto');
 
-            $porcentajeGasto = ($gastosFijos/$local->ingreso_mensual);
+            $porcentajeGasto = ($gastosFijos / $local->ingreso_mensual);
 
-            $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia/100)))*(1 + $porcentajeGasto)) * 1.19, -2);
-            
+            $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($local->ganancia / 100))) * (1 + $porcentajeGasto)) * 1.19, -2);
+
             $producto = Productos::find($ingrediente->producto_id);
             $producto->precio_sugerido = $precioSugerido;
             $producto->save();
 
             $diferencia = $precioSugerido - $producto->precio;
 
-            if($diferencia > $producto->precio * 0.2 || $diferencia < -1 * ($producto->precio * 0.2)){
-                $productos[] = $producto; 
+            if ($diferencia > $producto->precio * 0.2 || $diferencia < -1 * ($producto->precio * 0.2)) {
+                $productos[] = $producto;
             }
         }
 
-        if(count($productos) > 0){
+        if (count($productos) > 0) {
 
             Mail::to($request->user()->email)->send(new CambioEnPrecioSugerido($productos));
-
         }
     }
 }

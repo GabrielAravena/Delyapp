@@ -15,9 +15,9 @@
                         <h1>Cambio en precio sugerido</h1>
                     </div>
 
-                    <h3 style="margin-top: 30px;">Con la compra de un ingrediente se ha modificado el precio sugerido de algunos productos.</h3>
+                    <h3 style="margin-top: 30px;">Con la compra de un ingrediente, el cambio de ingreso mensual o el cambio en el porcentaje de ganancia, se ha modificado el precio sugerido de algunos productos.</h3>
                     <h4 style="margin-top: 10px; width: 70%; text-align: justify;">
-                        El precio sugerido de estos productos difiere en más de un 20% del valor al que tienes publicado el producto,
+                        El precio sugerido de los siguientes productos difiere en más de un 20% del valor al que tienes publicado el producto,
                         por lo que te recomendamos subir o bajar el precio, según corresponda y si lo estimas conveniente.
                     </h4>
                     <h3 style="margin-top: 30px;">Productos</h3>

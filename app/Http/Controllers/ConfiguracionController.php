@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Gastos_fijos;
+use App\Ingredientes;
+use App\Inventario;
 use Illuminate\Http\Request;
 use App\Local;
+use App\Productos;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Mail;
+use App\Mail\CambioEnPrecioSugerido;
 
 class ConfiguracionController extends Controller
 {
@@ -32,6 +37,12 @@ class ConfiguracionController extends Controller
     {
   
         $local = Local::find($request->user()->local_id);
+
+        if($local->ingreso_mensual != $request->ingreso_mensual || $local->ganancia != $request->ganancia){
+
+            $this->recalcularPreciosSugeridos($request, $local->id, $request->ingreso_mensual, $request->ganancia);
+
+        }
 
         $local->nombre = $request->nombre;
         $local->direccion = $request->direccion;
@@ -101,5 +112,41 @@ class ConfiguracionController extends Controller
         $admin->save();
 
         return redirect()->route('inicioAdmin.index')->with('mensaje', 'Se ha modificado la configuración correctamente.');
+    }
+
+    protected function recalcularPreciosSugeridos($request, $local_id, $ingreso_mensual, $ganancia){
+
+        $productos = Productos::where('local_id', $local_id)->get();
+
+        $productosCambioPrecio = [];
+        foreach($productos as $producto){
+
+            $ingredientesProducto = Ingredientes::where('producto_id', $producto->id)->get();
+
+            $sumaPreciosIngredientes = 0;
+            foreach ($ingredientesProducto as $ingredienteProducto) {
+                $sumaPreciosIngredientes += $ingredienteProducto->valor * (100 / (100 - $ingredienteProducto->merma));
+            }
+
+            $gastosFijos = Gastos_fijos::where('local_id', $local_id)->sum('monto');
+
+            $porcentajeGasto = ($gastosFijos / $ingreso_mensual);
+
+            $precioSugerido = round((($sumaPreciosIngredientes / (1 - ($ganancia / 100))) * (1 + $porcentajeGasto)) * 1.19, -2);
+
+            $producto->precio_sugerido = $precioSugerido;
+            $producto->save();
+
+            $diferencia = $precioSugerido - $producto->precio;
+
+            if ($diferencia > $producto->precio * 0.2 || $diferencia < -1 * ($producto->precio * 0.2)) {
+                $productosCambioPrecio[] = $producto;
+            }
+        }
+
+        if (count($productosCambioPrecio) > 0) {
+
+            Mail::to($request->user()->email)->send(new CambioEnPrecioSugerido($productosCambioPrecio));
+        }
     }
 }

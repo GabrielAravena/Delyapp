@@ -48,7 +48,17 @@ class PedidoListo extends Mailable
             $usuario = Invitado::find($registro_venta->invitado);
         }
 
-        $data = json_decode( file_get_contents($base_url.$local->longitud.','.$local->latitud.';'.$usuario->longitud.','.$usuario->latitud.'?'.'access_token='.$mapbox_token), true );
+        $url = $base_url.$local->longitud.','.$local->latitud.';'.$usuario->longitud.','.$usuario->latitud.'?'.'access_token='.$mapbox_token;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $respuesta = curl_exec($ch);
+        curl_close($ch);
+
+        $data = json_decode($respuesta , true );
 
         $duracion = number_format($data['routes'][0]['duration']/60, 0, ".", ",");
 

@@ -12,7 +12,6 @@
             <div style="margin-top: 30px;">
                 <div style="width: 80%">
                     <div style="margin-top: 30px; display: flex; flex-flow: row wrap; align-items: center;">
-                        <img src="{{ asset('/images/logo_mail.jpeg') }}" width="120" height="50" alt="Delyapp">
                         <h1>¡Te tenemos una buena noticia!</h1>
                     </div>
 
@@ -44,7 +43,7 @@
 
                     <h2 style="margin-top: 30px;">¡Gracias por preferirnos!</h2>
                     <p>Saludos, Delyapp.</p>
-                    
+                    <img src="{{ asset('/images/logo_mail.jpeg') }}" width="120" height="50" alt="Delyapp">
                 </div>
             </div>
         </div>

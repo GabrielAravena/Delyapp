@@ -41,6 +41,14 @@
           </button>
         </div>
         @endif
+        @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>{{ session('error') }}</strong> 
+          <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+            <span>&times;</span>
+          </button>
+        </div>
+        @endif
         <!-- Team name -->
         <div class="form-group mb-0">
           <div class="row">

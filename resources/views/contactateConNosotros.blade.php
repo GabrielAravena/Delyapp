@@ -35,7 +35,7 @@
                                 <label>Teléfono</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="telefono" type="tel" class="form-control" name="telefono" placeholder="Ejemplo: 912345678" pattern="[0-9]{9}">
+                                <input id="telefono" type="tel" class="form-control" name="telefono" placeholder="Ejemplo: 912345678" pattern="[0-9]{9}" required>
                             </div>
                         </div>
 

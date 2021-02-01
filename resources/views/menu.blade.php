@@ -62,7 +62,13 @@
                     <tr>
                       <td style="vertical-align: middle">{{ $producto->nombre }}</td>
                       <td style="vertical-align: middle">{{ $producto->descripcion }}</td>
-                      <td style="text-align:center"><img src="{{ asset($producto->imagen) }}" alt="Imagen producto" width="150px" height="80px" /></td>
+                      <td style="text-align:center">
+                        @if($producto->imagen)
+                          <img src="{{ asset($producto->imagen) }}" alt="Imagen producto" width="150px" height="80px" />
+                        @else
+                          <img src="{{ asset('/images/sinImagen.jpeg') }}" alt="Imagen producto" width="150px" height="80px" />
+                        @endif
+                        </td>
                       <td style="text-align:right; vertical-align: middle"><strong>{{ number_format($producto->precio, 0, ",", ".") }}</strong></td>
                       <td style="text-align:right; vertical-align: middle">{{ number_format($producto->precio_sugerido, 0, ",", ".") }}</td>
                       <td style="text-align:center; vertical-align: middle">

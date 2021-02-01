@@ -44,7 +44,7 @@
                                 <label>Ingreso mensual aproximado</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ingreso_mensual" type="number" min="0" max="100000000000" class="form-control text-center" value="{{ number_format($local->ingreso_mensual, 0, '', '') }}" name="ingreso_mensual">
+                                <input id="ingreso_mensual" type="number" min="1" max="100000000000" class="form-control text-center" value="{{ number_format($local->ingreso_mensual, 0, '', '') }}" name="ingreso_mensual" required>
                             </div>
                         </div>
 
@@ -71,7 +71,7 @@
                                 <label>Distancia máxima a la que despachas (en Km)</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="distancia_delivery" type="number" min="0" max="1000" class="form-control text-center" value="{{ number_format($local->distancia_delivery, 0, '', '') }}" name="distancia_delivery">
+                                <input id="distancia_delivery" type="number" min="1" max="1000" class="form-control text-center" value="{{ number_format($local->distancia_delivery, 0, '', '') }}" name="distancia_delivery">
                             </div>
                         </div>
 
@@ -80,7 +80,7 @@
                                 <label>Porcentaje de ganancia (%)</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" value="{{ number_format($local->ganancia, 0, '', '') }}" name="ganancia">
+                                <input id="ganancia" type="number" min="0" max="100" class="form-control text-center" value="{{ number_format($local->ganancia, 0, '', '') }}" name="ganancia" required>
                             </div>
                         </div>
 
@@ -124,7 +124,7 @@
 
                         <div class="form-inline row mb-5 mt-5">
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-green">
+                                <button type="submit" class="btn btn-green" onclick="activarSpinner();">
                                     Guardar
                                 </button>
                             </div>

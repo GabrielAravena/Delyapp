@@ -8,6 +8,10 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/dashboard/">
 
+    <!-- Fav icon -->
+    <link rel="shortcut icon" type="image/png" href="{{ asset('/images/favicon.png') }}">
+    <link rel="shortcut icon" sizes="192x192" href="{{ asset('/images/favicon.png') }}">
+
     <!-- Bootstrap core CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">

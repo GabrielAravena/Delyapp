@@ -103,17 +103,17 @@
 
                             <div class="form-inline row offset-md-2 mt-5">
                                 <label class="ml-3">
-                                    <input id="sugerido" name="radio" type="radio" value="sugerido" onclick="ocultar();" checked />
+                                    <input id="sugerido" name="radio" type="radio" value="sugerido" onclick="ocultar();"/>
                                     <span class="ml-3">Utilizar precio sugerido</span>
                                 </label>
                             </div>
 
                             <div class="form-inline row offset-md-2 mt-3">
                                 <label class="ml-3">
-                                    <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" />
+                                    <input id="otro" name="radio" type="radio" value="otro" onclick="mostrar();" checked/>
                                     <span class="ml-3">Utilizar otro precio</span>
                                 </label>
-                                <input id="precio" max="1000000" min="0" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:none" />
+                                <input id="precio" max="1000000" min="0" type="number" class="col-md-2 form-control text-center ml-5" name="precio" value="{{ number_format($producto->precio, 0, ',', '') }}" style="display:flex" required/>
                             </div>
 
                             <input class="d-none" type="text" name="producto_id" value="{{ $producto->id }}">
