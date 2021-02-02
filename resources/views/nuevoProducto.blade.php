@@ -32,50 +32,43 @@
 
                         <div class="form-group row mt-3">
                             <label for="nombre_ingrediente" class="col-md-2 col-form-label text-md-left">Nombre del producto</label>
-                            <input id="nombre_ingrediente" maxlength="225" type="text" class="col-md-4 form-control text-md-left" name="nombre_ingrediente" value="" required>
+                            <input id="nombre_ingrediente" maxlength="225" type="text" class="col-md-4 form-control text-md-left ml-3 mr-3" name="nombre_ingrediente" value="" required>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">Ingredientes</div>
-                                        <table class="table table-md">
-                                            <tbody id="tablaNuevoProducto">
-                                                <tr>
-                                                    <div class="form-group row">
-                                                        <td>
-                                                            <label class="col-md-12 col-form-label text-md-left">Ingrediente</label>
-                                                        </td>
-                                                        <td>
-                                                            <select id="ingrediente1" type="text" class="form-control" name="ingrediente1">
-                                                                @foreach($inventarios as $inventario)
-                                                                <option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </td>
-                                                        <td>
-                                                            <label class="col-md-12 col-form-label text-md-left">Cantidad</label>
-                                                        </td>
-                                                        <td>
-                                                            <input id="cantidad1" min="1" max="1000" type="number" class="col-md-12 form-control text-center" name="cantidad1" required>
-                                                        </td>
-                                                        <td>
-                                                            <label class="col-md-12 col-form-label text-md-left">Unidad de medida</label>
-                                                        </td>
-                                                        <td>
-                                                            <select id="unidad_medida1" type="text" class="form-control" name="unidad_medida1" value="">
-                                                                <option value="Kilogramo">Kilogramo</option>
-                                                                <option value="Gramo" selected>Gramo</option>
-                                                                <option value="Litro">Litro</option>
-                                                                <option value="Ml">Ml</option>
-                                                                <option value="Unidad">Unidad</option>
-                                                            </select>
-                                                        </td>
-                                                    </div>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div>
+
+                                        <div id="tablaNuevoProducto">
+                                            <div class="form-inline row justify-content-center ml-3 mr-3 mb-5">
+                                                <div class="col-md-4 text-center mt-3">
+                                                    <label class="col-12">Ingrediente</label>
+                                                    <select id="ingrediente1" type="text" class="col-2" name="ingrediente1">
+                                                        @foreach($inventarios as $inventario)
+                                                        <option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-4 text-center mt-3">
+                                                    <label class="col-12">Cantidad</label>
+                                                    <input id="cantidad1" min="1" max="1000" type="number" class="col-12 form-control text-center" name="cantidad1" required>
+                                                </div>
+                                                <div class="col-md-4 text-center mt-3">
+                                                    <label class="col-12">Unidad de medida</label>
+                                                    <select id="unidad_medida1" type="text" class="form-control" name="unidad_medida1" value="">
+                                                        <option value="Kilogramo">Kilogramo</option>
+                                                        <option value="Gramo" selected>Gramo</option>
+                                                        <option value="Litro">Litro</option>
+                                                        <option value="Ml">Ml</option>
+                                                        <option value="Unidad">Unidad</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="ml-5">
                                             <a id="btnAgregarIngrediente" role="button">
                                                 <svg width="3em" height="3em" viewBox="0 0 16 16" class="bi bi-plus-circle ml-3 mt-3 mb-3" fill="green" xmlns="http://www.w3.org/2000/svg">
                                                     <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -111,38 +104,36 @@
         $('#btnAgregarIngrediente').click(function() {
             c++;
             $('#tablaNuevoProducto').append(
-                '<tr id="fila' + c + '">' +
-                '<div class="form-group row">' +
-                '<td>' +
-                '<label class="col-md-12 col-form-label text-md-left">Ingrediente</label>' +
-                '</td>' +
-                '<td>' +
-                '<select id="ingrediente1" type="text" class="form-control" name="ingrediente' + c + '" value="" >' +
-                '@foreach($inventarios as $inventario)' +
-                '<option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>' +
-                '@endforeach' +
-                '</select>' +
-                '</td>' +
-                '<td>' +
-                '<label class="col-md-12 col-form-label text-md-left">Cantidad</label>' +
-                '</td>' +
-                '<td>' +
-                '<input id="cantidad' + c + '" min="1" max="1000" type="number" class="col-md-12 form-control text-center" name="cantidad' + c + '" required>' +
-                '</td>' +
-                '<td>' +
-                '<label class="col-md-12 col-form-label text-md-left">Unidad de medida</label>' +
-                '</td>' +
-                '<td>' +
-                '<select id="unidad_medida' + c + '" type="text" class="form-control" name="unidad_medida' + c + '" value="" >' +
-                '<option value="Kilogramo">Kilogramo</option>' +
-                '<option value="Gramo" selected>Gramo</option>' +
-                '<option value="Litro" >Litro</option>' +
-                '<option value="Ml">Ml</option>' +
-                '<option value="Unidad">Unidad</option>' +
-                '</select>' +
-                '</td>' +
-                '</div>' +
-                '</tr>'
+                '<div class="form-inline row justify-content-center ml-3 mr-3 mb-5" id="fila' + c + '">'+
+                    '<div class="col-md-4 text-center mt-3">'+
+                        '<label class="col-12">Ingrediente</label>'+
+                        '<div style="display: flex;">'+
+                            '<select id="ingrediente1" type="text" class="form-control col-12" name="ingrediente' + c + '" value="" >'+
+                                '@foreach($inventarios as $inventario)'+
+                                '<option value="{{ $inventario->id }}">{{ $inventario->nombre }}</option>'+
+                                '@endforeach'+
+                            '</select>'+
+                        '</div>'+
+                    '</div>'+
+
+                    '<div class="col-md-4 text-center mt-3">'+
+                        '<label class="col-12">Cantidad</label>'+
+                        '<input id="cantidad' + c + '" min="1" max="1000" type="number" class="col-12 form-control text-center"  name="cantidad' + c + '" required>'+
+                    '</div>'+
+                    
+                    '<div class="col-md-4 text-center mt-3">'+
+                        '<label class="col-12">Unidad de medida</label>'+
+                        '<div style="display: flex;">'+
+                            '<select id="unidad_medida' + c + '" type="text" class="form-control col-12"  name="unidad_medida' + c + '" value="">'+
+                                '<option value="Kilogramo">Kilogramo</option>'+
+                                '<option value="Gramo" selected>Gramo</option>'+
+                                '<option value="Litro">Litro</option>'+
+                                '<option value="Ml">Ml</option>'+
+                                '<option value="Unidad">Unidad</option>'+
+                            '</select>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'
             );
         });
         $('#btnQuitar').click(function() {

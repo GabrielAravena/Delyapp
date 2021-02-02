@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 justify-content-end" style="display: flex;">
+                <div class="form-inline row mt-5 mb-3 mt-5 text-center" style="display: flex;">
                     <a href="{{ route('gastosFijos.create') }}" class="btn btn-green btn-sm mr-3">Nuevo gasto fijo</a>
                     <a href="{{ route('inventario.index') }}" class="btn btn-primary btn-sm">Volver</a>
                 </div>
@@ -73,4 +73,12 @@
     </div>
 </div>
 
+<div class="form-inline row mt-5 mb-3 mt-5 text-center">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-green">
+                                    Confirmar
+                                </button>
+                                <a href="{{ route('inventario.index') }}" class="btn btn-primary">Volver</a>
+                            </div>
+                        </div>
 @endsection

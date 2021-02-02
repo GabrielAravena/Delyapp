@@ -26,16 +26,15 @@
                         @csrf
                         @foreach($inventarios as $inventario)
                         <div class="form-inline row mt-5 justify-content-center">
-                            <div class="col-md-2 text-center">
+                            <div class="col-md-4 text-center">
                                 <label>Ingrediente: {{ $inventario->nombre }}</label>
                             </div>
-                            <div class="col-md-2 text-center">
-                                <label class="text-center">Cantidad</label>
+                            
+                            <div class="form-inline col-md-4 justify-content-center">
+                                <label class="text-center">Cantidad </label>
+                                <input id="{{ $inventario->id }}" min="1" max="9999" type="number" class="form-control text-center ml-3" name="{{ $inventario->id }}" required>
                             </div>
-                            <div class="col-md-2 text-center">
-                                <input id="{{ $inventario->id }}" min="1" max="9999" type="number" class="col-md-12 form-control text-center" name="{{ $inventario->id }}" required>
-                            </div>
-                            <div class="col-md-2 text-center">
+                            <div class="col-md-4 text-center">
                                 <label>Unidad de medida: {{ $inventario->unidad_medida }}</label>
                             </div>
                         </div>

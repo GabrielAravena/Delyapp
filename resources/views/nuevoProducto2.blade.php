@@ -120,7 +120,7 @@
                             <input class="d-none" type="text" name="producto_id" value="{{ $producto->id }}">
 
                             <div class="form-group row mt-5 mb-3">
-                                <div class="col-md-6 offset-md-5">
+                                <div class="col-md-12 text-center">
                                     <button type="submit" class="btn btn-green">
                                         Ingresar
                                     </button>

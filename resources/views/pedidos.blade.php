@@ -43,7 +43,7 @@
                                             <th style="text-align:center" scope="col" class="col-4">Productos/Cantidad</th>
                                             <th style="text-align:center" scope="col">Tipo</th>
                                             <th style="text-align:center" scope="col">Precio</th>
-                                            <th style="text-align:center" scope="col" class="col-2">Confirmar entrega/envío</th>
+                                            <th style="text-align:center" scope="col" class="col-2">Confirmar producto listo/ envío</th>
                                         </tr>
                                     </thead>
 

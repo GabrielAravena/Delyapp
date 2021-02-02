@@ -6,14 +6,14 @@
       <div class="col-12 mb-5">
         <!-- Header -->
         <div class="header mt-5 mb-3">
-          <div class="header-body form-inline col-12">
+          <div class="header-body col-12">
             <!-- Title -->
             <h3 class="header-title">
               Ingredientes en bodega
             </h3>
-            <div class="col-sm-7 col-md-7 col-lg-5 justify-content-end" style="display: flex; margin-left: 60px;">
-              <a href="{{ route('inventario.realizarInventario') }}" class="btn btn-sm btn-green">Realizar inventario</a>
-              <a href="{{ route('gastosFijos.index') }}" class="btn btn-sm btn-primary ml-3">Gastos fijos</a>
+            <div>
+              <a href="{{ route('inventario.realizarInventario') }}" class="btn btn-sm btn-green  mr-3 mt-3">Realizar inventario</a>
+              <a href="{{ route('gastosFijos.index') }}" class="btn btn-sm btn-primary mt-3">Gastos fijos</a>
             </div>
           </div>
         </div>
