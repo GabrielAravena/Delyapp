@@ -58,7 +58,6 @@ class menuController extends Controller
 
     protected function store(Request $request)
     {
-
         $local_id = $request->user()->local_id;
 
         $gastos_fijos = Gastos_fijos::where('local_id', $local_id)->get()->sum('monto');

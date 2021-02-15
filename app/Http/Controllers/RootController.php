@@ -83,7 +83,7 @@ class RootController extends Controller
 
         Mail::to($admin->email)->send(new LocalCreado($local, $admin, $password));
 
-        return redirect()->route('root.index')->with('mensaje', 'El local se ha ingresado correctamente');
+        return redirect()->route('root.listaLocales')->with('mensaje', 'El local se ha ingresado correctamente');
     }
 
     protected function listaLocales(Request $request){

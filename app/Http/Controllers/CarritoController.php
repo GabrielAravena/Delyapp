@@ -245,7 +245,6 @@ class CarritoController extends Controller
 
     protected function pagar(Request $request)
     {
-
         $local = Local::find($request->local_id);
 
         if ($request->user() == null) {
@@ -255,7 +254,7 @@ class CarritoController extends Controller
             $productos = Productos_user::where('invitado', $codigoInvitado)
                 ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
                 ->join('productos', 'productos_users.producto_id', 'productos.id')
-                ->select('productos.nombre', 'productos.estado')
+                ->select('productos_users.producto_id', 'productos_users.cantidad', 'productos.nombre', 'productos.estado')
                 ->where('ventas.estado', 'carrito')
                 ->get()
                 ->groupBy('ventas_id')
@@ -267,7 +266,7 @@ class CarritoController extends Controller
             $productos = Productos_user::where('users_id', $user_id)
                 ->join('ventas', 'productos_users.ventas_id', 'ventas.id')
                 ->join('productos', 'productos_users.producto_id', 'productos.id')
-                ->select('productos.nombre', 'productos.estado')
+                ->select('productos_users.producto_id', 'productos_users.cantidad', 'productos.nombre', 'productos.estado')
                 ->where('ventas.estado', 'carrito')
                 ->get()
                 ->groupBy('ventas_id')
@@ -275,54 +274,105 @@ class CarritoController extends Controller
         }
 
         $productosDesactivados = "";
+        $sinIngredientes = "";
+
         foreach ($productos as $producto) {
+            if (($cantidadQuedan = $this->quedanIngredientes($producto)) != -1) {
+
+                if ($cantidadQuedan == 0) {
+                    $producto = Productos::where('id', $producto->producto_id)->first();
+                    $producto->estado = 'desactivado';
+                    $producto->save();
+                } else {
+                    $sinIngredientes = $sinIngredientes . "- Quedan solo " . $cantidadQuedan . " '" . $producto->nombre . "' - ";
+                }
+            }
             if ($producto->estado == 'desactivado') {
                 $productosDesactivados = $productosDesactivados . " - " . $producto->nombre . " - ";
             }
         }
 
         if ($local->estado == 'activado') {
-            if ($productosDesactivados == "") {
-                $token_ws = $request->token_ws;
-                $url = $request->url;
+            if ($sinIngredientes == "") {
+                if ($productosDesactivados == "") {
+                    $token_ws = $request->token_ws;
+                    $url = $request->url;
 
-                if ($request->user() == null) {
-                    $invitado = Invitado::create([
-                        'id' => $request->session()->get('codigoInvitado'),
-                        'nombre' => $request->name,
-                        'email' => $request->email,
-                        'direccion' => $request->direccion,
-                        'latitud' => $request->latitud,
-                        'longitud' => $request->longitud,
-                        'telefono' => $request->telefono,
-                    ]);
+                    if ($request->user() == null) {
+                        $invitado = Invitado::create([
+                            'id' => $request->session()->get('codigoInvitado'),
+                            'nombre' => $request->name,
+                            'email' => $request->email,
+                            'direccion' => $request->direccion,
+                            'latitud' => $request->latitud,
+                            'longitud' => $request->longitud,
+                            'telefono' => $request->telefono,
+                        ]);
 
-                    $user_latitud = $invitado->latitud;
-                    $user_longitud = $invitado->longitud;
-                } else {
-                    $user_latitud = $request->user()->latitud;
-                    $user_longitud = $request->user()->longitud;
-                }
-
-                if ($request->delivery == 1) {
-                    $distancia = $this->calcularDistancia($local->latitud, $local->longitud, $user_latitud, $user_longitud);
-
-                    if ($local->distancia_delivery < $distancia) {
-                        $distancia_delivery = number_format($local->distancia_delivery, 0, ",", ".");
-                        $distancia = number_format($distancia, 0, ",", ".");
-                        return redirect()->route('carrito.index')->with('error', 'Oops... Este local solo cuenta con delivery a '
-                            . $distancia_delivery . ' Km a la redonda, y tu dirección se encuentra a una distancia de '
-                            . $distancia . ' Km. Puedes solicitar retiro en local, o modificar tu dirección.');
+                        $user_latitud = $invitado->latitud;
+                        $user_longitud = $invitado->longitud;
+                    } else {
+                        $user_latitud = $request->user()->latitud;
+                        $user_longitud = $request->user()->longitud;
                     }
-                }
 
-                return view('carrito_pagar', compact('token_ws', 'url'));
+                    if ($request->delivery == 1) {
+                        $distancia = $this->calcularDistancia($local->latitud, $local->longitud, $user_latitud, $user_longitud);
+
+                        if ($local->distancia_delivery < $distancia) {
+                            $distancia_delivery = number_format($local->distancia_delivery, 0, ",", ".");
+                            $distancia = number_format($distancia, 0, ",", ".");
+                            return redirect()->route('carrito.index')->with('error', 'Oops... Este local solo cuenta con delivery a '
+                                . $distancia_delivery . ' Km a la redonda, y tu dirección se encuentra a una distancia de '
+                                . $distancia . ' Km. Puedes solicitar retiro en local, o modificar tu dirección.');
+                        }
+                    }
+
+                    return view('carrito_pagar', compact('token_ws', 'url'));
+                } else {
+                    return redirect()->route('carrito.index')->with('error', 'Oops... algunos de los productos ya no están disponibles. Los productos son: ' . $productosDesactivados);
+                }
             } else {
-                return redirect()->route('carrito.index')->with('error', 'Oops... algunos de los productos ya no están disponibles. Los productos son los siguientes: ' . $productosDesactivados);
+                return redirect()->route('carrito.index')->with('error', 'Oops... algunos productos se están agotando, y no alcanzan para completar tu pedido: ' . $sinIngredientes);
             }
         } else {
             return redirect()->route('carrito.index')->with('error', 'Oops... Este local ya no está recibiendo pedidos. Te invitamos a revisar otros locales.');
         }
+    }
+
+    private function quedanIngredientes($producto_user)
+    {
+        $ingredientes = Ingredientes::where('producto_id', $producto_user->producto_id)->get();
+
+        $quedaPara = -1;
+        foreach ($ingredientes as $ingrediente) {
+
+            $inventario = Inventario::find($ingrediente->inventario_id);
+
+            $unidadMedidaInv = $inventario->unidad_medida;
+            $unidadMedidaIng = $ingrediente->unidad_medida;
+
+            if ($unidadMedidaInv == $unidadMedidaIng) {
+                if ($inventario->cantidad - ($ingrediente->cantidad * $producto_user->cantidad) < 0) {
+                    if ($quedaPara <= floor($inventario->cantidad / $ingrediente->cantidad)) {
+                        $quedaPara = floor($inventario->cantidad / $ingrediente->cantidad);
+                    }
+                }
+            } elseif (($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')) {
+                if ($inventario->cantidad - ($ingrediente->cantidad * $producto_user->cantidad / 1000) < 0) {
+                    if ($quedaPara <= floor($inventario->cantidad / ($ingrediente->cantidad / 1000))) {
+                        $quedaPara = floor($inventario->cantidad / ($ingrediente->cantidad / 1000));
+                    }
+                }
+            } elseif (($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')) {
+                if ($inventario->cantidad - ($ingrediente->cantidad * $producto_user->cantidad * 1000) < 0) {
+                    if ($quedaPara <= floor($inventario->cantidad / ($ingrediente->cantidad * 1000))) {
+                        $quedaPara = floor($inventario->cantidad / ($ingrediente->cantidad * 1000));
+                    }
+                }
+            }
+        }
+        return $quedaPara;
     }
 
     protected function return(Request $request)
@@ -358,8 +408,20 @@ class CarritoController extends Controller
                 foreach ($ingredientes as $ingrediente) {
 
                     $inventario = Inventario::find($ingrediente->inventario_id);
-                    $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
-                    $inventario->save();
+
+                    $unidadMedidaInv = $inventario->unidad_medida;
+                    $unidadMedidaIng = $ingrediente->unidad_medida;
+
+                    if ($unidadMedidaInv == $unidadMedidaIng) {
+                        $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad);
+                        $inventario->save();
+                    } elseif (($unidadMedidaInv == 'Kilogramo' && $unidadMedidaIng == 'Gramo') || ($unidadMedidaInv == 'Litro' && $unidadMedidaIng == 'Ml')) {
+                        $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad / 1000);
+                        $inventario->save();
+                    } elseif (($unidadMedidaInv == 'Gramo' && $unidadMedidaIng == 'Kilogramo') || ($unidadMedidaInv == 'Ml' && $unidadMedidaIng == 'Litro')) {
+                        $inventario->cantidad -= ($ingrediente->cantidad * $producto->cantidad * 1000);
+                        $inventario->save();
+                    }
 
                     if ($inventario->cantidad < 10) {
                         $ingredientesBajos[] = $inventario;

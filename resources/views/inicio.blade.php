@@ -38,12 +38,12 @@
         <label class="justify-content-center text-white">LOCALES</label>
     </nav>
     @if(session('mensaje'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          <strong>Perfecto: </strong> {{ session('mensaje') }}
-          <button type="button" class="close" data-dismiss="alert" alert-label="Close">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Perfecto: </strong> {{ session('mensaje') }}
+        <button type="button" class="close" data-dismiss="alert" alert-label="Close">
             <span>&times;</span>
-          </button>
-        </div>
+        </button>
+    </div>
     @endif
     <div class="container-wide mt-5" id="containerLocales">
         <div class="row justify-content-xs-center mt-5 mb-5">
@@ -51,11 +51,11 @@
             @foreach($locales as $local)
             <div class="col-sm-6 col-md-4 view-animate zoomInSmall delay-04 active mt-5 text-center">
                 <a class="thumbnail-variant-3" href="{{ route('local.index', $local['id']) }}">
-                @if($local['imagen'])
+                    @if($local['imagen'])
                     <img type="button" src="{{ asset($local['imagen']) }}" width="300px" height="250px">
-                @else
+                    @else
                     <img type="button" src="{{ asset('/images/sinImagen.jpeg') }}" width="300px" height="250px">
-                @endif
+                    @endif
                 </a>
                 <h4>{{ $local['nombre'] }}</h4>
                 <p class="mb-0 text-left" style="margin-left: 40px;">{{ $local['direccion']}}</p>

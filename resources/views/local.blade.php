@@ -70,13 +70,13 @@
             @if ($cat->categoria == $producto->categoria && $producto->categoria != 'combo' && $producto->categoria != 'promoción' && $producto->precio != 0)
             <div class="item">
               <div class="thumbnail-menu-modern">
-                <figure>
+              <figure>
                 @if($producto->imagen)
-                  <img class="img" src="{{ asset($producto->imagen) }}" alt="No se ha cargado la imagen" width="310" height="260" />
+                  <img class="img" src="{{ asset($producto->imagen) }}" alt="No se ha cargado la imagen" width="310" height="260" style="width: 310px"/>
                 @else
-                  <img class="img" src="{{ asset('/images/sinImagen.jpeg') }}" alt="No se ha cargado la imagen" width="310" height="260" />
+                  <img class="img" src="{{ asset('/images/sinImagen.jpeg') }}" alt="No se ha cargado la imagen" width="310" height="260" style="width: 310px"/>
                 @endif
-                </figure>
+              </figure>
                 <div class="caption">
                   <h5 class="primary">{{ $producto->nombre }}</h5>
                   <p class="text-italic">{{ $producto->descripcion }}</p>
@@ -153,7 +153,7 @@
 <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.3.0/mapbox-gl-geocoder.css' type='text/css' />
 
 <script>
-  var user_location = [ {{$local -> longitud}}, {{ $local -> latitud}} ];
+  var user_location = [ {{$local -> longitud}}, {{$local -> latitud}} ];
 
   mapboxgl.accessToken = 'pk.eyJ1IjoiZ2Fib2J1ZG8iLCJhIjoiY2trNHM1enR4MW9kczJ4cGV6NHlrdTA1bSJ9.H8tB-u1v17oj7NclhK3iBA';
   var map = new mapboxgl.Map({
