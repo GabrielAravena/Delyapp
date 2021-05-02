@@ -53,7 +53,8 @@
                                 <label>Cuenta con delivery</label>
                             </div>
                             <div class="col-md-6 text-left">
-                                <input id="delivery" type="checkbox" onclick="mostrar();" name="delivery">
+                                <input id="delivery" type="checkbox" onclick="mostrar();">
+                                <input id="deliveryHidden" type="hidden" name="delivery">
                             </div>
                         </div>
 
@@ -124,7 +125,7 @@
 
                         <div class="form-inline row mb-5 mt-5">
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-green" onclick="activarSpinner();">
+                                <button type="submit" class="btn btn-green">
                                     Guardar
                                 </button>
                             </div>
@@ -160,10 +161,15 @@
     $(document).ready(function(){
         if({{ $local->delivery }}){
             $('#delivery').prop("checked", true);
+            $('#deliveryHidden').prop("value", 1);
             document.getElementById('valor_delivery_container').style.display = 'flex';
             document.getElementById('distancia_delivery_container').style.display = 'flex';
             $('#valor_delivery').prop("required", true);
             $('#distancia_delivery').prop("required", true);
+        }else{
+            $('#deliveryHidden').prop("value", 0);
+            $('#valor_delivery').prop("value", 1);
+            $('#distancia_delivery').prop("value", 1);
         }
     });
 
@@ -202,12 +208,17 @@
             document.getElementById('valor_delivery_container').style.display = 'flex';
             document.getElementById('distancia_delivery_container').style.display = 'flex';
             $('#valor_delivery').prop("required", true);
-            $('#distancia_delivery').prop("required", true);
+            $('#deliveryHidden').prop("value", 1);
+            $('#valor_delivery').prop("value", 0);
+            $('#distancia_delivery').prop("value", 0);
         } else {
             document.getElementById('valor_delivery_container').style.display = 'none';
             document.getElementById('distancia_delivery_container').style.display = 'none';
             $('#valor_delivery').prop("required", false);
+            $('#deliveryHidden').prop("value", 0);
+            $('#valor_delivery').prop("value", 1);
             $('#distancia_delivery').prop("required", false);
+            $('#distancia_delivery').prop("value", 1);
         }
     }
 

@@ -55,7 +55,7 @@ class VenderController extends Controller
                         $productos_user = Productos_user::create([
                             'producto_id' => $val,
                             'cantidad' => request('cantidad'.$i),
-                            'users_id' => '3',
+                            'users_id' => '1',
                             'ventas_id' => $venta->id,
                         ]);
 
@@ -97,6 +97,7 @@ class VenderController extends Controller
             'venta_id' => $venta->id,
             'tipo' => request('tipo_venta'),
             'valor' => request('precio_total'),
+            'entregado' => true,
         ]);
 
         $venta->tipo = request('tipo_venta');
