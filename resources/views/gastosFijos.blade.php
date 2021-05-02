@@ -73,12 +73,4 @@
     </div>
 </div>
 
-<div class="form-inline row mt-5 mb-3 mt-5 text-center">
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-green">
-                                    Confirmar
-                                </button>
-                                <a href="{{ route('inventario.index') }}" class="btn btn-primary">Volver</a>
-                            </div>
-                        </div>
 @endsection

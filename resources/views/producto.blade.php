@@ -42,16 +42,5 @@
     </div>
 </div>
 
-<div class="text-center" id="spinner" style="margin-top: 300px" hidden>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #791313;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #f9b129;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-    <div class="spinner-grow" style="width: 5rem; height: 5rem; color: #137830;" role="status">
-        <span class="visually-hidden"></span>
-    </div>
-</div>
 
 @endsection
